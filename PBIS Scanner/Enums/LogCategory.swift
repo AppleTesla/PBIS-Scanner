@@ -1,0 +1,5 @@
+// MARK: Enums
+
+enum LogCategory {
+    
+}

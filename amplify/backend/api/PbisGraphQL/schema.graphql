@@ -1,0 +1,8 @@
+type Juvenile @model {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  points: Int!
+  event_id: Int!
+  active: Int!
+}

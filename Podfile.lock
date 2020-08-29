@@ -1,0 +1,65 @@
+PODS:
+  - Amplify (1.1.1):
+    - Amplify/Default (= 1.1.1)
+  - Amplify/Default (1.1.1)
+  - Amplify/Tools (1.1.1)
+  - AmplifyPlugins/AWSCognitoAuthPlugin (1.1.1):
+    - AWSAuthCore (~> 2.15.0)
+    - AWSCore (~> 2.15.0)
+    - AWSMobileClient (~> 2.15.0)
+    - AWSPluginsCore (= 1.1.1)
+  - AmplifyPlugins/AWSDataStorePlugin (1.1.1):
+    - AWSAuthCore (~> 2.15.0)
+    - AWSCore (~> 2.15.0)
+    - AWSPluginsCore (= 1.1.1)
+    - SQLite.swift (~> 0.12.0)
+  - AWSAuthCore (2.15.3):
+    - AWSCore (= 2.15.3)
+  - AWSCognitoIdentityProvider (2.15.3):
+    - AWSCognitoIdentityProviderASF (= 1.0.2)
+    - AWSCore (= 2.15.3)
+  - AWSCognitoIdentityProviderASF (1.0.2)
+  - AWSCore (2.15.3)
+  - AWSMobileClient (2.15.3):
+    - AWSAuthCore (= 2.15.3)
+    - AWSCognitoIdentityProvider (= 2.15.3)
+  - AWSPluginsCore (1.1.1):
+    - Amplify (= 1.1.1)
+    - AWSCore (~> 2.15.0)
+    - AWSMobileClient (~> 2.15.0)
+  - SQLite.swift (0.12.2):
+    - SQLite.swift/standard (= 0.12.2)
+  - SQLite.swift/standard (0.12.2)
+
+DEPENDENCIES:
+  - Amplify
+  - Amplify/Tools
+  - AmplifyPlugins/AWSCognitoAuthPlugin
+  - AmplifyPlugins/AWSDataStorePlugin
+
+SPEC REPOS:
+  trunk:
+    - Amplify
+    - AmplifyPlugins
+    - AWSAuthCore
+    - AWSCognitoIdentityProvider
+    - AWSCognitoIdentityProviderASF
+    - AWSCore
+    - AWSMobileClient
+    - AWSPluginsCore
+    - SQLite.swift
+
+SPEC CHECKSUMS:
+  Amplify: e23b610dde2539d67ec29843c7f01010b44b98ba
+  AmplifyPlugins: 9e1e1bff2a8b1676307101ca7d768a7be49c0456
+  AWSAuthCore: 598e8eb56e12799877414d10b04598de12a15992
+  AWSCognitoIdentityProvider: 4a721292eda37a8c3ef451e8fec28abe14aff18e
+  AWSCognitoIdentityProviderASF: 0fb6ea671c05a63276e320726f680cd880522442
+  AWSCore: 5a8f9d7461dbe5ea6a5473c41cf113b687e19136
+  AWSMobileClient: 5c29678413764ee3bcd528421331deb0a35b72fb
+  AWSPluginsCore: 4e98e284fff7763470ef94f7538449f20d891f70
+  SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
+
+PODFILE CHECKSUM: f053a856b89ebcdfb6849616b9737b50de448085
+
+COCOAPODS: 1.9.3
