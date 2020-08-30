@@ -29,9 +29,19 @@
 		55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */; };
 		55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BEA24FB42750047D54A /* KeychainCategory.swift */; };
 		55117BFB24FB5D610047D54A /* JuvenileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BFA24FB5D610047D54A /* JuvenileExtensions.swift */; };
-		55117C0024FB66970047D54A /* schema.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 55117BFD24FB66960047D54A /* schema.graphql */; };
 		55117C0124FB66970047D54A /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BFE24FB66960047D54A /* amplifyconfiguration.json */; };
 		55117C0224FB66970047D54A /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BFF24FB66970047D54A /* awsconfiguration.json */; };
+		55117C0424FB67BF0047D54A /* schema.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 55117C0324FB67BF0047D54A /* schema.graphql */; };
+		55117C0E24FB68020047D54A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0624FB68020047D54A /* Location.swift */; };
+		55117C0F24FB68020047D54A /* AmplifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0724FB68020047D54A /* AmplifyModels.swift */; };
+		55117C1024FB68020047D54A /* Juvenile+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0824FB68020047D54A /* Juvenile+Schema.swift */; };
+		55117C1124FB68020047D54A /* Location+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0924FB68020047D54A /* Location+Schema.swift */; };
+		55117C1224FB68020047D54A /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0A24FB68020047D54A /* Category.swift */; };
+		55117C1324FB68020047D54A /* Juvenile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0B24FB68020047D54A /* Juvenile.swift */; };
+		55117C1424FB68020047D54A /* Behavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0C24FB68020047D54A /* Behavior.swift */; };
+		55117C1524FB68020047D54A /* Behavior+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117C0D24FB68020047D54A /* Behavior+Schema.swift */; };
+		559FCCA724FB7C5F007763B4 /* BehaviorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559FCCA624FB7C5F007763B4 /* BehaviorExtensions.swift */; };
+		559FCCA924FB80D1007763B4 /* LocationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559FCCA824FB80D1007763B4 /* LocationExtensions.swift */; };
 		55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839424FA63D4009356DC /* AppDelegate.swift */; };
 		55BA839724FA63D4009356DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839624FA63D4009356DC /* SceneDelegate.swift */; };
 		55BA839924FA63D4009356DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839824FA63D4009356DC /* ContentView.swift */; };
@@ -67,9 +77,19 @@
 		55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerInjector.swift; sourceTree = "<group>"; };
 		55117BEA24FB42750047D54A /* KeychainCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainCategory.swift; sourceTree = "<group>"; };
 		55117BFA24FB5D610047D54A /* JuvenileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuvenileExtensions.swift; sourceTree = "<group>"; };
-		55117BFD24FB66960047D54A /* schema.graphql */ = {isa = PBXFileReference; lastKnownFileType = file; path = schema.graphql; sourceTree = SOURCE_ROOT; };
 		55117BFE24FB66960047D54A /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = SOURCE_ROOT; };
 		55117BFF24FB66970047D54A /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = SOURCE_ROOT; };
+		55117C0324FB67BF0047D54A /* schema.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; name = schema.graphql; path = amplify/backend/api/pbisscanner/schema.graphql; sourceTree = SOURCE_ROOT; };
+		55117C0624FB68020047D54A /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		55117C0724FB68020047D54A /* AmplifyModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmplifyModels.swift; sourceTree = "<group>"; };
+		55117C0824FB68020047D54A /* Juvenile+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Juvenile+Schema.swift"; sourceTree = "<group>"; };
+		55117C0924FB68020047D54A /* Location+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Location+Schema.swift"; sourceTree = "<group>"; };
+		55117C0A24FB68020047D54A /* Category.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		55117C0B24FB68020047D54A /* Juvenile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Juvenile.swift; sourceTree = "<group>"; };
+		55117C0C24FB68020047D54A /* Behavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Behavior.swift; sourceTree = "<group>"; };
+		55117C0D24FB68020047D54A /* Behavior+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Behavior+Schema.swift"; sourceTree = "<group>"; };
+		559FCCA624FB7C5F007763B4 /* BehaviorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BehaviorExtensions.swift; sourceTree = "<group>"; };
+		559FCCA824FB80D1007763B4 /* LocationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtensions.swift; sourceTree = "<group>"; };
 		55BA839124FA63D4009356DC /* PBIS Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PBIS Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55BA839424FA63D4009356DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55BA839624FA63D4009356DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +144,8 @@
 			isa = PBXGroup;
 			children = (
 				55117BFA24FB5D610047D54A /* JuvenileExtensions.swift */,
+				559FCCA624FB7C5F007763B4 /* BehaviorExtensions.swift */,
+				559FCCA824FB80D1007763B4 /* LocationExtensions.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -133,14 +155,31 @@
 			children = (
 				55117BFE24FB66960047D54A /* amplifyconfiguration.json */,
 				55117BFF24FB66970047D54A /* awsconfiguration.json */,
-				55117BFD24FB66960047D54A /* schema.graphql */,
+				55117C0324FB67BF0047D54A /* schema.graphql */,
 			);
 			path = AmplifyConfig;
+			sourceTree = "<group>";
+		};
+		55117C0524FB68020047D54A /* models */ = {
+			isa = PBXGroup;
+			children = (
+				55117C0624FB68020047D54A /* Location.swift */,
+				55117C0724FB68020047D54A /* AmplifyModels.swift */,
+				55117C0824FB68020047D54A /* Juvenile+Schema.swift */,
+				55117C0924FB68020047D54A /* Location+Schema.swift */,
+				55117C0A24FB68020047D54A /* Category.swift */,
+				55117C0B24FB68020047D54A /* Juvenile.swift */,
+				55117C0C24FB68020047D54A /* Behavior.swift */,
+				55117C0D24FB68020047D54A /* Behavior+Schema.swift */,
+			);
+			name = models;
+			path = amplify/generated/models;
 			sourceTree = "<group>";
 		};
 		55BA838824FA63D4009356DC = {
 			isa = PBXGroup;
 			children = (
+				55117C0524FB68020047D54A /* models */,
 				55117BFC24FB665A0047D54A /* AmplifyConfig */,
 				55BA839324FA63D4009356DC /* PBIS Scanner */,
 				55BA839224FA63D4009356DC /* Products */,
@@ -282,7 +321,6 @@
 			buildConfigurationList = 55BA83A524FA63DA009356DC /* Build configuration list for PBXNativeTarget "PBIS Scanner" */;
 			buildPhases = (
 				3F2A16F8CFE51A886E4707A9 /* [CP] Check Pods Manifest.lock */,
-				55E18C3F24FA8C1100820CE3 /* Run Amplify Tools */,
 				55BA838D24FA63D4009356DC /* Sources */,
 				55BA838E24FA63D4009356DC /* Frameworks */,
 				55BA838F24FA63D4009356DC /* Resources */,
@@ -335,11 +373,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55117C0024FB66970047D54A /* schema.graphql in Resources */,
 				55BA83A124FA63DA009356DC /* LaunchScreen.storyboard in Resources */,
 				55117C0224FB66970047D54A /* awsconfiguration.json in Resources */,
 				55117C0124FB66970047D54A /* amplifyconfiguration.json in Resources */,
 				55BA839E24FA63DA009356DC /* Preview Assets.xcassets in Resources */,
+				55117C0424FB67BF0047D54A /* schema.graphql in Resources */,
 				55BA839B24FA63DA009356DC /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,24 +407,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		55E18C3F24FA8C1100820CE3 /* Run Amplify Tools */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Amplify Tools";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/AmplifyTools/amplify-tools.sh\"\n";
-		};
 		90A2F15DF18452FEAEE68E90 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -414,6 +434,7 @@
 				55117BD124FAACB90047D54A /* DataStoreMutationType.swift in Sources */,
 				55117BCF24FAA3B40047D54A /* HttpMethod.swift in Sources */,
 				55117BE124FB30EB0047D54A /* NetworkManagerInjector.swift in Sources */,
+				55117C1124FB68020047D54A /* Location+Schema.swift in Sources */,
 				55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */,
 				55E18C3D24FA776100820CE3 /* MainView.swift in Sources */,
 				55117BDD24FB27710047D54A /* KeychainManager.swift in Sources */,
@@ -421,25 +442,34 @@
 				55117BD524FAB0180047D54A /* ResponseError.swift in Sources */,
 				55117BE524FB33950047D54A /* HttpHeader.swift in Sources */,
 				55117BBE24FA98E90047D54A /* AppManager.swift in Sources */,
+				55117C1224FB68020047D54A /* Category.swift in Sources */,
 				55117BD324FAAFB70047D54A /* APIManager.swift in Sources */,
 				55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */,
 				55E18C2C24FA6D7800820CE3 /* AuthManager.swift in Sources */,
 				55117BFB24FB5D610047D54A /* JuvenileExtensions.swift in Sources */,
+				55117C1024FB68020047D54A /* Juvenile+Schema.swift in Sources */,
 				55117BD724FAB05C0047D54A /* APIManagerProtocol.swift in Sources */,
 				55117BC924FAA2830047D54A /* URLRequestProtocol.swift in Sources */,
+				55117C1524FB68020047D54A /* Behavior+Schema.swift in Sources */,
 				55117BCB24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift in Sources */,
 				55BA839724FA63D4009356DC /* SceneDelegate.swift in Sources */,
 				55117BCD24FAA2FA0047D54A /* BaseURL.swift in Sources */,
+				559FCCA724FB7C5F007763B4 /* BehaviorExtensions.swift in Sources */,
 				55E18C2F24FA6E9000820CE3 /* LoggerExtensions.swift in Sources */,
 				55117BC524FAA2220047D54A /* EndpointConfiguration.swift in Sources */,
 				55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */,
+				55117C0E24FB68020047D54A /* Location.swift in Sources */,
 				55E18C3224FA6F1700820CE3 /* LogCategory.swift in Sources */,
 				55BA839924FA63D4009356DC /* ContentView.swift in Sources */,
 				55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */,
 				55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */,
 				55117BDB24FB1C130047D54A /* NetworkManager.swift in Sources */,
 				55117BDF24FB27AD0047D54A /* DataExtensions.swift in Sources */,
+				559FCCA924FB80D1007763B4 /* LocationExtensions.swift in Sources */,
+				55117C0F24FB68020047D54A /* AmplifyModels.swift in Sources */,
+				55117C1424FB68020047D54A /* Behavior.swift in Sources */,
 				55117BC024FA9D650047D54A /* JuvenileManager.swift in Sources */,
+				55117C1324FB68020047D54A /* Juvenile.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -32,9 +32,6 @@ class JuvenileManager: ObservableObject, APIManagerInjector {
                                                         queryStrings: nil)
 
     init() {
-        remoteFetchForAll { (juveniles: [Juvenile]) in
-            print("JUVY: ", juveniles)
-        }
     }
 }
 
@@ -56,21 +53,38 @@ extension JuvenileManager {
 // MARK: Remote
 
 extension JuvenileManager {
-    private func remoteFetchForAll<T: Model>(completion: @escaping ([T]) -> Void) {
-        var endpointConfig: EndpointConfiguration!
+    private func remoteFetchWithStringType(_ type: Model.Type, customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([String]) -> Void) {
+        var endpointConfig: EndpointConfiguration! = customEndpoint
+
+        switch type.self {
+        case is Location.Type:
+            endpointConfig = locationsEndpointConfig
+        default:
+            print("Could not configure endpoint for type \(type.modelName).")
+            return
+        }
+
+        apiManager.fetch(from: endpointConfig) { (result: Result<[String], ResponseError>) in
+            switch result {
+            case .success(let strings):
+                completion(strings)
+            case .failure(let error):
+                completion([])
+                print(error)
+            }
+        }
+    }
+
+    private func remoteFetch<T: Model>(customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([T]) -> Void) {
+        var endpointConfig: EndpointConfiguration! = customEndpoint
 
         switch T.self {
-        case is JuvenileLocal.Type:
+        case is Juvenile.Type:
             endpointConfig = juvenilesEndpointConfig
-// TODO: Add new model types
-//        case is Behavior.Type:
-//            endpointConfig = behaviorsEndpointConfig
-//        case is Location.Type:
-//            endpointConfig = locationsEndpointConfig
-//        case is Reward.Type:
-//            endpointConfig = rewardsEndpointConfig
+        case is Behavior.Type:
+            endpointConfig = behaviorsEndpointConfig
         default:
-            print("Could not configure endpoint.")
+            print("Could not configure endpoint for type \(T.modelName).")
             return
         }
 
@@ -110,7 +124,7 @@ extension JuvenileManager {
         }
     }
     
-    func localFetchForAll<T: Model>(completion: ([T]) -> Void) {
+    func localFetch<T: Model>(completion: ([T]) -> Void) {
         Amplify.DataStore.query(T.self) { result in
             switch result {
             case .success(let juveniles):

@@ -39,8 +39,6 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
 
             defer { resultQueue.async { completion(result) } }
 
-            print(response?.description)
-
             if let error = error {
                 result = .failure(.responseProblem(error))
                 return
@@ -68,7 +66,10 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
                 return
             }
 
+
             print(String(data: data, encoding: .utf8) ?? "Data is nil")
+            print(try! self.decoder.decode(T.self, from: data))
+
             return
         }
 

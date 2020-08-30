@@ -9,7 +9,7 @@ type Location @model {
 }
 
 type Juvenile @model {
-  id: Int!
+  id: ID!
   first_name: String!
   last_name: String!
   points: Int!
@@ -18,7 +18,7 @@ type Juvenile @model {
 }
 
 type Behavior @model {
-    id: Int!
+    id: ID!
     title: String!
     category: Category!
     location: Location! @connection
