@@ -29,10 +29,10 @@
 		55117BDD24FB27710047D54A /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BDC24FB27710047D54A /* KeychainManager.swift */; };
 		55117BDF24FB27AD0047D54A /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BDE24FB27AD0047D54A /* DataExtensions.swift */; };
 		55117BE124FB30EB0047D54A /* NetworkManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */; };
-		55117BE324FB31C20047D54A /* AuthManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE224FB31C20047D54A /* AuthManagerInjector.swift */; };
 		55117BE524FB33950047D54A /* HttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE424FB33950047D54A /* HttpHeader.swift */; };
 		55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE624FB35280047D54A /* APIManagerInjector.swift */; };
 		55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */; };
+		55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BEA24FB42750047D54A /* KeychainCategory.swift */; };
 		55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839424FA63D4009356DC /* AppDelegate.swift */; };
 		55BA839724FA63D4009356DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839624FA63D4009356DC /* SceneDelegate.swift */; };
 		55BA839924FA63D4009356DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839824FA63D4009356DC /* ContentView.swift */; };
@@ -70,10 +70,10 @@
 		55117BDC24FB27710047D54A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		55117BDE24FB27AD0047D54A /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerInjector.swift; sourceTree = "<group>"; };
-		55117BE224FB31C20047D54A /* AuthManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerInjector.swift; sourceTree = "<group>"; };
 		55117BE424FB33950047D54A /* HttpHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpHeader.swift; sourceTree = "<group>"; };
 		55117BE624FB35280047D54A /* APIManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManagerInjector.swift; sourceTree = "<group>"; };
 		55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerInjector.swift; sourceTree = "<group>"; };
+		55117BEA24FB42750047D54A /* KeychainCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainCategory.swift; sourceTree = "<group>"; };
 		55BA839124FA63D4009356DC /* PBIS Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PBIS Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55BA839424FA63D4009356DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55BA839624FA63D4009356DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,7 +131,6 @@
 				55117BC824FAA2830047D54A /* URLRequestProtocol.swift */,
 				55117BD624FAB05C0047D54A /* APIManagerProtocol.swift */,
 				55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */,
-				55117BE224FB31C20047D54A /* AuthManagerInjector.swift */,
 				55117BE624FB35280047D54A /* APIManagerInjector.swift */,
 				55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */,
 			);
@@ -211,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				55E18C3124FA6F1700820CE3 /* LogCategory.swift */,
+				55117BEA24FB42750047D54A /* KeychainCategory.swift */,
 				55117BC124FAA1BA0047D54A /* Endpoint.swift */,
 				55117BCC24FAA2FA0047D54A /* BaseURL.swift */,
 				55117BCE24FAA3B40047D54A /* HttpMethod.swift */,
@@ -429,7 +429,6 @@
 				55E18C3D24FA776100820CE3 /* MainView.swift in Sources */,
 				55117BDD24FB27710047D54A /* KeychainManager.swift in Sources */,
 				55E18C3724FA71EF00820CE3 /* SignInView.swift in Sources */,
-				55117BE324FB31C20047D54A /* AuthManagerInjector.swift in Sources */,
 				55117BD524FAB0180047D54A /* ResponseError.swift in Sources */,
 				55117BE524FB33950047D54A /* HttpHeader.swift in Sources */,
 				55117BBE24FA98E90047D54A /* AppManager.swift in Sources */,
@@ -446,6 +445,7 @@
 				55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */,
 				55E18C3224FA6F1700820CE3 /* LogCategory.swift in Sources */,
 				55BA839924FA63D4009356DC /* ContentView.swift in Sources */,
+				55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */,
 				D7F71C4CD6654D7D8F137A5D /* AmplifyModels.swift in Sources */,
 				55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */,
 				1E782523C3324E1899912566 /* Juvenile.swift in Sources */,

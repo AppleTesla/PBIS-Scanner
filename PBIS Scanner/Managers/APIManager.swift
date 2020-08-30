@@ -5,7 +5,7 @@ import Network
 
 // MARK: Classes
 
-class APIManager: APIManagerProtocol, NetworkManagerInjector, AuthManagerInjector {
+class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInjector {
 
     var baseURL: BaseURL = .prod
     var session: URLSession = URLSession.shared
@@ -20,7 +20,9 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, AuthManagerInjecto
             return
         }
 
-        guard let token = authManager.getIDToken() else {
+        guard
+            let tokenData = keychainManager.load(key: .token),
+            let token = String(data: tokenData, encoding: .utf8) else {
             completion(.failure(.tokenProblem))
             return
         }

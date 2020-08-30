@@ -6,10 +6,10 @@ import Security
 // MARK: Classes
 
 class KeychainManager {
-    class func save(key: String, data: Data) -> OSStatus {
+    func save(key: KeychainCategory, data: Data) -> OSStatus {
         let query = [
             kSecClass as String       : kSecClassGenericPassword as String,
-            kSecAttrAccount as String : key,
+            kSecAttrAccount as String : key.rawValue,
             kSecValueData as String   : data ] as [String : Any]
 
         SecItemDelete(query as CFDictionary)
@@ -17,10 +17,10 @@ class KeychainManager {
         return SecItemAdd(query as CFDictionary, nil)
     }
 
-    class func load(key: String) -> Data? {
+    func load(key: KeychainCategory) -> Data? {
         let query = [
             kSecClass as String       : kSecClassGenericPassword,
-            kSecAttrAccount as String : key,
+            kSecAttrAccount as String : key.rawValue,
             kSecReturnData as String  : kCFBooleanTrue!,
             kSecMatchLimit as String  : kSecMatchLimitOne ] as [String : Any]
 
@@ -35,7 +35,7 @@ class KeychainManager {
         }
     }
 
-    class func createUniqueID() -> String {
+    func createUniqueID() -> String {
         let uuid: CFUUID = CFUUIDCreate(nil)
         let cfStr: CFString = CFUUIDCreateString(nil, uuid)
 

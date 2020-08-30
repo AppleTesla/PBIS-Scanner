@@ -26,6 +26,11 @@ class JuvenileManager: ObservableObject, APIManagerInjector {
                                                         body: nil,
                                                         queryStrings: nil)
 
+    let rewardsEndpointConfig = EndpointConfiguration(path: .reward,
+                                                        httpMethod: .get,
+                                                        body: nil,
+                                                        queryStrings: nil)
+
     init() {
     }
 }
@@ -48,11 +53,28 @@ extension JuvenileManager {
 // MARK: Remote
 
 extension JuvenileManager {
-    private func remoteFetchForAllJuveniles(completion: @escaping ([Juvenile]) -> Void) {
-        apiManager.fetch(from: juvenilesEndpointConfig) { (result: Result<[Juvenile], ResponseError>) in
+    private func remoteFetchForAll<T: Model>(_ object: T, completion: @escaping ([T]) -> Void) {
+        var endpointConfig: EndpointConfiguration!
+
+        switch object {
+        case is Juvenile:
+            endpointConfig = juvenilesEndpointConfig
+// TODO: Add new model types
+//        case is Behavior:
+//            endpointConfig = behaviorsEndpointConfig
+//        case is Location:
+//            endpointConfig = locationsEndpointConfig
+//        case is Reward:
+//            endpointConfig = rewardsEndpointConfig
+        default:
+            print("Could not configure endpoint.")
+            return
+        }
+
+        apiManager.fetch(from: endpointConfig) { (result: Result<[T], ResponseError>) in
             switch result {
-            case .success(let juveniles):
-                completion(juveniles)
+            case .success(let objects):
+                completion(objects)
             case .failure(let error):
                 print(error)
             }

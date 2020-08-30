@@ -7,7 +7,7 @@ import AWSPluginsCore
 
 // MARK: Classes
 
-class AuthManager: ObservableObject {
+class AuthManager: ObservableObject, KeychainManagerInjector {
 
     // MARK: Initializers
 
@@ -28,6 +28,7 @@ class AuthManager: ObservableObject {
     init() {
         checkSessionStatus()
         observeAuthEvents()
+        _ = getToken()
     }
 
     private func checkSessionStatus() {
@@ -90,10 +91,11 @@ extension AuthManager {
     }
 }
 
-// MARK: Helper Methods
+// MARK: Token
 
 extension AuthManager {
-    func getIDToken() -> String? {
+    func getToken() -> String? {
+        print("was called")
         var token: String?
         Amplify.Auth.fetchAuthSession { result in
             do {
@@ -102,7 +104,16 @@ extension AuthManager {
                 if let cognitoTokenProvider = session as? AuthCognitoTokensProvider {
                     let tokens = try cognitoTokenProvider.getCognitoTokens().get()
                     token = tokens.idToken
-                    print("Retrieved token: ", token ?? "nil")
+
+                    if let data = token?.data(using: .utf8) {
+                        let saveStatusError = self.keychainManager.save(key: .token, data: data)
+
+                        if saveStatusError == noErr {
+                            print("Token was successfully fetched and saved.", token.unsafelyUnwrapped)
+                        }
+                    } else {
+                        print("Token could not be fetched.")
+                    }
                 }
             } catch {
                 print(error)
