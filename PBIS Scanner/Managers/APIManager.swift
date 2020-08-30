@@ -68,7 +68,6 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
 
 
             print(String(data: data, encoding: .utf8) ?? "Data is nil")
-            print(try! self.decoder.decode(T.self, from: data))
 
             return
         }

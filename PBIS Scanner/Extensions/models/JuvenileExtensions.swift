@@ -5,7 +5,6 @@ import Foundation
 // MARK: Extensions
 
 extension Juvenile: Codable {
-
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: Juvenile.keys)
 
@@ -41,5 +40,17 @@ extension Juvenile: Codable {
             return String(id)
         }
         return id as! String
+    }
+}
+
+extension Juvenile: Equatable {
+    public static func ==(lhs: Juvenile, rhs: Juvenile) -> Bool {
+        return lhs.event_id == rhs.event_id
+    }
+}
+
+extension Juvenile: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(event_id)
     }
 }

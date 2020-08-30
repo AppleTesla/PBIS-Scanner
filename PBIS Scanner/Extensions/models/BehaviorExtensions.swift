@@ -35,3 +35,9 @@ extension Behavior: Codable {
         try container.encode(category, forKey: .category)
     }
 }
+
+extension Behavior: Equatable {
+    public static func ==(lhs: Behavior, rhs: Behavior) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

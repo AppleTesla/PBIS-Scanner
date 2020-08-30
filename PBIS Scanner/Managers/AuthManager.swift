@@ -108,7 +108,7 @@ extension AuthManager {
                         let saveStatusError = self.keychainManager.save(key: .token, data: data)
 
                         if saveStatusError == noErr {
-                            print("Token was successfully fetched and saved.", token.unsafelyUnwrapped)
+                            print("Token was successfully fetched and saved.")
                         }
                     } else {
                         print("Token could not be fetched.")

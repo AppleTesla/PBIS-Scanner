@@ -7,7 +7,12 @@ import AmplifyPlugins
 // MARK: Classes
 
 class AppManager: ObservableObject {
-    
+
+    // MARK: Configuration
+
+    @Published var tabIndex = 1
+    @Published var codeString = ""
+
     // MARK: Plugins
     
     private let authPlugin = AWSCognitoAuthPlugin()
@@ -47,4 +52,8 @@ class AppManager: ObservableObject {
             fatalError(error.localizedDescription)
         }
     }
+}
+
+extension AppManager {
+
 }

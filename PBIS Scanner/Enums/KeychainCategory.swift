@@ -2,4 +2,5 @@
 
 enum KeychainCategory: String {
     case token
+    case queue
 }

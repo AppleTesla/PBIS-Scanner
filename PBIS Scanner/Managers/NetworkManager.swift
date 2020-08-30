@@ -16,7 +16,7 @@ class NetworkManager: ObservableObject {
 
     private let queue = DispatchQueue.global(qos: .background)
     
-    private lazy var monitor: NWPathMonitor = {
+    private let monitor: NWPathMonitor = {
         let monitor = NWPathMonitor(requiredInterfaceType: .wifi)
         return monitor
     }()

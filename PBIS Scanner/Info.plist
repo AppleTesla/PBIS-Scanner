@@ -56,14 +56,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>pbisapp</string>
-            </array>
-        </dict>
-    </array>
+	<key>NSCameraUsageDescription</key>
+	<string>A camera feed is needed to scan barcodes</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>pbisapp</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
