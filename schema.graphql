@@ -1,0 +1,25 @@
+enum Category {
+    SAFE
+    RESPONSIBLE
+    CONSIDERATE
+}
+
+type Location @model {
+    name: String!
+}
+
+type Juvenile @model {
+  id: Int!
+  first_name: String!
+  last_name: String!
+  points: Int!
+  event_id: Int!
+  active: Int!
+}
+
+type Behavior @model {
+    id: Int!
+    title: String!
+    category: Category!
+    location: Location! @connection
+}

@@ -95,7 +95,6 @@ extension AuthManager {
 
 extension AuthManager {
     func getToken() -> String? {
-        print("was called")
         var token: String?
         Amplify.Auth.fetchAuthSession { result in
             do {

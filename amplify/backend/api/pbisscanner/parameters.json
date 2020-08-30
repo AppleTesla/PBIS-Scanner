@@ -1,5 +1,5 @@
 {
-    "AppSyncApiName": "PbisGraphQL",
+    "AppSyncApiName": "pbisscanner",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
     "DynamoDBEnableServerSideEncryption": false
 }

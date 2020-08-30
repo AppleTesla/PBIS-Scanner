@@ -1,6 +1,7 @@
 // MARK: Imports
 
 import Foundation
+import AVFoundation
 import Network
 
 // MARK: Classes
@@ -9,7 +10,7 @@ class NetworkManager: ObservableObject {
         
     // MARK: Published
 
-    var isConnected = false
+    @Published var isConnected = true
     
     // MARK: Properties
 
@@ -36,6 +37,7 @@ class NetworkManager: ObservableObject {
 extension NetworkManager {
     func observeNetworkStatusEvents() {
         monitor.pathUpdateHandler = { path in
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             if path.status == .satisfied {
                 DispatchQueue.main.async { self.isConnected = true }
             } else {

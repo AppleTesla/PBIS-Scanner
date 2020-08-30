@@ -7,12 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E782523C3324E1899912566 /* Juvenile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C81721BF9549899E358390 /* Juvenile.swift */; };
 		209342999DC3437A0042A3DE /* Pods_PBIS_Scanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F71E722ED32FCB03755931A5 /* Pods_PBIS_Scanner.framework */; };
-		55117BB924FA97D20047D54A /* amplifytools.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 55117BB524FA97D20047D54A /* amplifytools.xcconfig */; };
-		55117BBA24FA97D20047D54A /* amplify.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BB624FA97D20047D54A /* amplify.json */; };
-		55117BBB24FA97D20047D54A /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BB724FA97D20047D54A /* amplifyconfiguration.json */; };
-		55117BBC24FA97D20047D54A /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BB824FA97D20047D54A /* awsconfiguration.json */; };
 		55117BBE24FA98E90047D54A /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBD24FA98E90047D54A /* AppManager.swift */; };
 		55117BC024FA9D650047D54A /* JuvenileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBF24FA9D650047D54A /* JuvenileManager.swift */; };
 		55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BC124FAA1BA0047D54A /* Endpoint.swift */; };
@@ -33,6 +28,10 @@
 		55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE624FB35280047D54A /* APIManagerInjector.swift */; };
 		55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */; };
 		55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BEA24FB42750047D54A /* KeychainCategory.swift */; };
+		55117BFB24FB5D610047D54A /* JuvenileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BFA24FB5D610047D54A /* JuvenileExtensions.swift */; };
+		55117C0024FB66970047D54A /* schema.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 55117BFD24FB66960047D54A /* schema.graphql */; };
+		55117C0124FB66970047D54A /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BFE24FB66960047D54A /* amplifyconfiguration.json */; };
+		55117C0224FB66970047D54A /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BFF24FB66970047D54A /* awsconfiguration.json */; };
 		55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839424FA63D4009356DC /* AppDelegate.swift */; };
 		55BA839724FA63D4009356DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839624FA63D4009356DC /* SceneDelegate.swift */; };
 		55BA839924FA63D4009356DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839824FA63D4009356DC /* ContentView.swift */; };
@@ -44,16 +43,9 @@
 		55E18C3224FA6F1700820CE3 /* LogCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C3124FA6F1700820CE3 /* LogCategory.swift */; };
 		55E18C3724FA71EF00820CE3 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C3624FA71EF00820CE3 /* SignInView.swift */; };
 		55E18C3D24FA776100820CE3 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C3C24FA776100820CE3 /* MainView.swift */; };
-		8996695051004A7EA09A2237 /* Juvenile+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEA674AF4A14279B3427866 /* Juvenile+Schema.swift */; };
-		D7F71C4CD6654D7D8F137A5D /* AmplifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94967259D934E8689555D6C /* AmplifyModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		03C81721BF9549899E358390 /* Juvenile.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = Juvenile.swift; path = amplify/generated/models/Juvenile.swift; sourceTree = "<group>"; };
-		55117BB524FA97D20047D54A /* amplifytools.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = amplifytools.xcconfig; sourceTree = "<group>"; };
-		55117BB624FA97D20047D54A /* amplify.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplify.json; sourceTree = "<group>"; };
-		55117BB724FA97D20047D54A /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
-		55117BB824FA97D20047D54A /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 		55117BBD24FA98E90047D54A /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
 		55117BBF24FA9D650047D54A /* JuvenileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuvenileManager.swift; sourceTree = "<group>"; };
 		55117BC124FAA1BA0047D54A /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
@@ -74,6 +66,10 @@
 		55117BE624FB35280047D54A /* APIManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManagerInjector.swift; sourceTree = "<group>"; };
 		55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerInjector.swift; sourceTree = "<group>"; };
 		55117BEA24FB42750047D54A /* KeychainCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainCategory.swift; sourceTree = "<group>"; };
+		55117BFA24FB5D610047D54A /* JuvenileExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuvenileExtensions.swift; sourceTree = "<group>"; };
+		55117BFD24FB66960047D54A /* schema.graphql */ = {isa = PBXFileReference; lastKnownFileType = file; path = schema.graphql; sourceTree = SOURCE_ROOT; };
+		55117BFE24FB66960047D54A /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = SOURCE_ROOT; };
+		55117BFF24FB66970047D54A /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = SOURCE_ROOT; };
 		55BA839124FA63D4009356DC /* PBIS Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PBIS Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55BA839424FA63D4009356DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55BA839624FA63D4009356DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,9 +83,7 @@
 		55E18C3124FA6F1700820CE3 /* LogCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCategory.swift; sourceTree = "<group>"; };
 		55E18C3624FA71EF00820CE3 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		55E18C3C24FA776100820CE3 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		6CEA674AF4A14279B3427866 /* Juvenile+Schema.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "Juvenile+Schema.swift"; path = "amplify/generated/models/Juvenile+Schema.swift"; sourceTree = "<group>"; };
 		7E496EA33889CEB2F18ABD00 /* Pods-PBIS Scanner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PBIS Scanner.release.xcconfig"; path = "Target Support Files/Pods-PBIS Scanner/Pods-PBIS Scanner.release.xcconfig"; sourceTree = "<group>"; };
-		A94967259D934E8689555D6C /* AmplifyModels.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = AmplifyModels.swift; path = amplify/generated/models/AmplifyModels.swift; sourceTree = "<group>"; };
 		E0274966E7C788BEF511419F /* Pods-PBIS Scanner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PBIS Scanner.debug.xcconfig"; path = "Target Support Files/Pods-PBIS Scanner/Pods-PBIS Scanner.debug.xcconfig"; sourceTree = "<group>"; };
 		F71E722ED32FCB03755931A5 /* Pods_PBIS_Scanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PBIS_Scanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -106,17 +100,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		55117BB424FA97D20047D54A /* AmplifyConfig */ = {
-			isa = PBXGroup;
-			children = (
-				55117BB524FA97D20047D54A /* amplifytools.xcconfig */,
-				55117BB624FA97D20047D54A /* amplify.json */,
-				55117BB724FA97D20047D54A /* amplifyconfiguration.json */,
-				55117BB824FA97D20047D54A /* awsconfiguration.json */,
-			);
-			path = AmplifyConfig;
-			sourceTree = "<group>";
-		};
 		55117BC324FAA20A0047D54A /* Structs */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,11 +120,28 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		55117BF924FB5D4C0047D54A /* models */ = {
+			isa = PBXGroup;
+			children = (
+				55117BFA24FB5D610047D54A /* JuvenileExtensions.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		55117BFC24FB665A0047D54A /* AmplifyConfig */ = {
+			isa = PBXGroup;
+			children = (
+				55117BFE24FB66960047D54A /* amplifyconfiguration.json */,
+				55117BFF24FB66970047D54A /* awsconfiguration.json */,
+				55117BFD24FB66960047D54A /* schema.graphql */,
+			);
+			path = AmplifyConfig;
+			sourceTree = "<group>";
+		};
 		55BA838824FA63D4009356DC = {
 			isa = PBXGroup;
 			children = (
-				55117BB424FA97D20047D54A /* AmplifyConfig */,
-				E0325EC2B4A5430C93F4C745 /* AmplifyModels */,
+				55117BFC24FB665A0047D54A /* AmplifyConfig */,
 				55BA839324FA63D4009356DC /* PBIS Scanner */,
 				55BA839224FA63D4009356DC /* Products */,
 				AC2418D0FA781B0E1A64C37E /* Pods */,
@@ -199,6 +199,7 @@
 		55E18C2D24FA6E6500820CE3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				55117BF924FB5D4C0047D54A /* models */,
 				55E18C2E24FA6E9000820CE3 /* LoggerExtensions.swift */,
 				55117BCA24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift */,
 				55117BDE24FB27AD0047D54A /* DataExtensions.swift */,
@@ -273,17 +274,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		E0325EC2B4A5430C93F4C745 /* AmplifyModels */ = {
-			isa = PBXGroup;
-			children = (
-				A94967259D934E8689555D6C /* AmplifyModels.swift */,
-				03C81721BF9549899E358390 /* Juvenile.swift */,
-				6CEA674AF4A14279B3427866 /* Juvenile+Schema.swift */,
-			);
-			name = AmplifyModels;
-			path = .;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -345,13 +335,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55117C0024FB66970047D54A /* schema.graphql in Resources */,
 				55BA83A124FA63DA009356DC /* LaunchScreen.storyboard in Resources */,
-				55117BBC24FA97D20047D54A /* awsconfiguration.json in Resources */,
-				55117BBB24FA97D20047D54A /* amplifyconfiguration.json in Resources */,
+				55117C0224FB66970047D54A /* awsconfiguration.json in Resources */,
+				55117C0124FB66970047D54A /* amplifyconfiguration.json in Resources */,
 				55BA839E24FA63DA009356DC /* Preview Assets.xcassets in Resources */,
-				55117BBA24FA97D20047D54A /* amplify.json in Resources */,
 				55BA839B24FA63DA009356DC /* Assets.xcassets in Resources */,
-				55117BB924FA97D20047D54A /* amplifytools.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +424,7 @@
 				55117BD324FAAFB70047D54A /* APIManager.swift in Sources */,
 				55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */,
 				55E18C2C24FA6D7800820CE3 /* AuthManager.swift in Sources */,
+				55117BFB24FB5D610047D54A /* JuvenileExtensions.swift in Sources */,
 				55117BD724FAB05C0047D54A /* APIManagerProtocol.swift in Sources */,
 				55117BC924FAA2830047D54A /* URLRequestProtocol.swift in Sources */,
 				55117BCB24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift in Sources */,
@@ -446,13 +436,10 @@
 				55E18C3224FA6F1700820CE3 /* LogCategory.swift in Sources */,
 				55BA839924FA63D4009356DC /* ContentView.swift in Sources */,
 				55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */,
-				D7F71C4CD6654D7D8F137A5D /* AmplifyModels.swift in Sources */,
 				55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */,
-				1E782523C3324E1899912566 /* Juvenile.swift in Sources */,
 				55117BDB24FB1C130047D54A /* NetworkManager.swift in Sources */,
 				55117BDF24FB27AD0047D54A /* DataExtensions.swift in Sources */,
 				55117BC024FA9D650047D54A /* JuvenileManager.swift in Sources */,
-				8996695051004A7EA09A2237 /* Juvenile+Schema.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

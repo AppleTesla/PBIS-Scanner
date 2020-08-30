@@ -39,6 +39,8 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
 
             defer { resultQueue.async { completion(result) } }
 
+            print(response?.description)
+
             if let error = error {
                 result = .failure(.responseProblem(error))
                 return
@@ -50,6 +52,8 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
             }
 
             if response.statusCode == 401 {
+                // TODO: Refresh token in keychain if expired
+                print("User ID token is expired.")
                 result = .failure(.otherProblem(URLError(.userAuthenticationRequired)))
                 return
             }
@@ -64,7 +68,6 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
                 return
             }
 
-            print(response.description)
             print(String(data: data, encoding: .utf8) ?? "Data is nil")
             return
         }
