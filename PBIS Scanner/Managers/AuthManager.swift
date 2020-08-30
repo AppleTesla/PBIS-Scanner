@@ -3,32 +3,33 @@
 import Foundation
 import Amplify
 import AmplifyPlugins
+import AWSPluginsCore
 
 // MARK: Classes
 
 class AuthManager: ObservableObject {
-    
+
     // MARK: Initializers
-    
+
     private var window: UIWindow {
         guard
             let scene = UIApplication.shared.connectedScenes.first,
             let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
             let window = windowSceneDelegate.window as? UIWindow
         else { return UIWindow() }
-        
+
         return window
     }
-    
+
     // MARK: Published
-    
+
     @Published var isSignedIn = false
-    
+
     init() {
         checkSessionStatus()
         observeAuthEvents()
     }
-    
+
     private func checkSessionStatus() {
         let _ = Amplify.Auth.fetchAuthSession { [weak self] result in
             switch result {
@@ -38,6 +39,24 @@ class AuthManager: ObservableObject {
                 print(error)
             }
         }
+    }
+}
+
+// MARK: Listener
+
+extension AuthManager {
+    private func observeAuthEvents() {
+        _ = Amplify.Hub.listen(to: .auth, listener: { [weak self] result in
+            switch result.eventName {
+            case HubPayload.EventName.Auth.signedIn:
+                DispatchQueue.main.async { self?.isSignedIn = true }
+            case HubPayload.EventName.Auth.signedOut,
+                 HubPayload.EventName.Auth.sessionExpired:
+                DispatchQueue.main.async { self?.isSignedIn = false }
+            default:
+                break
+            }
+        })
     }
 }
 
@@ -71,20 +90,25 @@ extension AuthManager {
     }
 }
 
-// MARK: Listener
+// MARK: Helper Methods
 
 extension AuthManager {
-    func observeAuthEvents() {
-        _ = Amplify.Hub.listen(to: .auth, listener: { [weak self] result in
-            switch result.eventName {
-            case HubPayload.EventName.Auth.signedIn:
-                DispatchQueue.main.async { self?.isSignedIn = true }
-            case HubPayload.EventName.Auth.signedOut,
-                 HubPayload.EventName.Auth.sessionExpired:
-                DispatchQueue.main.async { self?.isSignedIn = false }
-            default:
-                break
+    func getIDToken() -> String? {
+        var token: String?
+        Amplify.Auth.fetchAuthSession { result in
+            do {
+                let session = try result.get()
+
+                if let cognitoTokenProvider = session as? AuthCognitoTokensProvider {
+                    let tokens = try cognitoTokenProvider.getCognitoTokens().get()
+                    token = tokens.idToken
+                    print("Retrieved token: ", token ?? "nil")
+                }
+            } catch {
+                print(error)
             }
-        })
+        }
+        return token
     }
 }
+

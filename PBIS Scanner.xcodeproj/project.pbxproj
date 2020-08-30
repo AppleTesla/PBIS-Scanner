@@ -14,13 +14,25 @@
 		55117BBB24FA97D20047D54A /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BB724FA97D20047D54A /* amplifyconfiguration.json */; };
 		55117BBC24FA97D20047D54A /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = 55117BB824FA97D20047D54A /* awsconfiguration.json */; };
 		55117BBE24FA98E90047D54A /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBD24FA98E90047D54A /* AppManager.swift */; };
-		55117BC024FA9D650047D54A /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBF24FA9D650047D54A /* DataManager.swift */; };
+		55117BC024FA9D650047D54A /* JuvenileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBF24FA9D650047D54A /* JuvenileManager.swift */; };
 		55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BC124FAA1BA0047D54A /* Endpoint.swift */; };
 		55117BC524FAA2220047D54A /* EndpointConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BC424FAA2220047D54A /* EndpointConfiguration.swift */; };
 		55117BC924FAA2830047D54A /* URLRequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BC824FAA2830047D54A /* URLRequestProtocol.swift */; };
 		55117BCB24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BCA24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift */; };
 		55117BCD24FAA2FA0047D54A /* BaseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BCC24FAA2FA0047D54A /* BaseURL.swift */; };
 		55117BCF24FAA3B40047D54A /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BCE24FAA3B40047D54A /* HttpMethod.swift */; };
+		55117BD124FAACB90047D54A /* DataStoreMutationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BD024FAACB90047D54A /* DataStoreMutationType.swift */; };
+		55117BD324FAAFB70047D54A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BD224FAAFB70047D54A /* APIManager.swift */; };
+		55117BD524FAB0180047D54A /* ResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BD424FAB0180047D54A /* ResponseError.swift */; };
+		55117BD724FAB05C0047D54A /* APIManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BD624FAB05C0047D54A /* APIManagerProtocol.swift */; };
+		55117BDB24FB1C130047D54A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BDA24FB1C130047D54A /* NetworkManager.swift */; };
+		55117BDD24FB27710047D54A /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BDC24FB27710047D54A /* KeychainManager.swift */; };
+		55117BDF24FB27AD0047D54A /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BDE24FB27AD0047D54A /* DataExtensions.swift */; };
+		55117BE124FB30EB0047D54A /* NetworkManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */; };
+		55117BE324FB31C20047D54A /* AuthManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE224FB31C20047D54A /* AuthManagerInjector.swift */; };
+		55117BE524FB33950047D54A /* HttpHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE424FB33950047D54A /* HttpHeader.swift */; };
+		55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE624FB35280047D54A /* APIManagerInjector.swift */; };
+		55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */; };
 		55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839424FA63D4009356DC /* AppDelegate.swift */; };
 		55BA839724FA63D4009356DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839624FA63D4009356DC /* SceneDelegate.swift */; };
 		55BA839924FA63D4009356DC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA839824FA63D4009356DC /* ContentView.swift */; };
@@ -43,13 +55,25 @@
 		55117BB724FA97D20047D54A /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
 		55117BB824FA97D20047D54A /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 		55117BBD24FA98E90047D54A /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
-		55117BBF24FA9D650047D54A /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		55117BBF24FA9D650047D54A /* JuvenileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JuvenileManager.swift; sourceTree = "<group>"; };
 		55117BC124FAA1BA0047D54A /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		55117BC424FAA2220047D54A /* EndpointConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointConfiguration.swift; sourceTree = "<group>"; };
 		55117BC824FAA2830047D54A /* URLRequestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestProtocol.swift; sourceTree = "<group>"; };
 		55117BCA24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestProtocolExtensions.swift; sourceTree = "<group>"; };
 		55117BCC24FAA2FA0047D54A /* BaseURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseURL.swift; sourceTree = "<group>"; };
 		55117BCE24FAA3B40047D54A /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
+		55117BD024FAACB90047D54A /* DataStoreMutationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreMutationType.swift; sourceTree = "<group>"; };
+		55117BD224FAAFB70047D54A /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		55117BD424FAB0180047D54A /* ResponseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseError.swift; sourceTree = "<group>"; };
+		55117BD624FAB05C0047D54A /* APIManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManagerProtocol.swift; sourceTree = "<group>"; };
+		55117BDA24FB1C130047D54A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		55117BDC24FB27710047D54A /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		55117BDE24FB27AD0047D54A /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerInjector.swift; sourceTree = "<group>"; };
+		55117BE224FB31C20047D54A /* AuthManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManagerInjector.swift; sourceTree = "<group>"; };
+		55117BE424FB33950047D54A /* HttpHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpHeader.swift; sourceTree = "<group>"; };
+		55117BE624FB35280047D54A /* APIManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManagerInjector.swift; sourceTree = "<group>"; };
+		55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManagerInjector.swift; sourceTree = "<group>"; };
 		55BA839124FA63D4009356DC /* PBIS Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PBIS Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55BA839424FA63D4009356DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55BA839624FA63D4009356DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,7 +88,6 @@
 		55E18C3624FA71EF00820CE3 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		55E18C3C24FA776100820CE3 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		6CEA674AF4A14279B3427866 /* Juvenile+Schema.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "Juvenile+Schema.swift"; path = "amplify/generated/models/Juvenile+Schema.swift"; sourceTree = "<group>"; };
-		6DBB06E66EAE4D3BBB893874 /* schema.graphql */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text; name = schema.graphql; path = amplify/backend/api/PbisGraphQL/schema.graphql; sourceTree = "<group>"; };
 		7E496EA33889CEB2F18ABD00 /* Pods-PBIS Scanner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PBIS Scanner.release.xcconfig"; path = "Target Support Files/Pods-PBIS Scanner/Pods-PBIS Scanner.release.xcconfig"; sourceTree = "<group>"; };
 		A94967259D934E8689555D6C /* AmplifyModels.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = AmplifyModels.swift; path = amplify/generated/models/AmplifyModels.swift; sourceTree = "<group>"; };
 		E0274966E7C788BEF511419F /* Pods-PBIS Scanner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PBIS Scanner.debug.xcconfig"; path = "Target Support Files/Pods-PBIS Scanner/Pods-PBIS Scanner.debug.xcconfig"; sourceTree = "<group>"; };
@@ -90,7 +113,6 @@
 				55117BB624FA97D20047D54A /* amplify.json */,
 				55117BB724FA97D20047D54A /* amplifyconfiguration.json */,
 				55117BB824FA97D20047D54A /* awsconfiguration.json */,
-				6DBB06E66EAE4D3BBB893874 /* schema.graphql */,
 			);
 			path = AmplifyConfig;
 			sourceTree = "<group>";
@@ -107,6 +129,11 @@
 			isa = PBXGroup;
 			children = (
 				55117BC824FAA2830047D54A /* URLRequestProtocol.swift */,
+				55117BD624FAB05C0047D54A /* APIManagerProtocol.swift */,
+				55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */,
+				55117BE224FB31C20047D54A /* AuthManagerInjector.swift */,
+				55117BE624FB35280047D54A /* APIManagerInjector.swift */,
+				55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -134,10 +161,10 @@
 		55BA839324FA63D4009356DC /* PBIS Scanner */ = {
 			isa = PBXGroup;
 			children = (
-				55117BC624FAA2620047D54A /* Protocols */,
 				55E18C3424FA71C500820CE3 /* Delegates */,
 				55E18C2A24FA6D6E00820CE3 /* Managers */,
 				55117BC324FAA20A0047D54A /* Structs */,
+				55117BC624FAA2620047D54A /* Protocols */,
 				55E18C3024FA6EE600820CE3 /* Enums */,
 				55E18C2D24FA6E6500820CE3 /* Extensions */,
 				55E18C3324FA71A900820CE3 /* Views */,
@@ -162,7 +189,10 @@
 			children = (
 				55117BBD24FA98E90047D54A /* AppManager.swift */,
 				55E18C2B24FA6D7800820CE3 /* AuthManager.swift */,
-				55117BBF24FA9D650047D54A /* DataManager.swift */,
+				55117BBF24FA9D650047D54A /* JuvenileManager.swift */,
+				55117BD224FAAFB70047D54A /* APIManager.swift */,
+				55117BDA24FB1C130047D54A /* NetworkManager.swift */,
+				55117BDC24FB27710047D54A /* KeychainManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -172,6 +202,7 @@
 			children = (
 				55E18C2E24FA6E9000820CE3 /* LoggerExtensions.swift */,
 				55117BCA24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift */,
+				55117BDE24FB27AD0047D54A /* DataExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -183,6 +214,9 @@
 				55117BC124FAA1BA0047D54A /* Endpoint.swift */,
 				55117BCC24FAA2FA0047D54A /* BaseURL.swift */,
 				55117BCE24FAA3B40047D54A /* HttpMethod.swift */,
+				55117BE424FB33950047D54A /* HttpHeader.swift */,
+				55117BD024FAACB90047D54A /* DataStoreMutationType.swift */,
+				55117BD424FAB0180047D54A /* ResponseError.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -388,24 +422,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55117BD124FAACB90047D54A /* DataStoreMutationType.swift in Sources */,
 				55117BCF24FAA3B40047D54A /* HttpMethod.swift in Sources */,
+				55117BE124FB30EB0047D54A /* NetworkManagerInjector.swift in Sources */,
 				55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */,
 				55E18C3D24FA776100820CE3 /* MainView.swift in Sources */,
+				55117BDD24FB27710047D54A /* KeychainManager.swift in Sources */,
 				55E18C3724FA71EF00820CE3 /* SignInView.swift in Sources */,
+				55117BE324FB31C20047D54A /* AuthManagerInjector.swift in Sources */,
+				55117BD524FAB0180047D54A /* ResponseError.swift in Sources */,
+				55117BE524FB33950047D54A /* HttpHeader.swift in Sources */,
 				55117BBE24FA98E90047D54A /* AppManager.swift in Sources */,
+				55117BD324FAAFB70047D54A /* APIManager.swift in Sources */,
+				55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */,
 				55E18C2C24FA6D7800820CE3 /* AuthManager.swift in Sources */,
+				55117BD724FAB05C0047D54A /* APIManagerProtocol.swift in Sources */,
 				55117BC924FAA2830047D54A /* URLRequestProtocol.swift in Sources */,
 				55117BCB24FAA2BA0047D54A /* URLRequestProtocolExtensions.swift in Sources */,
 				55BA839724FA63D4009356DC /* SceneDelegate.swift in Sources */,
 				55117BCD24FAA2FA0047D54A /* BaseURL.swift in Sources */,
 				55E18C2F24FA6E9000820CE3 /* LoggerExtensions.swift in Sources */,
 				55117BC524FAA2220047D54A /* EndpointConfiguration.swift in Sources */,
+				55117BE924FB35F40047D54A /* KeychainManagerInjector.swift in Sources */,
 				55E18C3224FA6F1700820CE3 /* LogCategory.swift in Sources */,
 				55BA839924FA63D4009356DC /* ContentView.swift in Sources */,
 				D7F71C4CD6654D7D8F137A5D /* AmplifyModels.swift in Sources */,
 				55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */,
 				1E782523C3324E1899912566 /* Juvenile.swift in Sources */,
-				55117BC024FA9D650047D54A /* DataManager.swift in Sources */,
+				55117BDB24FB1C130047D54A /* NetworkManager.swift in Sources */,
+				55117BDF24FB27AD0047D54A /* DataExtensions.swift in Sources */,
+				55117BC024FA9D650047D54A /* JuvenileManager.swift in Sources */,
 				8996695051004A7EA09A2237 /* Juvenile+Schema.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

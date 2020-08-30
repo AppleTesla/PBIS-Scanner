@@ -28,10 +28,6 @@ class JuvenileManager: ObservableObject, APIManagerInjector {
 
     init() {
     }
-    
-    private func remoteFetchForAllJuveniles(completion: @escaping ([Juvenile]) -> Void) {
-        apiManager.fetch(from: juvenilesEndpointConfig, completion: <#T##(Result<Decodable, ResponseError>) -> Void#>)
-    }
 }
 
 // MARK: Helper Methods
@@ -42,6 +38,21 @@ extension JuvenileManager {
             switch result {
             case .success:
                 print("Successfully cleared DataStore.")
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+}
+
+// MARK: Remote
+
+extension JuvenileManager {
+    private func remoteFetchForAllJuveniles(completion: @escaping ([Juvenile]) -> Void) {
+        apiManager.fetch(from: juvenilesEndpointConfig) { (result: Result<[Juvenile], ResponseError>) in
+            switch result {
+            case .success(let juveniles):
+                completion(juveniles)
             case .failure(let error):
                 print(error)
             }
@@ -73,8 +84,8 @@ extension JuvenileManager {
         }
     }
     
-    func localFetchForAllJuveniles(completion: ([Juvenile]) -> Void) {
-        Amplify.DataStore.query(Juvenile.self) { result in
+    func localFetchForAll<T: Model>(completion: ([T]) -> Void) {
+        Amplify.DataStore.query(T.self) { result in
             switch result {
             case .success(let juveniles):
                 completion(juveniles)
