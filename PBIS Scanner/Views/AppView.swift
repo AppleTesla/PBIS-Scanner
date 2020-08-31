@@ -10,27 +10,27 @@ struct AppView: View {
 
     @EnvironmentObject private var qm: QueueManager
 
-    @EnvironmentObject private var apm: AppManager
+    @EnvironmentObject private var amp: AmplifyConfigurator
 
     @EnvironmentObject private var auth: AuthManager
 
     var body: some View {
         Group {
             if auth.isSignedIn {
-                TabView(selection: $apm.tabIndex) {
+                TabView(selection: $amp.tabIndex) {
                     HistoryView()
                         .tabItem {
-                            apm.tabIndex == 0 ? Image(.personFill) : Image(.person)
+                            amp.tabIndex == 0 ? Image(.personFill) : Image(.person)
                     }
                     .tag(0)
                     ScanView()
                         .tabItem {
-                            apm.tabIndex == 1 ? Image(.barcode) : Image(.viewfinder)
+                            amp.tabIndex == 1 ? Image(.barcode) : Image(.viewfinder)
                     }
                     .tag(1)
                     ProfileView()
                         .tabItem {
-                            apm.tabIndex == 2 ? Image(.clockFill) : Image(.clock)
+                            amp.tabIndex == 2 ? Image(.clockFill) : Image(.clock)
                     }
                     .tag(2)
                 }

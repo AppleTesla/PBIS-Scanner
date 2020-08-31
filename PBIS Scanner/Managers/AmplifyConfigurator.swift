@@ -7,7 +7,7 @@ import Combine
 
 // MARK: Classes
 
-final class AppManager: ObservableObject {
+final class AmplifyConfigurator: ObservableObject {
 
     // MARK: Navigation
 

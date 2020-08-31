@@ -52,6 +52,8 @@ extension Juvenile: Equatable {
     }
 }
 
+extension Juvenile: Identifiable { }
+
 extension Juvenile: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(event_id)

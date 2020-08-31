@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		209342999DC3437A0042A3DE /* Pods_PBIS_Scanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F71E722ED32FCB03755931A5 /* Pods_PBIS_Scanner.framework */; };
-		55117BBE24FA98E90047D54A /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBD24FA98E90047D54A /* AppManager.swift */; };
+		55117BBE24FA98E90047D54A /* AmplifyConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBD24FA98E90047D54A /* AmplifyConfigurator.swift */; };
 		55117BC024FA9D650047D54A /* QueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BBF24FA9D650047D54A /* QueueManager.swift */; };
 		55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BC124FAA1BA0047D54A /* Endpoint.swift */; };
 		55117BC524FAA2220047D54A /* EndpointConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55117BC424FAA2220047D54A /* EndpointConfiguration.swift */; };
@@ -69,7 +69,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		55117BBD24FA98E90047D54A /* AppManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppManager.swift; sourceTree = "<group>"; };
+		55117BBD24FA98E90047D54A /* AmplifyConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplifyConfigurator.swift; sourceTree = "<group>"; };
 		55117BBF24FA9D650047D54A /* QueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueManager.swift; sourceTree = "<group>"; };
 		55117BC124FAA1BA0047D54A /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		55117BC424FAA2220047D54A /* EndpointConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointConfiguration.swift; sourceTree = "<group>"; };
@@ -278,7 +278,7 @@
 		55E18C2A24FA6D6E00820CE3 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				55117BBD24FA98E90047D54A /* AppManager.swift */,
+				55117BBD24FA98E90047D54A /* AmplifyConfigurator.swift */,
 				55E18C2B24FA6D7800820CE3 /* AuthManager.swift */,
 				55117BBF24FA9D650047D54A /* QueueManager.swift */,
 				55117BD224FAAFB70047D54A /* APIManager.swift */,
@@ -501,7 +501,7 @@
 				55E18C3724FA71EF00820CE3 /* SignInView.swift in Sources */,
 				55117BD524FAB0180047D54A /* ResponseError.swift in Sources */,
 				55117BE524FB33950047D54A /* HttpHeader.swift in Sources */,
-				55117BBE24FA98E90047D54A /* AppManager.swift in Sources */,
+				55117BBE24FA98E90047D54A /* AmplifyConfigurator.swift in Sources */,
 				55117BD324FAAFB70047D54A /* APIManager.swift in Sources */,
 				55117BE724FB35280047D54A /* APIManagerInjector.swift in Sources */,
 				5574668B24FC19CE00C8138F /* Behavior.swift in Sources */,

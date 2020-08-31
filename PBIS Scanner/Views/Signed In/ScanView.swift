@@ -9,8 +9,6 @@ struct ScanView: View {
 
     // MARK: Properties
 
-    @EnvironmentObject private var apm: AppManager
-
     @EnvironmentObject private var qm: QueueManager
 
     @State var sessionIsOffline = false
@@ -32,9 +30,10 @@ struct ScanView: View {
             }
 
             List {
-                ForEach(qm.juveniles, id: \.id) { juvenile in
+                ForEach(qm.juveniles) { juvenile in
                     Text(juvenile.first_name)
                 }
+                .onDelete(perform: self.qm.removeJuveniles)
             }
         }
     }

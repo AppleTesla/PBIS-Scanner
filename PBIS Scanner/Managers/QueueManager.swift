@@ -278,7 +278,7 @@ extension QueueManager {
     }
 }
 
-// MARK: Juvenile Fetch
+// MARK: Juvenile Fetch & Deletion
 
 extension QueueManager {
     func fetchJuvenilesWithOnlinePriority(withEventID id: Int? = nil) {
@@ -348,5 +348,13 @@ extension QueueManager {
                 }
             })
         }
+    }
+
+    func removeJuveniles(at offsets: IndexSet) {
+        var juveniles = self.juveniles
+        juveniles.remove(atOffsets: offsets)
+        guard let juvenile = Set(juveniles).symmetricDifference(self.juveniles).first else { return }
+        self.delete(entity: juvenile)
+        DispatchQueue.main.async { self.juveniles.remove(atOffsets: offsets) }
     }
 }

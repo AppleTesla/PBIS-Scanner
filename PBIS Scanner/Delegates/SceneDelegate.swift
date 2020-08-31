@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     // MARK: Managers
     
-    var appManager: AppManager?
+    var amplifyConfigurator: AmplifyConfigurator?
     var authManager: AuthManager?
     var queueManager: QueueManager?
 
@@ -22,12 +22,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Initialize all managers used direcly by SwiftUI views.
 
-        appManager = AppManager {
+        amplifyConfigurator = AmplifyConfigurator {
             authManager = AuthManager()
             queueManager = QueueManager()
         }
 
-        guard let appManager = appManager,
+        guard let appManager = amplifyConfigurator,
             let authManager = authManager,
             let queueManager = queueManager
             else { return }
