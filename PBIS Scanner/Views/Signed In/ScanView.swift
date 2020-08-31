@@ -28,7 +28,7 @@ struct ScanView: View {
             }
             .onReceive(qrCodePublisher.debounce(for: .milliseconds(ProcessInfo.processInfo.isLowPowerModeEnabled ? 50 : 25),
                                                 scheduler: DispatchQueue.main)) { code in
-                                                    self.qm.blendFetchJuvenile(withEventID: code)
+                                                    self.qm.fetchJuvenilesWithOfflinePriority(withEventID: code)
             }
 
             List {

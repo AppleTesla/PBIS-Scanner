@@ -28,6 +28,6 @@ extension Location: Codable {
 
 extension Location: Equatable {
     public static func ==(lhs: Location, rhs: Location) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.name == rhs.name
     }
 }

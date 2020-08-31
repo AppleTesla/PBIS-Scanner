@@ -8,9 +8,7 @@ extension Queue: Identifiable { }
 
 extension Queue: Equatable {
     public static func ==(lhs: Queue, rhs: Queue) -> Bool {
-        return lhs.juveniles!.elementsEqual(rhs.juveniles!)
-//            && lhs.owner == rhs.owner
-            && lhs.id == rhs.id
+        return lhs.id == rhs.id
     }
 }
 

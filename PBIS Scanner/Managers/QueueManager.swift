@@ -42,41 +42,18 @@ final class QueueManager: ObservableObject, APIManagerInjector {
 
     init() {
         initializeQueue()
-        initializeBehaviors()
         initializeLocations()
-        initializeJuveniles()
-        observeJuveniles()
-    }
-
-    /// Remote fetches all juveniles from database and cross references with database to keep up-to-date. This function does not load juveniles into the queue. Refer to the 'initializeQueue' function.
-    private func initializeJuveniles() {
-        // TODO: Find a way to use a predicate?
-        remoteFetch { (juveniles: [Juvenile]) in
-            print("Attempted to remote fetch juveniles on init: ", juveniles.count)
-
-            juveniles.forEach({ juvenile in
-                self.save(entity: juvenile)
-            })
-
-            // TODO: Deletes juveniles unpredictably
-//            self.localFetch { (locals: [Juvenile]) in
-//                locals.forEach({ local in
-//                    if !juveniles.contains(local) {
-//                        self.delete(entity: local)
-//                        print("getting deleted?")
-//                    }
-//                })
-//            }
-        }
+        initializeBehaviors()
+        fetchJuvenilesWithOnlinePriority()
+//        observeJuveniles()
     }
 
     /// This function loads juveniles into the queue from local only.
     private func initializeQueue() {
-        localFetch { (queues: [Queue]) in
+        offlineFetch { (queues: [Queue]) in
             if !queues.isEmpty {
                 print("\(queues.count) queues are on-device", "\(queues.first!.juveniles!.count) juveniles inside.")
                 self.queue = queues.first!
-
                 self.queue.juveniles?.load({ result in
                     switch result {
                     case .success(let juveniles):
@@ -86,22 +63,24 @@ final class QueueManager: ObservableObject, APIManagerInjector {
                     }
                 })
             } else {
-                self.queue = Queue(id: UUID().uuidString, juveniles: [])
+                self.queue = Queue(juveniles: [])
                 save(entity: queue)
             }
         }
     }
 
     private func initializeLocations() {
-        localFetch { (locations: [Location]) in
+        offlineFetch { (locations: [Location]) in
             if !locations.isEmpty {
                 self.locations = locations
             } else {
-                remoteFetch(Location.self, withType: String.self) { (strings: [String]) in
+                fetchOnlineAtomic(Location.self, withType: String.self) { (strings: [String]) in
                     print("Attempted to remote fetch locations on init: ", strings.count)
                     strings.forEach({ name in
-                        let location = Location(name: name)
-                        self.locations.append(location)
+                        let location = Location(id: String(name.hashValue), name: name)
+                        if !self.locations.contains(location) {
+                            self.locations.append(location)
+                        }
                         self.save(entity: location)
                     })
                 }
@@ -110,15 +89,17 @@ final class QueueManager: ObservableObject, APIManagerInjector {
     }
 
     private func initializeBehaviors() {
-        localFetch { (behaviors: [Behavior]) in
+        offlineFetch { (behaviors: [Behavior]) in
             if !behaviors.isEmpty {
                 self.behaviors = behaviors
             } else {
-                remoteFetch { (behaviors: [Behavior]) in
+                fetchOnlineList { (behaviors: [Behavior]) in
                     print("Attempted to remote fetch behaviors on init: ", behaviors.count)
                     behaviors.forEach({ behavior in
+                        if !self.behaviors.contains(behavior) {
+                            self.behaviors.append(behavior)
+                        }
                         self.save(entity: behavior)
-                        self.behaviors.append(behavior)
                     })
                 }
             }
@@ -145,7 +126,7 @@ extension QueueManager {
 
 extension QueueManager {
     /// Use this remote fetch function if the object return type is expected to be an atomic array and there are no special parameters. Location is likely to be the only endpoint in need of this treatment.
-    private func remoteFetch<T: Model, U: Decodable>(_ model: T.Type, withType atomic: U.Type, customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([U]) -> Void) {
+    private func fetchOnlineAtomic<T: Model, U: Decodable>(_ model: T.Type, withType atomic: U.Type, customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([U]) -> Void) {
         var endpointConfig: EndpointConfiguration! = customEndpoint
 
         switch T.self {
@@ -168,7 +149,7 @@ extension QueueManager {
     }
 
     /// Use this remote fetch function if the object return type is not expected to be an array and there might special parameters.
-    private func remoteFetch<T: Model>(customEndpoint: EndpointConfiguration? = nil, completion: @escaping (T?) -> Void) {
+    private func fetchOnlineObject<T: Model>(customEndpoint: EndpointConfiguration? = nil, completion: @escaping (T?) -> Void) {
         var endpointConfig: EndpointConfiguration! = customEndpoint
 
         if endpointConfig == nil {
@@ -195,7 +176,7 @@ extension QueueManager {
     }
 
     /// Use this remote fetch function if the object return type is expected to be an array and there are no special parameters.
-    private func remoteFetch<T: Model>(completion: @escaping ([T]) -> Void) {
+    private func fetchOnlineList<T: Model>(completion: @escaping ([T]) -> Void) {
         var endpointConfig: EndpointConfiguration!
 
         if endpointConfig == nil {
@@ -225,35 +206,40 @@ extension QueueManager {
 // MARK: Local Fetch - Private!
 
 extension QueueManager {
-    private func observeJuveniles() {
-        observationToken = Amplify.DataStore.publisher(for: Juvenile.self)
-            .sink(receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    print(error)
-                }
-            }) { changes in
-                guard let juvenile = try? changes.decodeModel(as: Juvenile.self) else { return }
-                switch DataStoreMutationType(rawValue: changes.mutationType) {
-                case .create:
-                    if !self.queue.juveniles!.contains(juvenile) {
-                        DispatchQueue.main.async { self.juveniles.append(juvenile) }
-                    }
-                // TODO: Add juvenile removal capabillity
-                case .delete:
-                    if let index = self.juveniles.firstIndex(of: juvenile) {
-                        DispatchQueue.main.async { self.juveniles.remove(at: index) }
-                    }
-                case .update:
-                    if let index = self.juveniles.firstIndex(of: juvenile) {
-                        DispatchQueue.main.async { self.juveniles[index] = juvenile }
-                    }
-                default:
-                    print("No changes needed to be sinked.", juvenile)
-                }
-        }
-    }
+//    private func observeJuveniles() {
+//        observationToken = Amplify.DataStore.publisher(for: Juvenile.self)
+//            .sink(receiveCompletion: { completion in
+//                if case let .failure(error) = completion {
+//                    print(error)
+//                }
+//            }) { changes in
+//                guard let juvenile = try? changes.decodeModel(as: Juvenile.self) else { return }
+//                guard juvenile.queue == self.queue else { return }
+//
+//                print(juvenile)
+//                print(self.queue.id)
+//
+//                print("idk: ", self.juveniles.count)
+//
+//                switch DataStoreMutationType(rawValue: changes.mutationType) {
+//                case .create:
+//                    guard !self.juveniles.contains(juvenile) else { break }
+//                    DispatchQueue.main.async { self.juveniles.append(juvenile) }
+//                case .delete:
+//                    print("delete?")
+//                    guard let index = self.juveniles.firstIndex(of: juvenile) else { break }
+//                    DispatchQueue.main.async { self.juveniles.remove(at: index) }
+//                case .update:
+//                    print("update?")
+//                    guard let index = self.juveniles.firstIndex(of: juvenile) else { break }
+//                    DispatchQueue.main.async { self.juveniles[index] = juvenile }
+//                default:
+//                    print("No changes needed to be sinked.", juvenile)
+//                }
+//        }
+//    }
     
-    private func localFetch<T: Model>(predicate: QueryPredicate? = nil, sort: QuerySortInput? = nil, completion: ([T]) -> Void) {
+    private func offlineFetch<T: Model>(predicate: QueryPredicate? = nil, sort: QuerySortInput? = nil, completion: ([T]) -> Void) {
         Amplify.DataStore.query(T.self, where: predicate, sort: sort) { result in
             switch result {
             case .success(let objects):
@@ -292,39 +278,75 @@ extension QueueManager {
     }
 }
 
-// MARK: Blend Fetch
+// MARK: Juvenile Fetch
 
 extension QueueManager {
-    // TODO: Instead of only getting the missing juvenile, just get all of them.
-    func blendFetchJuvenile(withEventID id: Int) {
-        var shouldFetchRemote = false
+    func fetchJuvenilesWithOnlinePriority(withEventID id: Int? = nil) {
+        fetchOnlineList { (remotes: [Juvenile]) in
+            remotes.forEach({ remote in
+                print(remote.event_id)
+                self.save(entity: remote)
+            })
+            self.offlineFetch { (locals: [Juvenile]) in
+                locals.forEach({ local in
+                    if !remotes.isEmpty && !remotes.contains(local) {
+                        guard let index = self.juveniles.firstIndex(of: local) else { return }
+                        self.juveniles.remove(at: index)
+                        self.delete(entity: local)
+                    } else if let id = id, let interest = locals.first(where: { $0.event_id == id }) {
+                        var new = interest
+                        new.queue = self.queue
+
+                        guard !self.juveniles.contains(new) else { return }
+                        self.juveniles.append(new)
+                        self.save(entity: new)
+                    }
+                })
+            }
+        }
+    }
+
+    func fetchJuvenilesWithOfflinePriority(withEventID id: Int? = nil) {
+        var shouldFetchOnline = true
 
         defer {
-            if shouldFetchRemote {
+            if shouldFetchOnline, let id = id {
                 let customEndpoint = EndpointConfiguration(path: .juvenile(.get),
                                                            httpMethod: .get,
                                                            body: nil,
                                                            queryStrings: [Juvenile.keys.event_id.stringValue: String(id)])
-                remoteFetch(customEndpoint: customEndpoint) { (juvenile: Juvenile?) in
-                    if var juvenile = juvenile {
-                        juvenile.queue = self.queue
-                        self.save(entity: juvenile) // CREATE
-                    } else {
-                        print("Could not find juvenile from database with event ID \(id)")
-                    }
+                fetchOnlineList { (remotes: [Juvenile]) in
+                    remotes.forEach({ remote in
+                        print(remote.event_id)
+                        if remote.event_id == id {
+                            var new = remote
+                            new.queue = self.queue
+
+                            guard !self.juveniles.contains(new) else { return }
+                            self.juveniles.append(new)
+                            self.save(entity: new)
+                            print("Successfully fetched \(new.first_name) from remote!")
+                        } else {
+                            self.save(entity: remote)
+                        }
+                    })
                 }
             }
         }
 
-        let p = Juvenile.keys
-        localFetch(predicate: p.event_id.eq(id), sort: nil) { (juveniles: [Juvenile]) in
-            if !juveniles.contains(where: { $0.event_id == id }) {
-                shouldFetchRemote = true
-            } else if var juvenile = juveniles.first {
-                juvenile.queue = self.queue
-                save(entity: juvenile) // UPDATE
-                print("Fetched \(juvenile.first_name) from local and updated his/her queue.")
-            }
+        offlineFetch { (locals: [Juvenile]) in
+            locals.forEach({ local in
+//                print(local.event_id)
+                if local.event_id == id {
+                    shouldFetchOnline = false
+                    var new = local
+                    new.queue = self.queue
+
+                    guard !self.juveniles.contains(new) else { return }
+                    self.juveniles.append(new)
+                    save(entity: new)
+                }
+            })
         }
     }
 }
