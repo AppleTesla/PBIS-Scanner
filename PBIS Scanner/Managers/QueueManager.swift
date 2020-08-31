@@ -283,20 +283,25 @@ extension QueueManager {
 extension QueueManager {
     func fetchJuvenilesWithOnlinePriority(withEventID id: Int? = nil) {
         fetchOnlineList { (remotes: [Juvenile]) in
+            /// Fetch all remote juveniles
             remotes.forEach({ remote in
                 print(remote.event_id)
                 self.save(entity: remote)
             })
+            
+            /// Fetch all local juveniles
             self.offlineFetch { (locals: [Juvenile]) in
                 locals.forEach({ local in
+                    /// If the local juvenile is non-existent or outdated when compared to remote, delete them.
                     if !remotes.isEmpty && !remotes.contains(local) {
                         guard let index = self.juveniles.firstIndex(of: local) else { return }
                         self.juveniles.remove(at: index)
                         self.delete(entity: local)
+                        /// If the local juvenile is intended to be added to the queue, do so here.
                     } else if let id = id, let interest = locals.first(where: { $0.event_id == id }) {
                         var new = interest
                         new.queue = self.queue
-
+                        /// If local contains non-existent or outdated juveniles, delete them.
                         guard !self.juveniles.contains(new) else { return }
                         self.juveniles.append(new)
                         self.save(entity: new)
@@ -310,14 +315,16 @@ extension QueueManager {
         var shouldFetchOnline = true
 
         defer {
+            /// Wait for offline fetch attempt..
             if shouldFetchOnline, let id = id {
                 let customEndpoint = EndpointConfiguration(path: .juvenile(.get),
                                                            httpMethod: .get,
                                                            body: nil,
                                                            queryStrings: [Juvenile.keys.event_id.stringValue: String(id)])
+
+                /// If the offline fetch failed, then try an online fetch.
                 fetchOnlineList { (remotes: [Juvenile]) in
                     remotes.forEach({ remote in
-                        print(remote.event_id)
                         if remote.event_id == id {
                             var new = remote
                             new.queue = self.queue
@@ -334,9 +341,10 @@ extension QueueManager {
             }
         }
 
+        /// Look for juveniles offline first.
         offlineFetch { (locals: [Juvenile]) in
             locals.forEach({ local in
-//                print(local.event_id)
+                /// Check for juvenile with scanned qr code string.
                 if local.event_id == id {
                     shouldFetchOnline = false
                     var new = local
@@ -353,8 +361,9 @@ extension QueueManager {
     func removeJuveniles(at offsets: IndexSet) {
         var juveniles = self.juveniles
         juveniles.remove(atOffsets: offsets)
-        guard let juvenile = Set(juveniles).symmetricDifference(self.juveniles).first else { return }
-        self.delete(entity: juvenile)
+        guard var juvenile = Set(juveniles).symmetricDifference(self.juveniles).first else { return }
         DispatchQueue.main.async { self.juveniles.remove(atOffsets: offsets) }
+        juvenile.queue = nil
+        save(entity: juvenile)
     }
 }
