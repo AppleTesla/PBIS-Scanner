@@ -52,19 +52,21 @@ final class QueueManager: ObservableObject, APIManagerInjector {
     private func initializeJuveniles() {
         // TODO: Find a way to use a predicate?
         remoteFetch { (juveniles: [Juvenile]) in
-            print("Attempted to remote fetch juveniles on init: ", juveniles)
+            print("Attempted to remote fetch juveniles on init: ", juveniles.count)
 
             juveniles.forEach({ juvenile in
                 self.save(entity: juvenile)
             })
 
-            self.localFetch { (locals: [Juvenile]) in
-                locals.forEach({ local in
-                    if !juveniles.contains(local) {
-                        self.delete(entity: local)
-                    }
-                })
-            }
+            // TODO: Deletes juveniles unpredictably
+//            self.localFetch { (locals: [Juvenile]) in
+//                locals.forEach({ local in
+//                    if !juveniles.contains(local) {
+//                        self.delete(entity: local)
+//                        print("getting deleted?")
+//                    }
+//                })
+//            }
         }
     }
 
@@ -96,7 +98,7 @@ final class QueueManager: ObservableObject, APIManagerInjector {
                 self.locations = locations
             } else {
                 remoteFetch(Location.self, withType: String.self) { (strings: [String]) in
-                    print("Attempted to remote fetch locations on init: ", strings)
+                    print("Attempted to remote fetch locations on init: ", strings.count)
                     strings.forEach({ name in
                         let location = Location(name: name)
                         self.locations.append(location)
@@ -113,7 +115,7 @@ final class QueueManager: ObservableObject, APIManagerInjector {
                 self.behaviors = behaviors
             } else {
                 remoteFetch { (behaviors: [Behavior]) in
-                    print("Attempted to remote fetch behaviors on init: ", behaviors)
+                    print("Attempted to remote fetch behaviors on init: ", behaviors.count)
                     behaviors.forEach({ behavior in
                         self.save(entity: behavior)
                         self.behaviors.append(behavior)
