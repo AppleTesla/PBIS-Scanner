@@ -20,6 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
+        // Initialize all managers used direcly by SwiftUI views.
+
         appManager = AppManager {
             authManager = AuthManager()
             queueManager = QueueManager()
@@ -29,6 +31,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let authManager = authManager,
             let queueManager = queueManager
             else { return }
+
+        // Configure any delegates for communication between managers.
+
+        queueManager.apiManager.credentialsDelegate = authManager
 
         // Create the SwiftUI view that provides the window contents.
 
@@ -64,16 +70,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
+        // Rebuild Keychain items
+        authManager?.getAccessToken { token in
+            guard let token = token,
+                let data = token.data(using: .utf8)
+                else { return }
+            _ = self.queueManager?.apiManager.keychainManager.save(key: .token, data: data)
+        }
+
+        // Restart network manager
+        queueManager?.apiManager.networkManager.connect()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
+        // Release Keychain items
+        queueManager?.apiManager.keychainManager.remove(key: .token)
+
+        // Restart network manager
+        queueManager?.apiManager.networkManager.disconnect()
+        
     }
-
-
 }
 

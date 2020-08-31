@@ -7,6 +7,12 @@ import Network
 
 final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInjector {
 
+    // MARK: Credentials
+
+    weak var credentialsDelegate: CredentialsProvider?
+
+    // MARK: URLRequestProtocol
+
     var baseURL: BaseURL = .prod
     var session: URLSession = URLSession.shared
     var decoder: JSONDecoder = JSONDecoder()
@@ -15,15 +21,16 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
                              dataTaskQueue: DispatchQueue = DispatchQueue.global(),
                              resultQueue: DispatchQueue = .main,
                              completion: @escaping (Result<T, ResponseError>) -> Void) {
-        guard networkManager.isConnected else {
-            completion(.failure(.networkProblem))
+
+        guard let token_RAW = keychainManager.load(key: .token),
+            let token = String(data: token_RAW, encoding: .utf8)
+            else {
+            completion(.failure(.tokenProblem))
             return
         }
 
-        guard
-            let tokenData = keychainManager.load(key: .token),
-            let token = String(data: tokenData, encoding: .utf8) else {
-            completion(.failure(.tokenProblem))
+        guard networkManager.isConnected else {
+            completion(.failure(.networkProblem))
             return
         }
 
@@ -50,8 +57,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
             }
 
             if response.statusCode == 401 {
-                // TODO: Refresh token in keychain if expired
-                print("User ID token is expired.")
+                self.credentialsDelegate?.getAccessToken { _ in }
                 result = .failure(.otherProblem(URLError(.userAuthenticationRequired)))
                 return
             }
@@ -66,8 +72,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
                 return
             }
 
-//            print(String(data: data, encoding: .utf8) ?? "Data is nil")
-
+            print(String(data: data, encoding: .utf8) ?? "Data is nil")
             return
         }
 

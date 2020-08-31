@@ -17,6 +17,20 @@ final class KeychainManager {
         return SecItemAdd(query as CFDictionary, nil)
     }
 
+    func remove(key: KeychainCategory) {
+        let query = [
+            kSecClass as String       : kSecClassGenericPassword,
+            kSecAttrAccount as String : key.rawValue,
+            kSecReturnData as String  : kCFBooleanTrue!,
+            kSecMatchLimit as String  : kSecMatchLimitOne ] as [String : Any]
+
+        let status: OSStatus = SecItemDelete(query as CFDictionary)
+
+        if status != noErr {
+            print(status)
+        }
+    }
+
     func load(key: KeychainCategory) -> Data? {
         let query = [
             kSecClass as String       : kSecClassGenericPassword,

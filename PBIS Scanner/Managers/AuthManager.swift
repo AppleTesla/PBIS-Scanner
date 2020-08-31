@@ -29,7 +29,6 @@ final class AuthManager: ObservableObject, KeychainManagerInjector {
         checkSessionStatus()
         saveUserCredentials()
         observeAuthEvents()
-        _ = getToken()
     }
 
     private func checkSessionStatus() {
@@ -92,9 +91,9 @@ extension AuthManager {
     }
 }
 
-// MARK: Helper Methods
+// MARK: CredentialsProvider
 
-extension AuthManager {
+extension AuthManager: CredentialsProvider {
     func saveUserCredentials() {
         guard let user = Amplify.Auth.getCurrentUser(),
             let username = user.username.data(using: .utf8)
@@ -110,31 +109,33 @@ extension AuthManager {
         print("Successfully saved username to keychain.")
     }
 
-    func getToken() -> String? {
-        var token: String?
+    func getAccessToken(completion: @escaping (String?) -> Void) {
         Amplify.Auth.fetchAuthSession { result in
             do {
                 let session = try result.get()
 
                 if let cognitoTokenProvider = session as? AuthCognitoTokensProvider {
                     let tokens = try cognitoTokenProvider.getCognitoTokens().get()
-                    token = tokens.idToken
 
-                    if let data = token?.data(using: .utf8) {
-                        let saveStatusError = self.keychainManager.save(key: .token, data: data)
-
-                        if saveStatusError == noErr {
-                            print("Token was successfully fetched and saved.")
-                        }
-                    } else {
-                        print("Token could not be fetched.")
+                    guard let tokenData = tokens.idToken.data(using: .utf8) else {
+                        print("Failed to retrieve id token and encode into data.")
+                        return
                     }
+
+                    let saveError = self.keychainManager.save(key: .token, data: tokenData)
+
+                    if saveError != noErr {
+                        print(saveError)
+                        return
+                    }
+
+                    print("Successfully saved token to keychain!")
+                    completion(tokens.idToken)
                 }
             } catch {
                 print(error)
             }
         }
-        return token
     }
 }
 

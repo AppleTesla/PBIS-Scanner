@@ -7,7 +7,7 @@ import Combine
 
 // MARK: Classes
 
-final class QueueManager: ObservableObject, APIManagerInjector, KeychainManagerInjector {
+final class QueueManager: ObservableObject, APIManagerInjector {
 
     // MARK: Observe
 
@@ -62,7 +62,7 @@ final class QueueManager: ObservableObject, APIManagerInjector, KeychainManagerI
                     }
                 })
             } else {
-                self.queue = Queue(id: keychainManager.createUniqueID(), juveniles: [])
+                self.queue = Queue(id: UUID().uuidString, juveniles: [])
                 save(entity: queue)
             }
         }
@@ -216,13 +216,15 @@ extension QueueManager {
                     }
                 // TODO: Add juvenile removal capabillity
                 case .delete:
-                    print("Hit delete case.")
+                    if let index = self.juveniles.firstIndex(of: juvenile) {
+                        DispatchQueue.main.async { self.juveniles.remove(at: index) }
+                    }
                 case .update:
                     if let index = self.juveniles.firstIndex(of: juvenile) {
                         DispatchQueue.main.async { self.juveniles[index] = juvenile }
                     }
                 default:
-                    print("Hit default case.")
+                    print("No changes needed to be sinked.", juvenile)
                 }
         }
     }
@@ -269,15 +271,15 @@ extension QueueManager {
 // MARK: Blend Fetch
 
 extension QueueManager {
-    func saveJuvenile(withEventID id: Int) {
-        let p = Juvenile.keys
-        localFetch(predicate: p.event_id.eq(id), sort: nil) { (juveniles: [Juvenile]) in
-            if !juveniles.contains(where: { $0.event_id == id }) {
+    func blendFetchJuvenile(withEventID id: Int? = nil) {
+        var shouldFetchRemote = id == nil
+
+        defer {
+            if shouldFetchRemote, let id = id {
                 let customEndpoint = EndpointConfiguration(path: .juvenile(.get),
                                                            httpMethod: .get,
                                                            body: nil,
                                                            queryStrings: [Juvenile.keys.event_id.stringValue: String(id)])
-
                 remoteFetch(customEndpoint: customEndpoint) { (juvenile: Juvenile?) in
                     if var juvenile = juvenile {
                         juvenile.queue = self.queue
@@ -286,6 +288,15 @@ extension QueueManager {
                         print("Could not find juvenile from database with event ID \(id)")
                     }
                 }
+            }
+        }
+
+        guard !shouldFetchRemote else { return }
+
+        let p = Juvenile.keys
+        localFetch(predicate: p.event_id.eq(id), sort: nil) { (juveniles: [Juvenile]) in
+            if !juveniles.contains(where: { $0.event_id == id }) {
+                shouldFetchRemote = true
             } else if var juvenile = juveniles.first {
                 juvenile.queue = self.queue
                 save(entity: juvenile) // UPDATE

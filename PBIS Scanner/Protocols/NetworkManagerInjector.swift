@@ -7,7 +7,8 @@ import Foundation
 fileprivate let sharedNetworkManager = NetworkManager()
 
 protocol NetworkManagerInjector {
-    var networkManager: NetworkManager { get }
+    var networkManager: NetworkManager {
+        get }
 }
 
 extension NetworkManagerInjector {

@@ -16,27 +16,35 @@ final class NetworkManager: ObservableObject {
 
     private let queue = DispatchQueue.global(qos: .background)
     
-    private let monitor: NWPathMonitor = {
-        let monitor = NWPathMonitor(requiredInterfaceType: .wifi)
-        return monitor
-    }()
+    private var monitor: NWPathMonitor?
         
     // MARK: Init
 
     init() {
-        observeNetworkStatusEvents()
-        monitor.start(queue: queue)
+        connect()
     }
+
     deinit {
-        monitor.cancel()
+        disconnect()
     }
 }
 
 // MARK: Helper Methods
 
 extension NetworkManager {
+    func connect() {
+        monitor = NWPathMonitor(requiredInterfaceType: .wifi)
+        observeNetworkStatusEvents()
+        monitor?.start(queue: queue)
+    }
+
+    func disconnect() {
+        monitor?.cancel()
+        monitor = nil
+    }
+
     func observeNetworkStatusEvents() {
-        monitor.pathUpdateHandler = { path in
+        monitor?.pathUpdateHandler = { path in
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
             if path.status == .satisfied {
                 DispatchQueue.main.async { self.isConnected = true }

@@ -47,6 +47,7 @@
 		5574668A24FC19CE00C8138F /* Juvenile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574668024FC19CE00C8138F /* Juvenile.swift */; };
 		5574668B24FC19CE00C8138F /* Behavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574668124FC19CE00C8138F /* Behavior.swift */; };
 		5574668C24FC19CE00C8138F /* Behavior+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574668224FC19CE00C8138F /* Behavior+Schema.swift */; };
+		5574668E24FC770C00C8138F /* CredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574668D24FC770C00C8138F /* CredentialsProvider.swift */; };
 		559FCCA724FB7C5F007763B4 /* BehaviorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559FCCA624FB7C5F007763B4 /* BehaviorExtensions.swift */; };
 		559FCCA924FB80D1007763B4 /* LocationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559FCCA824FB80D1007763B4 /* LocationExtensions.swift */; };
 		559FCCAB24FB93A9007763B4 /* ImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559FCCAA24FB93A9007763B4 /* ImageExtensions.swift */; };
@@ -107,6 +108,7 @@
 		5574668024FC19CE00C8138F /* Juvenile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Juvenile.swift; sourceTree = "<group>"; };
 		5574668124FC19CE00C8138F /* Behavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Behavior.swift; sourceTree = "<group>"; };
 		5574668224FC19CE00C8138F /* Behavior+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Behavior+Schema.swift"; sourceTree = "<group>"; };
+		5574668D24FC770C00C8138F /* CredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsProvider.swift; sourceTree = "<group>"; };
 		559FCCA624FB7C5F007763B4 /* BehaviorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BehaviorExtensions.swift; sourceTree = "<group>"; };
 		559FCCA824FB80D1007763B4 /* LocationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtensions.swift; sourceTree = "<group>"; };
 		559FCCAA24FB93A9007763B4 /* ImageExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtensions.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				55117BE024FB30EB0047D54A /* NetworkManagerInjector.swift */,
 				55117BE624FB35280047D54A /* APIManagerInjector.swift */,
 				55117BE824FB35F40047D54A /* KeychainManagerInjector.swift */,
+				5574668D24FC770C00C8138F /* CredentialsProvider.swift */,
 				557465B524FBA39200C8138F /* CaptureSessionSetup.swift */,
 			);
 			path = Protocols;
@@ -492,6 +495,7 @@
 				55117BE124FB30EB0047D54A /* NetworkManagerInjector.swift in Sources */,
 				559FCCAB24FB93A9007763B4 /* ImageExtensions.swift in Sources */,
 				55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */,
+				5574668E24FC770C00C8138F /* CredentialsProvider.swift in Sources */,
 				55E18C3D24FA776100820CE3 /* ScanView.swift in Sources */,
 				55117BDD24FB27710047D54A /* KeychainManager.swift in Sources */,
 				55E18C3724FA71EF00820CE3 /* SignInView.swift in Sources */,
