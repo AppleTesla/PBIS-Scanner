@@ -7,7 +7,7 @@ import Combine
 
 // MARK: Classes
 
-class JuvenileManager: ObservableObject, APIManagerInjector, KeychainManagerInjector {
+class QueueManager: ObservableObject, APIManagerInjector, KeychainManagerInjector {
 
     // MARK: Observe
 
@@ -72,7 +72,7 @@ class JuvenileManager: ObservableObject, APIManagerInjector, KeychainManagerInje
 
 // MARK: Helper Methods
 
-extension JuvenileManager {
+extension QueueManager {
     func clearAllData() {
         Amplify.DataStore.clear { result in
             switch result {
@@ -87,7 +87,7 @@ extension JuvenileManager {
 
 // MARK: Remote Fetch
 
-extension JuvenileManager {
+extension QueueManager {
     func remoteFetch<T: Model, U: Decodable>(_ model: T.Type, withType atomic: U.Type, customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([U]) -> Void) {
         var endpointConfig: EndpointConfiguration! = customEndpoint
 
@@ -137,7 +137,7 @@ extension JuvenileManager {
 
 // MARK: Local Fetch
 
-extension JuvenileManager {
+extension QueueManager {
     // TODO: Unsure if these work
     func observe<T: Model>(entity: T.Type) {
         observationToken = Amplify.DataStore.publisher(for: T.self)
@@ -183,6 +183,14 @@ extension JuvenileManager {
             }
         }
     }
+
+    func loadJuvenilesWithEventIDArray(_ data: Data?) {
+        
+    }
+
+    func addJuvenile(code: Int) {
+
+    }
     
 //    func localFetchForJuvenileWithEventID(_ id: String, completion: (Juvenile?) -> Void) {
 //        let p = Juvenile.keys
@@ -222,7 +230,7 @@ extension JuvenileManager {
 
 // MARK: Saving & Deleting - Private!
 
-extension JuvenileManager {
+extension QueueManager {
     private func save<T: Model>(entity: T) {
         Amplify.DataStore.save(entity) { result in
             switch result {

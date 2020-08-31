@@ -1,14 +1,15 @@
 // MARK: Imports
 
 import AVFoundation
+import Combine
 import SwiftUI
 
 // MARK: UIVIewControllerRepresentable
 
 struct EmbeddedCaptureSessionViewController: UIViewControllerRepresentable {
 
-    @Binding var sessionOffline: Bool
-    @Binding var codeString: String
+    @Binding var sessionIsOffline: Bool
+    @Binding var qrPassthrough: PassthroughSubject<Int, Never>
 
     func makeCoordinator() -> CaptureSessionCoordinator {
         CaptureSessionCoordinator(self)
@@ -28,7 +29,7 @@ class CaptureSessionCoordinator: NSObject, AVCaptureMetadataOutputObjectsDelegat
 
     var sessionFailed: Bool = false {
         didSet {
-            parent.sessionOffline = sessionFailed
+            parent.sessionIsOffline = sessionFailed
         }
     }
 
@@ -42,7 +43,8 @@ class CaptureSessionCoordinator: NSObject, AVCaptureMetadataOutputObjectsDelegat
         if let metadataObject = metadataObjects.first {
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
             guard let stringValue = readableObject.stringValue else { return }
-            parent.codeString = stringValue
+            guard let intValue = Int(stringValue) else { return }
+            parent.qrPassthrough.send(intValue)
         }
     }
 }

@@ -1,5 +1,11 @@
 {
     "AppSyncApiName": "pbisscanner",
     "DynamoDBBillingMode": "PAY_PER_REQUEST",
-    "DynamoDBEnableServerSideEncryption": false
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authpbisscannere8ddf393",
+            "Outputs.UserPoolId"
+        ]
+    }
 }

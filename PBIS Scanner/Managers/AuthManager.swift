@@ -7,7 +7,7 @@ import AWSPluginsCore
 
 // MARK: Classes
 
-class AuthManager: ObservableObject, KeychainManagerInjector {
+final class AuthManager: ObservableObject, KeychainManagerInjector {
 
     // MARK: Initializers
 
@@ -27,6 +27,7 @@ class AuthManager: ObservableObject, KeychainManagerInjector {
 
     init() {
         checkSessionStatus()
+        saveUserCredentials()
         observeAuthEvents()
         _ = getToken()
     }
@@ -91,9 +92,24 @@ extension AuthManager {
     }
 }
 
-// MARK: Token
+// MARK: Helper Methods
 
 extension AuthManager {
+    func saveUserCredentials() {
+        guard let user = Amplify.Auth.getCurrentUser(),
+            let username = user.username.data(using: .utf8)
+            else { return }
+
+        let saveError = keychainManager.save(key: .username, data: username)
+
+        if saveError != noErr {
+            print(saveError)
+            return
+        }
+
+        print("Successfully saved username to keychain.")
+    }
+
     func getToken() -> String? {
         var token: String?
         Amplify.Auth.fetchAuthSession { result in

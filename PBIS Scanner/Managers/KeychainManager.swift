@@ -5,7 +5,7 @@ import Security
 
 // MARK: Classes
 
-class KeychainManager {
+final class KeychainManager {
     func save(key: KeychainCategory, data: Data) -> OSStatus {
         let query = [
             kSecClass as String       : kSecClassGenericPassword as String,

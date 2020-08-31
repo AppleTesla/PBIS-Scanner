@@ -8,7 +8,7 @@ struct AppView: View {
     
     // MARK: Properties
 
-    @EnvironmentObject private var jvm: JuvenileManager
+    @EnvironmentObject private var qm: QueueManager
 
     @EnvironmentObject private var apm: AppManager
 

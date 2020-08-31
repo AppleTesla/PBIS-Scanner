@@ -14,8 +14,11 @@ struct ProfileView: View {
 
     @EnvironmentObject private var auth: AuthManager
 
+    @EnvironmentObject private var qm: QueueManager
+
     var body: some View {
         Button(action: {
+            self.qm.clearAllData()
             self.auth.signOut()
         }, label: {
             Text("Sign Out")

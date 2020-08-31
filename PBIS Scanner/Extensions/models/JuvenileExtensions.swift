@@ -1,6 +1,7 @@
 // MARK: Imports
 
 import Foundation
+import Amplify
 
 // MARK: Extensions
 
@@ -21,6 +22,7 @@ extension Juvenile: Codable {
         points = try values.decode(Int.self, forKey: .points)
         event_id = try values.decode(Int.self, forKey: .event_id)
         active = try values.decode(Int.self, forKey: .active)
+        queue = try? values.decode(Queue.self, forKey: .queue)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -32,6 +34,7 @@ extension Juvenile: Codable {
         try container.encode(points, forKey: .points)
         try container.encode(event_id, forKey: .event_id)
         try container.encode(active, forKey: .active)
+        try container.encode(queue, forKey: .queue)
     }
 
     // TODO: Can this be used?

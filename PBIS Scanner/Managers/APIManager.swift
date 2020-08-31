@@ -5,7 +5,7 @@ import Network
 
 // MARK: Classes
 
-class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInjector {
+final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInjector {
 
     var baseURL: BaseURL = .prod
     var session: URLSession = URLSession.shared
@@ -66,8 +66,7 @@ class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainManagerInj
                 return
             }
 
-
-            print(String(data: data, encoding: .utf8) ?? "Data is nil")
+//            print(String(data: data, encoding: .utf8) ?? "Data is nil")
 
             return
         }

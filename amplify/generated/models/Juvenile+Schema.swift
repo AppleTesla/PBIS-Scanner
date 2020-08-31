@@ -11,6 +11,7 @@ extension Juvenile {
     case points
     case event_id
     case active
+    case queue
   }
   
   public static let keys = CodingKeys.self
@@ -27,7 +28,8 @@ extension Juvenile {
       .field(juvenile.last_name, is: .required, ofType: .string),
       .field(juvenile.points, is: .required, ofType: .int),
       .field(juvenile.event_id, is: .required, ofType: .int),
-      .field(juvenile.active, is: .required, ofType: .int)
+      .field(juvenile.active, is: .required, ofType: .int),
+      .belongsTo(juvenile.queue, is: .optional, ofType: Queue.self, targetName: "juvenileQueueId")
     )
     }
 }

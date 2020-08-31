@@ -6,7 +6,7 @@ import Network
 
 // MARK: Classes
 
-class NetworkManager: ObservableObject {
+final class NetworkManager: ObservableObject {
         
     // MARK: Published
 

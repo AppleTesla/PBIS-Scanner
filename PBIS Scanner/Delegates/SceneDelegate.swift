@@ -11,9 +11,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     // MARK: Managers
     
-    var appManager: AppManager!
-    var authManager: AuthManager!
-    var juvenileManager: JuvenileManager!
+    var appManager: AppManager?
+    var authManager: AuthManager?
+    var queueManager: QueueManager?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -22,14 +22,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         appManager = AppManager {
             authManager = AuthManager()
-            juvenileManager = JuvenileManager()
+            queueManager = QueueManager()
         }
 
+        guard let appManager = appManager,
+            let authManager = authManager,
+            let queueManager = queueManager
+            else { return }
+
         // Create the SwiftUI view that provides the window contents.
+
         let contentView = AppView()
             .environmentObject(appManager)
             .environmentObject(authManager)
-            .environmentObject(juvenileManager)
+            .environmentObject(queueManager)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
