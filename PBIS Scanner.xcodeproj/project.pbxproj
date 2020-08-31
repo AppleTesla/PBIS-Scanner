@@ -35,7 +35,6 @@
 		557465AD24FB9BF200C8138F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557465AC24FB9BF200C8138F /* ProfileView.swift */; };
 		557465B424FBA2D600C8138F /* EmbeddedCaptureSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557465B324FBA2D600C8138F /* EmbeddedCaptureSessionViewController.swift */; };
 		557465B624FBA39200C8138F /* CaptureSessionSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557465B524FBA39200C8138F /* CaptureSessionSetup.swift */; };
-		557465B824FBAAA100C8138F /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557465B724FBAAA100C8138F /* HistoryView.swift */; };
 		557465CF24FBECB600C8138F /* QueueExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557465CE24FBECB600C8138F /* QueueExtensions.swift */; };
 		5574668324FC19CE00C8138F /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574667924FC19CE00C8138F /* Location.swift */; };
 		5574668424FC19CE00C8138F /* Queue+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5574667A24FC19CE00C8138F /* Queue+Schema.swift */; };
@@ -61,6 +60,7 @@
 		55BA839B24FA63DA009356DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BA839A24FA63DA009356DC /* Assets.xcassets */; };
 		55BA839E24FA63DA009356DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BA839D24FA63DA009356DC /* Preview Assets.xcassets */; };
 		55BA83A124FA63DA009356DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55BA839F24FA63DA009356DC /* LaunchScreen.storyboard */; };
+		55D3BF3A24FD104600FD5236 /* QueueDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3BF3924FD104600FD5236 /* QueueDrawer.swift */; };
 		55E18C2C24FA6D7800820CE3 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C2B24FA6D7800820CE3 /* AuthManager.swift */; };
 		55E18C2F24FA6E9000820CE3 /* LoggerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C2E24FA6E9000820CE3 /* LoggerExtensions.swift */; };
 		55E18C3224FA6F1700820CE3 /* LogCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C3124FA6F1700820CE3 /* LogCategory.swift */; };
@@ -96,7 +96,6 @@
 		557465AC24FB9BF200C8138F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		557465B324FBA2D600C8138F /* EmbeddedCaptureSessionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmbeddedCaptureSessionViewController.swift; sourceTree = "<group>"; };
 		557465B524FBA39200C8138F /* CaptureSessionSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureSessionSetup.swift; sourceTree = "<group>"; };
-		557465B724FBAAA100C8138F /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		557465CE24FBECB600C8138F /* QueueExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueExtensions.swift; sourceTree = "<group>"; };
 		5574667924FC19CE00C8138F /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		5574667A24FC19CE00C8138F /* Queue+Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Queue+Schema.swift"; sourceTree = "<group>"; };
@@ -126,6 +125,7 @@
 		55BA839D24FA63DA009356DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		55BA83A024FA63DA009356DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		55BA83A224FA63DA009356DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55D3BF3924FD104600FD5236 /* QueueDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueDrawer.swift; sourceTree = "<group>"; };
 		55E18C2B24FA6D7800820CE3 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		55E18C2E24FA6E9000820CE3 /* LoggerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerExtensions.swift; sourceTree = "<group>"; };
 		55E18C3124FA6F1700820CE3 /* LogCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCategory.swift; sourceTree = "<group>"; };
@@ -346,8 +346,8 @@
 		55E18C3B24FA771A00820CE3 /* Signed In */ = {
 			isa = PBXGroup;
 			children = (
-				557465B724FBAAA100C8138F /* HistoryView.swift */,
 				55E18C3C24FA776100820CE3 /* ScanView.swift */,
+				55D3BF3924FD104600FD5236 /* QueueDrawer.swift */,
 				557465AC24FB9BF200C8138F /* ProfileView.swift */,
 			);
 			path = "Signed In";
@@ -513,6 +513,7 @@
 				5574668924FC19CE00C8138F /* Category.swift in Sources */,
 				55117BD724FAB05C0047D54A /* APIManagerProtocol.swift in Sources */,
 				5574668524FC19CE00C8138F /* AmplifyModels.swift in Sources */,
+				55D3BF3A24FD104600FD5236 /* QueueDrawer.swift in Sources */,
 				55117BC924FAA2830047D54A /* URLRequestProtocol.swift in Sources */,
 				557465AD24FB9BF200C8138F /* ProfileView.swift in Sources */,
 				559FCCAD24FB93E0007763B4 /* SystemImage.swift in Sources */,
@@ -531,7 +532,6 @@
 				559FCCB824FB9631007763B4 /* LocalizationUtil.swift in Sources */,
 				55117BEB24FB42750047D54A /* KeychainCategory.swift in Sources */,
 				55117BC224FAA1BA0047D54A /* Endpoint.swift in Sources */,
-				557465B824FBAAA100C8138F /* HistoryView.swift in Sources */,
 				55117BDB24FB1C130047D54A /* NetworkManager.swift in Sources */,
 				55117BDF24FB27AD0047D54A /* DataExtensions.swift in Sources */,
 				559FCCBA24FB9827007763B4 /* LocalizationKey.swift in Sources */,

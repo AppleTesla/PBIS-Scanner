@@ -1,1 +1,7 @@
-"HELLO_WORLD" = "你好";
+// Profile View
+"SIGN_OUT" = "Sign Out";
+
+// Capture Sessino Alert
+"SESSSION_ALERT_TITLE" = "Oh no!";
+"SESSSION_ALERT_MESSAGE" = "We were unable to create a video capture sessino.";
+"SESSSION_ALERT_DISMISS" = "OK";

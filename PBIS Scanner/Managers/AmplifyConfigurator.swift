@@ -9,10 +9,6 @@ import Combine
 
 final class AmplifyConfigurator: ObservableObject {
 
-    // MARK: Navigation
-
-    @Published var tabIndex = 1
-
     // MARK: Plugins
     
     private let authPlugin = AWSCognitoAuthPlugin()

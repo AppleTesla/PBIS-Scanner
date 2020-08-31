@@ -14,25 +14,26 @@ struct AppView: View {
 
     @EnvironmentObject private var auth: AuthManager
 
+    // MARK: View Properties
+
+    private enum Tabs: Int { case first, second }
+    @State private var tabIndex: Tabs = .first
+
     var body: some View {
         Group {
             if auth.isSignedIn {
-                TabView(selection: $amp.tabIndex) {
-                    HistoryView()
-                        .tabItem {
-                            amp.tabIndex == 0 ? Image(.personFill) : Image(.person)
-                    }
-                    .tag(0)
+                TabView(selection: $tabIndex) {
                     ScanView()
                         .tabItem {
-                            amp.tabIndex == 1 ? Image(.barcode) : Image(.viewfinder)
+                            tabIndex == .first ? Image(.barcode) : Image(.viewfinder)
                     }
-                    .tag(1)
+                    .tag(Tabs.first)
+                    
                     ProfileView()
                         .tabItem {
-                            amp.tabIndex == 2 ? Image(.clockFill) : Image(.clock)
+                            tabIndex == .second ? Image(.personFill) : Image(.person)
                     }
-                    .tag(2)
+                    .tag(Tabs.second)
                 }
             } else {
                 SignInView()

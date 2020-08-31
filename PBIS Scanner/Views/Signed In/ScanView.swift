@@ -7,9 +7,11 @@ import Combine
 
 struct ScanView: View {
 
-    // MARK: Properties
+    // MARK: Environment Objects
 
     @EnvironmentObject private var qm: QueueManager
+
+    // MARK: View Properties
 
     @State var sessionIsOffline = false
 
@@ -20,14 +22,16 @@ struct ScanView: View {
             EmbeddedCaptureSessionViewController(sessionIsOffline: $sessionIsOffline,
                                                  qrPassthrough: $qrCodePublisher)
                 .alert(isPresented: $sessionIsOffline) {
-                    Alert(title: Text(.hello),
-                          message: Text(.hello),
-                          dismissButton: .default(Text(.hello)))
+                    Alert(title: Text(.sessionAlertTitle),
+                          message: Text(.sessionAlertMessage),
+                          dismissButton: .default(Text(.sessionAlertDismiss)))
             }
-            .onReceive(qrCodePublisher.debounce(for: .milliseconds(ProcessInfo.processInfo.isLowPowerModeEnabled ? 50 : 25),
-                                                scheduler: DispatchQueue.main)) { code in
-                                                    self.qm.fetchJuvenilesWithOfflinePriority(withEventID: code)
+            .onReceive(qrCodePublisher
+            .debounce(for: .milliseconds(ProcessInfo.processInfo.isLowPowerModeEnabled ? 50 : 25),
+                      scheduler: DispatchQueue.main)) { code in
+                        self.qm.fetchJuvenilesWithOfflinePriority(withEventID: code)
             }
+            .edgesIgnoringSafeArea(.all)
 
             List {
                 ForEach(qm.juveniles) { juvenile in

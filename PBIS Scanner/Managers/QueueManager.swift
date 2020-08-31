@@ -9,10 +9,6 @@ import Combine
 
 final class QueueManager: ObservableObject, APIManagerInjector {
 
-    // MARK: Observe
-
-    @Published private var observationToken: AnyCancellable?
-
     // MARK: Properties
 
     private var queue: Queue!
@@ -45,7 +41,6 @@ final class QueueManager: ObservableObject, APIManagerInjector {
         initializeLocations()
         initializeBehaviors()
         fetchJuvenilesWithOnlinePriority()
-//        observeJuveniles()
     }
 
     /// This function loads juveniles into the queue from local only.
@@ -206,39 +201,6 @@ extension QueueManager {
 // MARK: Local Fetch - Private!
 
 extension QueueManager {
-//    private func observeJuveniles() {
-//        observationToken = Amplify.DataStore.publisher(for: Juvenile.self)
-//            .sink(receiveCompletion: { completion in
-//                if case let .failure(error) = completion {
-//                    print(error)
-//                }
-//            }) { changes in
-//                guard let juvenile = try? changes.decodeModel(as: Juvenile.self) else { return }
-//                guard juvenile.queue == self.queue else { return }
-//
-//                print(juvenile)
-//                print(self.queue.id)
-//
-//                print("idk: ", self.juveniles.count)
-//
-//                switch DataStoreMutationType(rawValue: changes.mutationType) {
-//                case .create:
-//                    guard !self.juveniles.contains(juvenile) else { break }
-//                    DispatchQueue.main.async { self.juveniles.append(juvenile) }
-//                case .delete:
-//                    print("delete?")
-//                    guard let index = self.juveniles.firstIndex(of: juvenile) else { break }
-//                    DispatchQueue.main.async { self.juveniles.remove(at: index) }
-//                case .update:
-//                    print("update?")
-//                    guard let index = self.juveniles.firstIndex(of: juvenile) else { break }
-//                    DispatchQueue.main.async { self.juveniles[index] = juvenile }
-//                default:
-//                    print("No changes needed to be sinked.", juvenile)
-//                }
-//        }
-//    }
-    
     private func offlineFetch<T: Model>(predicate: QueryPredicate? = nil, sort: QuerySortInput? = nil, completion: ([T]) -> Void) {
         Amplify.DataStore.query(T.self, where: predicate, sort: sort) { result in
             switch result {
@@ -281,6 +243,7 @@ extension QueueManager {
 // MARK: Juvenile Fetch & Deletion
 
 extension QueueManager {
+    /// Fetching from a remote database will be prioritized. Avoid using this in common scenarios, as it can be slow and unpredictable.
     func fetchJuvenilesWithOnlinePriority(withEventID id: Int? = nil) {
         fetchOnlineList { (remotes: [Juvenile]) in
             /// Fetch all remote juveniles
@@ -293,7 +256,9 @@ extension QueueManager {
             self.offlineFetch { (locals: [Juvenile]) in
                 locals.forEach({ local in
                     /// If the local juvenile is non-existent or outdated when compared to remote, delete them.
-                    if !remotes.isEmpty && !remotes.contains(local) {
+                    if self.apiManager.networkManager.isConnected
+                        && !remotes.isEmpty
+                        && !remotes.contains(local) {
                         guard let index = self.juveniles.firstIndex(of: local) else { return }
                         self.juveniles.remove(at: index)
                         self.delete(entity: local)
@@ -311,6 +276,7 @@ extension QueueManager {
         }
     }
 
+    /// Fetching from on-device location will be prioritized. Use this in common scenarios, as it is optimized for speed and efficiency.
     func fetchJuvenilesWithOfflinePriority(withEventID id: Int? = nil) {
         var shouldFetchOnline = true
 
