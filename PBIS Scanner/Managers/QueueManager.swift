@@ -44,9 +44,31 @@ final class QueueManager: ObservableObject, APIManagerInjector {
         initializeQueue()
         initializeBehaviors()
         initializeLocations()
+        initializeJuveniles()
         observeJuveniles()
     }
 
+    /// Remote fetches all juveniles from database and cross references with database to keep up-to-date. This function does not load juveniles into the queue. Refer to the 'initializeQueue' function.
+    private func initializeJuveniles() {
+        // TODO: Find a way to use a predicate?
+        remoteFetch { (juveniles: [Juvenile]) in
+            print("Attempted to remote fetch juveniles on init: ", juveniles)
+
+            juveniles.forEach({ juvenile in
+                self.save(entity: juvenile)
+            })
+
+            self.localFetch { (locals: [Juvenile]) in
+                locals.forEach({ local in
+                    if !juveniles.contains(local) {
+                        self.delete(entity: local)
+                    }
+                })
+            }
+        }
+    }
+
+    /// This function loads juveniles into the queue from local only.
     private func initializeQueue() {
         localFetch { (queues: [Queue]) in
             if !queues.isEmpty {
@@ -74,7 +96,7 @@ final class QueueManager: ObservableObject, APIManagerInjector {
                 self.locations = locations
             } else {
                 remoteFetch(Location.self, withType: String.self) { (strings: [String]) in
-                    print("Attempted to remote fetch locations: ", strings)
+                    print("Attempted to remote fetch locations on init: ", strings)
                     strings.forEach({ name in
                         let location = Location(name: name)
                         self.locations.append(location)
@@ -91,7 +113,7 @@ final class QueueManager: ObservableObject, APIManagerInjector {
                 self.behaviors = behaviors
             } else {
                 remoteFetch { (behaviors: [Behavior]) in
-                    print("Attempted to remote fetch behaviors: ", behaviors)
+                    print("Attempted to remote fetch behaviors on init: ", behaviors)
                     behaviors.forEach({ behavior in
                         self.save(entity: behavior)
                         self.behaviors.append(behavior)
@@ -271,11 +293,12 @@ extension QueueManager {
 // MARK: Blend Fetch
 
 extension QueueManager {
-    func blendFetchJuvenile(withEventID id: Int? = nil) {
-        var shouldFetchRemote = id == nil
+    // TODO: Instead of only getting the missing juvenile, just get all of them.
+    func blendFetchJuvenile(withEventID id: Int) {
+        var shouldFetchRemote = false
 
         defer {
-            if shouldFetchRemote, let id = id {
+            if shouldFetchRemote {
                 let customEndpoint = EndpointConfiguration(path: .juvenile(.get),
                                                            httpMethod: .get,
                                                            body: nil,
@@ -290,8 +313,6 @@ extension QueueManager {
                 }
             }
         }
-
-        guard !shouldFetchRemote else { return }
 
         let p = Juvenile.keys
         localFetch(predicate: p.event_id.eq(id), sort: nil) { (juveniles: [Juvenile]) in
