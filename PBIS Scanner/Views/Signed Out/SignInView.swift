@@ -12,7 +12,7 @@ struct SignInView: View {
 
     var body: some View {
         Button(action: {
-            self.authManager.webSignIn()
+            self.authManager.signInWithWebUI()
         }, label: {
             Text("Sign In")
         })

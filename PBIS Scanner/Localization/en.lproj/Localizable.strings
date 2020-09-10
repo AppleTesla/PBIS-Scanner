@@ -5,7 +5,13 @@
 "TITLE" = "Profile";
 "SIGN_OUT" = "Sign Out";
 
-// Capture Sessino Alert
+"CONNECTED" = "Connected";
+"DISCONNECTED" = "Disconnected";
+
+// Capture Session Alert
 "SESSSION_ALERT_TITLE" = "Oh no!";
 "SESSSION_ALERT_MESSAGE" = "We were unable to create a video capture sessino.";
 "SESSSION_ALERT_DISMISS" = "OK";
+
+// Queue Drawer
+"DELETE" = "Delete";

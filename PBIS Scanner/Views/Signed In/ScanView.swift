@@ -9,35 +9,39 @@ struct ScanView: View {
 
     // MARK: Environment Objects
 
-    @EnvironmentObject private var qm: QueueManager
+    @EnvironmentObject private var jvm: JuvenileManager
 
-    // MARK: View Properties
+    @EnvironmentObject private var blm: BehaviorLocationManager
+
+    // MARK: Capture Session Properties
 
     @State var sessionIsOffline = false
 
     @State var qrCodePublisher = PassthroughSubject<Int, Never>()
 
     var body: some View {
-        VStack {
+        ZStack(alignment: .top) {
             EmbeddedCaptureSessionViewController(sessionIsOffline: $sessionIsOffline,
                                                  qrPassthrough: $qrCodePublisher)
+                .edgesIgnoringSafeArea(.all)
                 .alert(isPresented: $sessionIsOffline) {
                     Alert(title: Text(.sessionAlertTitle),
                           message: Text(.sessionAlertMessage),
                           dismissButton: .default(Text(.sessionAlertDismiss)))
             }
             .onReceive(qrCodePublisher
-            .debounce(for: .milliseconds(ProcessInfo.processInfo.isLowPowerModeEnabled ? 50 : 25),
-                      scheduler: DispatchQueue.main)) { code in
-                        self.qm.fetchJuvenilesWithOfflinePriority(withEventID: code)
-            }
-            .edgesIgnoringSafeArea(.all)
+            .debounce(for: .milliseconds(ProcessInfo.processInfo.isLowPowerModeEnabled ? 25 : 10),
+                      scheduler: RunLoop.main)) { code in
+                        self.jvm.fetchJuveniles(withEventID: code) }
 
-            List {
-                ForEach(qm.juveniles) { juvenile in
-                    Text(juvenile.first_name)
+            VStack {
+                LocationSelectorView()
+
+                Spacer()
+
+                QueueDrawer { // Drawer expanded...
+                    EmptyView()
                 }
-                .onDelete(perform: self.qm.removeJuveniles)
             }
         }
     }

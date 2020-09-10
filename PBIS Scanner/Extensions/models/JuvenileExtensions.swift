@@ -9,7 +9,6 @@ extension Juvenile: Codable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: Juvenile.keys)
 
-        // TODO: A better way to generalize this? ++ Duplicated
         do {
             let id_integer = try values.decode(Int.self, forKey: .id)
             id = String(id_integer)
@@ -22,7 +21,12 @@ extension Juvenile: Codable {
         points = try values.decode(Int.self, forKey: .points)
         event_id = try values.decode(Int.self, forKey: .event_id)
         active = try values.decode(Int.self, forKey: .active)
-        queue = try? values.decode(Queue.self, forKey: .queue)
+
+        if let temp = try? values.decode(Bool.self, forKey: .isEnqueued) {
+            isEnqueued = temp
+        } else {
+            isEnqueued = false
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -34,15 +38,7 @@ extension Juvenile: Codable {
         try container.encode(points, forKey: .points)
         try container.encode(event_id, forKey: .event_id)
         try container.encode(active, forKey: .active)
-        try container.encode(queue, forKey: .queue)
-    }
-
-    // TODO: Can this be used?
-    private func decodeId<T>(_ id: T) -> String {
-        if let id = id as? Int {
-            return String(id)
-        }
-        return id as! String
+        try container.encode(isEnqueued, forKey: .isEnqueued)
     }
 }
 

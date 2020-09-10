@@ -2,24 +2,24 @@
 import Amplify
 import Foundation
 
-extension Queue {
+extension Bucket {
   // MARK: - CodingKeys 
    public enum CodingKeys: String, ModelKey {
     case id
-    case juveniles
+    case posts
   }
   
   public static let keys = CodingKeys.self
   //  MARK: - ModelSchema 
   
   public static let schema = defineSchema { model in
-    let queue = Queue.keys
+    let bucket = Bucket.keys
     
-    model.pluralName = "Queues"
+    model.pluralName = "Buckets"
     
     model.fields(
       .id(),
-      .hasMany(queue.juveniles, is: .optional, ofType: Juvenile.self, associatedWith: Juvenile.keys.queue)
+      .hasMany(bucket.posts, is: .optional, ofType: Post.self, associatedWith: Post.keys.bucket)
     )
     }
 }

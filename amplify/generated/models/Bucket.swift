@@ -2,13 +2,13 @@
 import Amplify
 import Foundation
 
-public struct Queue: Model {
+public struct Bucket: Model {
   public let id: String
-  public var juveniles: List<Juvenile>?
+  public var posts: List<Post>?
   
   public init(id: String = UUID().uuidString,
-      juveniles: List<Juvenile> = []) {
+      posts: List<Post> = []) {
       self.id = id
-      self.juveniles = juveniles
+      self.posts = posts
   }
 }

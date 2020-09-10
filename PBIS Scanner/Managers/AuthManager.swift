@@ -4,6 +4,7 @@ import Foundation
 import Amplify
 import AmplifyPlugins
 import AWSPluginsCore
+import Combine
 
 // MARK: Classes
 
@@ -11,12 +12,16 @@ final class AuthManager: ObservableObject, KeychainManagerInjector {
 
     // MARK: Initializers
 
+    private var initCancellable: AnyCancellable?
+    private var stateCancellable: AnyCancellable?
+    private var tokenCancellable: AnyCancellable?
+
     private var window: UIWindow {
         guard
             let scene = UIApplication.shared.connectedScenes.first,
             let windowSceneDelegate = scene.delegate as? UIWindowSceneDelegate,
             let window = windowSceneDelegate.window as? UIWindow
-        else { return UIWindow() }
+            else { return UIWindow() }
 
         return window
     }
@@ -26,52 +31,64 @@ final class AuthManager: ObservableObject, KeychainManagerInjector {
     @Published var isSignedIn = false
 
     init() {
-        checkSessionStatus()
-        saveUserCredentials()
-        observeAuthEvents()
+        initCancellable = checkSessionStatus()
+        stateCancellable = observeAuthEvents()
+        tokenCancellable = fetchTokens()
     }
 
-    private func checkSessionStatus() {
-        let _ = Amplify.Auth.fetchAuthSession { [weak self] result in
-            switch result {
-            case .success(let session):
-                DispatchQueue.main.async { self?.isSignedIn = session.isSignedIn }
-            case .failure(let error):
-                print(error)
+    deinit {
+        initCancellable?.cancel()
+        stateCancellable?.cancel()
+        tokenCancellable?.cancel()
+    }
+
+    private func checkSessionStatus() -> AnyCancellable {
+        return Amplify.Auth.fetchAuthSession().resultPublisher
+            .sink(receiveCompletion: {
+            if case let .failure(authError) = $0 {
+                print("Fetch session failed with error \(authError)")
             }
-        }
+        },
+        receiveValue: { session in
+            self.isSignedIn = session.isSignedIn
+        })
     }
 }
 
 // MARK: Listener
 
 extension AuthManager {
-    private func observeAuthEvents() {
-        _ = Amplify.Hub.listen(to: .auth, listener: { [weak self] result in
-            switch result.eventName {
-            case HubPayload.EventName.Auth.signedIn:
-                DispatchQueue.main.async { self?.isSignedIn = true }
-            case HubPayload.EventName.Auth.signedOut,
-                 HubPayload.EventName.Auth.sessionExpired:
-                DispatchQueue.main.async { self?.isSignedIn = false }
-            default:
-                break
-            }
-        })
+    private func observeAuthEvents() -> AnyCancellable {
+        Amplify.Hub
+            .publisher(for: .auth)
+            .sink { payload in
+                switch payload.eventName {
+                case HubPayload.EventName.Auth.signedIn:
+                    DispatchQueue.main.async { self.isSignedIn = true }
+                    self.initCancellable?.cancel()
+                case HubPayload.EventName.Auth.signedOut,
+                     HubPayload.EventName.Auth.sessionExpired:
+                    DispatchQueue.main.async { self.isSignedIn = false }
+                default:
+                    break
+                }
+        }
     }
 }
 
 // MARK: Sign In
 
 extension AuthManager {
-    func webSignIn() {
-        _ = Amplify.Auth.signInWithWebUI(presentationAnchor: window, listener: { result in
-            switch result {
-            case .success:
-                print("User is signed in successfully.")
-            case .failure(let error):
-                print(error)
+    func signInWithWebUI() {
+        _ = Amplify.Auth.signInWithWebUI(presentationAnchor: window)
+        .resultPublisher
+            .sink(receiveCompletion: {
+            if case let .failure(authError) = $0 {
+                print("Sign in failed \(authError)")
             }
+        },
+        receiveValue: { _ in
+            print("Sign in succeeded")
         })
     }
 }
@@ -91,51 +108,51 @@ extension AuthManager {
     }
 }
 
-// MARK: CredentialsProvider
+// MARK: Provide vars for CredentialsProvider
 
 extension AuthManager: CredentialsProvider {
-    func saveUserCredentials() {
-        guard let user = Amplify.Auth.getCurrentUser(),
-            let username = user.username.data(using: .utf8)
-            else { return }
-
-        let saveError = keychainManager.save(key: .username, data: username)
-
-        if saveError != noErr {
-            print(saveError)
-            return
-        }
-
-        print("Successfully saved username to keychain.")
-    }
-
-    func getAccessToken(completion: @escaping (String?) -> Void) {
-        Amplify.Auth.fetchAuthSession { result in
-            do {
-                let session = try result.get()
-
-                if let cognitoTokenProvider = session as? AuthCognitoTokensProvider {
-                    let tokens = try cognitoTokenProvider.getCognitoTokens().get()
-
-                    guard let tokenData = tokens.idToken.data(using: .utf8) else {
-                        print("Failed to retrieve id token and encode into data.")
-                        return
-                    }
-
-                    let saveError = self.keychainManager.save(key: .token, data: tokenData)
-
-                    if saveError != noErr {
-                        print(saveError)
-                        return
-                    }
-
-                    print("Successfully saved token to keychain!")
-                    completion(tokens.idToken)
+    private func fetchTokens() -> AnyCancellable {
+        Amplify.Auth.fetchAuthSession()
+            .resultPublisher
+            .sink(receiveCompletion: {
+                if case let .failure(error) = $0 {
+                    print("Failed to fetch credentials: \(error)")
                 }
-            } catch {
-                print(error)
-            }
-        }
+            },
+            receiveValue: {session in
+                if let session = session as? AuthCognitoTokensProvider {
+                    do {
+                        let tokens = try session.getCognitoTokens().get()
+                        let saveError = self.keychainManager.save(key: .token, data: tokens.idToken.data(using: .utf8)!)
+                        if saveError != noErr { print(saveError) }
+
+                        let json = try JSONUtility().decode(jwtToken: tokens.idToken)
+                        if let username = json["name"] as? String, let email = json["email"] as? String, let verification = json["email_verified"] as? Int  {
+                            _ = self.keychainManager.save(key: .username, data: username.data(using: .utf8)!)
+                            _ = self.keychainManager.save(key: .email, data: email.data(using: .utf8)!)
+                            let isVerified = verification == 1 ? true : false
+                            let isVerifiedData = try JSONEncoder().encode(isVerified)
+                            _ = self.keychainManager.save(key: .isVerified, data: isVerifiedData)
+                        }
+                    } catch {
+                        print(error)
+                    }
+                }
+        })
     }
 }
 
+extension AuthManager {
+    private func rememberDevice() -> AnyCancellable {
+        Amplify.Auth.rememberDevice()
+            .resultPublisher
+            .sink(receiveCompletion:  {
+                if case let .failure(authError) = $0 {
+                    print("Remember device failed with error \(authError).")
+                }
+            },
+                  receiveValue: {
+                    print("Remember device succeeded!")
+            })
+    }
+}

@@ -5,6 +5,7 @@ enum Category {
 }
 
 type Location @model {
+    id: ID!
     name: String!
 }
 
@@ -15,7 +16,7 @@ type Juvenile @model {
   points: Int!
   event_id: Int!
   active: Int!
-  queue: Queue @connection(name: "QueueToManyJuveniles")
+  isEnqueued: Boolean!
 }
 
 type Behavior @model {
@@ -25,7 +26,14 @@ type Behavior @model {
     location: Location! @connection
 }
 
-type Queue @model {
+type Bucket @model {
     id: ID!
-    juveniles: [Juvenile]! @connection(name: "QueueToManyJuveniles")
+    posts: [Post]! @connection(name:"BucketPosts")
+}
+
+type Post @model {
+    id: ID!
+    juvenile_id: String!
+    behavior_id: String!
+    bucket: Bucket! @connection(name:"BucketPosts")
 }

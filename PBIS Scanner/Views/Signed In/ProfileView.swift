@@ -10,35 +10,46 @@ struct ProfileView: View {
 
     @EnvironmentObject private var auth: AuthManager
 
-    @EnvironmentObject private var qm: QueueManager
+    @EnvironmentObject private var jvm: JuvenileManager
 
     // MARK: View Properties
 
-    @State var fullName = ""
+    @State var fullName = "Not Signed In"
+
+    @State var connectionState = ""
 
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    HStack {
-                        Image(.personFill)
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .padding()
-                        VStack(alignment: .leading) {
-                            Text(fullName)
-                                .font(.headline)
-                            Text("Currently Online")
-                                .font(.subheadline)
+                    NavigationLink(destination: ProfileDetailView(km: auth.keychainManager)
+                        .navigationBarTitle(Text(fullName), displayMode: .inline)) {
+                        HStack {
+                            ProfileIconView(badges: [])
+                                .aspectRatio(1, contentMode: .fit)
+                                .frame(width: 50)
+                                .padding(10)
+                            VStack(alignment: .leading) {
+                                Text(fullName)
+                                    .font(.headline)
+                                Text(connectionState)
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                                    .onReceive(jvm.apiManager.networkManager.$isConnected) { state in
+                                        self.connectionState = localized(state ? LocalizationKey.connected.rawValue : LocalizationKey.disconnected.rawValue)
+                                }
+                            }
                         }
                     }
                 }
+
                 Section(footer: Text(.copyright)) {
                     Button(action: {
-                        self.qm.clearAllData()
+                        self.jvm.apiManager.clearAllData()
                         self.auth.signOut()
                     }) {
                         Text(.signOut)
+                            .foregroundColor(.red)
                     }
                 }
                 .multilineTextAlignment(.center)

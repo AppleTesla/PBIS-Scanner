@@ -1,10 +1,10 @@
 // MARK: Imports
 
 import Foundation
+import AWSPluginsCore
+import Amplify
 
 // MARK: Protocols
 
 protocol CredentialsProvider: class {
-    func saveUserCredentials()
-    func getAccessToken(completion: @escaping (String?) -> Void)
 }

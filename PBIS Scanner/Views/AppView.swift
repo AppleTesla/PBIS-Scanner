@@ -8,16 +8,16 @@ struct AppView: View {
     
     // MARK: Properties
 
-    @EnvironmentObject private var qm: QueueManager
+    @EnvironmentObject private var jvm: JuvenileManager
 
     @EnvironmentObject private var amp: AmplifyConfigurator
 
     @EnvironmentObject private var auth: AuthManager
 
-    // MARK: View Properties
+    @EnvironmentObject private var uim: UIManager
 
-    private enum Tabs: Int { case first, second }
-    @State private var tabIndex: Tabs = .first
+    enum Tabs: Int { case first, second }
+    @State var tabIndex: Tabs = .first
 
     var body: some View {
         Group {
@@ -25,19 +25,22 @@ struct AppView: View {
                 TabView(selection: $tabIndex) {
                     ScanView()
                         .tabItem {
-                            tabIndex == .first ? Image(.barcode) : Image(.viewfinder)
+                            tabIndex == .first ? Image(.barcode).font(.system(size: uim.tabIconSize)) : Image(.viewfinder).font(.system(size: uim.tabIconSize))
                     }
                     .tag(Tabs.first)
                     
                     ProfileView()
                         .tabItem {
-                            tabIndex == .second ? Image(.personFill) : Image(.person)
+                            tabIndex == .second ? Image(.personFill).font(.system(size: uim.tabIconSize)) : Image(.person).font(.system(size: uim.tabIconSize))
                     }
                     .tag(Tabs.second)
                 }
             } else {
                 SignInView()
             }
+        }
+        .onAppear {
+            UITabBar.appearance().backgroundColor = UIColor(named: "TabBar_Color")
         }
     }
 }

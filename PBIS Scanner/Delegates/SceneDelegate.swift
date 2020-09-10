@@ -13,7 +13,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var amplifyConfigurator: AmplifyConfigurator?
     var authManager: AuthManager?
-    var queueManager: QueueManager?
+    var juvenileManager: JuvenileManager?
+    var bucketManager: BucketManager?
+    var behaviorLocationManager: BehaviorLocationManager?
+    var uiManager: UIManager?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -24,24 +27,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         amplifyConfigurator = AmplifyConfigurator {
             authManager = AuthManager()
-            queueManager = QueueManager()
+            juvenileManager = JuvenileManager()
+            behaviorLocationManager = BehaviorLocationManager()
+            uiManager = UIManager()
+
+            if let networkManager = juvenileManager?.apiManager.networkManager {
+                bucketManager = BucketManager(networkManager: networkManager)
+            }
         }
 
         guard let appManager = amplifyConfigurator,
             let authManager = authManager,
-            let queueManager = queueManager
+            let juvenileManager = juvenileManager,
+            let _ = bucketManager, // Runs in background and does not neet to be exposed
+            let behaviorLoctionManager = behaviorLocationManager,
+            let uiManager = uiManager
             else { return }
 
         // Configure any delegates for communication between managers.
-
-        queueManager.apiManager.credentialsDelegate = authManager
+        juvenileManager.apiManager.credentialsDelegate = authManager
+        juvenileManager.bucketManagerDelegate = bucketManager
 
         // Create the SwiftUI view that provides the window contents.
 
         let contentView = AppView()
             .environmentObject(appManager)
             .environmentObject(authManager)
-            .environmentObject(queueManager)
+            .environmentObject(juvenileManager)
+            .environmentObject(behaviorLoctionManager)
+            .environmentObject(uiManager)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -71,23 +85,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneWillEnterForeground(_ scene: UIScene) {
         // Rebuild Keychain items
-        authManager?.getAccessToken { token in
-            guard let token = token,
-                let data = token.data(using: .utf8)
-                else { return }
-            _ = self.queueManager?.apiManager.keychainManager.save(key: .token, data: data)
-        }
+//        authManager?.getAccessToken { token in
+//            guard let token = token,
+//                let data = token.data(using: .utf8)
+//                else { return }
+//            _ = self.juvenileManager?.apiManager.keychainManager.save(key: .token, data: data)
+//        }
 
         // Restart network manager
-        queueManager?.apiManager.networkManager.connect()
+        juvenileManager?.apiManager.networkManager.connect()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         // Release Keychain items
-        queueManager?.apiManager.keychainManager.remove(key: .token)
+//        juvenileManager?.apiManager.keychainManager.remove(key: .token)
 
         // Restart network manager
-        queueManager?.apiManager.networkManager.disconnect()
+        juvenileManager?.apiManager.networkManager.disconnect()
         
     }
 }

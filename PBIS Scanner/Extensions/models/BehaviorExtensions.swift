@@ -8,7 +8,6 @@ extension Behavior: Codable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: Behavior.keys)
 
-        // TODO: A better way to generalize this? ++ Duplicated
         do {
             let id_integer = try values.decode(Int.self, forKey: .id)
             id = String(id_integer)
@@ -18,12 +17,15 @@ extension Behavior: Codable {
 
         title = try values.decode(String.self, forKey: .title)
 
-        let location_string = try values.decode(String.self, forKey: .location)
-        location = Location(name: location_string)
+        do {
+            let location_name = try values.decode(String.self, forKey: .location)
+            location = Location(name: location_name)
+        } catch {
+            location = try values.decode(Location.self, forKey: .location)
+        }
 
-        // TODO: Find alternative to default value for mismatched category
         let category_string = try values.decode(String.self, forKey: .category)
-        category = Category(rawValue: category_string) ?? .safe
+        category = Category(rawValue: category_string.uppercased()) ?? .safe
     }
 
     public func encode(to encoder: Encoder) throws {
