@@ -15,19 +15,14 @@ struct QueueDrawer<Content: View>: View {
     // MARK: View Properties
 
     @State private var isMinimized = true
-    @State private var lastJuvenileCount = 0
+
+    // Minimizer Icon
+    @State private var minOffset_HOR: CGFloat = 0
+    @State private var minOffset_VER: CGFloat = 0
 
     // Category Preview
     @State private var categorySelectorSize: CGFloat = 1
     @State private var categorySelectorBGSize: CGFloat = 0
-
-    // Behavior Preview
-
-    // Juvenile Preview
-    @State private var juvenilePreview = "Loading Queue..."
-    let timer = Timer.publish(every: 1, tolerance: 0.5, on: .main, in: .common).autoconnect()
-    @State var timeRemaining = 0
-    @State var timerDidStart = false
 
     let blurTintMix = 0.3
 
@@ -37,7 +32,26 @@ struct QueueDrawer<Content: View>: View {
     var content: () -> Content
     var body: some View {
 
-        let drag = DragGesture(minimumDistance: 0)
+        let minimizerDrag = DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                self.minOffset_HOR = value.translation.width * 0.1
+                self.minOffset_VER = value.translation.height * 0.1
+        }
+        .onEnded { value in
+            self.minOffset_HOR = 0
+            self.minOffset_VER = 0
+            withAnimation(Animation.interpolatingSpring(stiffness: 300.0,
+                                                        damping: 30.0,
+                                                        initialVelocity: 10.0)) {
+                                                            if value.translation.height < -30 {
+                                                                self.isMinimized = false
+                                                            } else if value.translation.height > 30 {
+                                                                self.isMinimized = true
+                                                            }
+            }
+        }
+
+        let categoryDrag = DragGesture(minimumDistance: 0)
             .onChanged({ state in
                 guard self.isMinimized else { return }
                 if case 0 ..< self.lowerDragThreshold = abs(state.translation.height) { self.blm.selectedCategory = .safe }
@@ -65,14 +79,14 @@ struct QueueDrawer<Content: View>: View {
 
             // MARK: Category Dragger
 
-            ZStack(alignment: .top) {
+            ZStack(alignment: .topLeading) {
                 Rectangle()
                     .foregroundColor(.orange)
                     .opacity(0.5)
                 Text(blm.selectedCategory.stringValue.uppercased())
                     .foregroundColor(.white)
                     .font(.system(size: 30, weight: .black, design: Font.Design.monospaced))
-                    .padding(.top)
+                    .padding([.top, .leading])
             }
             .position(x: UIScreen.main.bounds.width/2)
             .frame(height: categorySelectorBGSize)
@@ -86,7 +100,8 @@ struct QueueDrawer<Content: View>: View {
 
                 // MARK: Mini Bar - BEGIN
 
-                HStack(spacing: 15) {
+                HStack(alignment: .top, spacing: 15) {
+                    // MARK: Mini Bar - Category Prefix
                     BoxStringContainerView(text: String(blm.selectedCategory.stringValue.prefix(1)))
                         .aspectRatio(1, contentMode: .fit)
                         .frame(width: isMinimized ? 40 : 50)
@@ -97,7 +112,7 @@ struct QueueDrawer<Content: View>: View {
                             let currentCategory = self.blm.selectedCategory
                             self.blm.selectedCategory = currentCategory.next(state: currentCategory)
                     }
-                        .gesture(drag)
+                        .gesture(categoryDrag)
                         .onReceive(blm.$selectedCategory) { _ in
                             if self.blm.selectedCategory != self.blm.selectedCategory_PREV {
                                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -110,67 +125,60 @@ struct QueueDrawer<Content: View>: View {
                         Text(blm.selectedBehavior?.title ?? "No behavior selected")
                             .fontWeight(.medium)
                             .opacity(blm.selectedBehavior?.title == nil ? 0.2 : 1)
-                        Text(juvenilePreview)
-                            .foregroundColor(.gray)
-                            .onReceive(jvm.$juveniles) { juveniles in
-                                defer { self.lastJuvenileCount = juveniles.count }
-                                guard self.timerDidStart, self.lastJuvenileCount < juveniles.count else { return }
-                                if let juvenile = juveniles.last {
-                                    self.timeRemaining = 3
-                                    withAnimation { self.juvenilePreview = juvenile.first_name + " was just added!" }
-                                }
-                        }
-                        .onReceive(timer) { _ in
-                            if self.timeRemaining > 0 {
-                                self.timeRemaining -= 1
-                            } else {
-                                self.timerDidStart = true
-                                withAnimation { self.juvenilePreview = "\(self.jvm.juveniles.count) in queue" }
+                        if !jvm.queueVerbalUpdate.isEmpty {
+                            Text(jvm.queueVerbalUpdate)
+                                .foregroundColor(.gray)
+                                .onReceive(jvm.$queueVerbalUpdate.removeDuplicates()) { _ in
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                        withAnimation { self.jvm.queueVerbalUpdate = "" }
+                                    }
                             }
                         }
-                        .animation(.linear)
                     }
+
                     Spacer()
 
                     // MARK: Mini Bar - Toggle Minimize
 
-                    VStack {
+                    VStack(alignment: .trailing) {
                         Image(isMinimized ? .chevronUpSquare : .chevronDownSquareFill)
                             .resizable()
                             .aspectRatio(1, contentMode: .fit)
                             .frame(width: 30)
-                            .padding(.vertical)
+                            .padding(isMinimized ? .bottom : .vertical)
                             .opacity(0.5)
-                    }
-                    .onTapGesture {
-                        withAnimation(Animation.interpolatingSpring(stiffness: 300.0,
-                                                                    damping: 30.0,
-                                                                    initialVelocity: 10.0)) { self.isMinimized.toggle() }
+                            .offset(x: minOffset_HOR, y: minOffset_VER)
+                            .onTapGesture {
+                                withAnimation(Animation.interpolatingSpring(stiffness: 300.0,
+                                                                            damping: 30.0,
+                                                                            initialVelocity: 10.0)) { self.isMinimized.toggle() }
+                        }
+                        .simultaneousGesture(minimizerDrag)
                     }
                 }
                 .padding([.top, .horizontal])
-                .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 0 : nil)
+                .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 0 : isMinimized ? 40 : 0)
 
                 // MARK: Mini Bar - END
 
-                // MARK: Submit Button - BEGIN
+                // MARK: Submit Button
 
-                Button(action: {
-                    self.jvm.saveToBucket(with: self.blm.selectedBehavior, for: self.jvm.juveniles)
-                }) {
-                    Text("Submit")
-                        .fontWeight(.medium)
-                        .padding()
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                        .padding(.horizontal, 5)
+                if !jvm.juveniles.isEmpty && blm.selectedBehavior != nil {
+                    Button(action: {
+                        self.jvm.saveToBucket(with: self.blm.selectedBehavior, for: self.jvm.juveniles)
+                    }) {
+                        Text("Submit (\(jvm.juveniles.count))")
+                            .fontWeight(.medium)
+                            .padding()
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 5)
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, isMinimized ? 40 : 5)
                 }
-                .padding(.horizontal)
-                .opacity(!jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 1 : 0)
-                .frame(height: !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? nil : 0)
-                .animation(.spring())
 
                 // MARK: Queue Drawer - Below Mini-Bar
 
@@ -206,9 +214,6 @@ struct QueueDrawer<Content: View>: View {
 
                         JuvenileScrollView(juveniles: self.$jvm.juveniles)
                             .padding(.vertical)
-                            .onAppear {
-                                self.lastJuvenileCount = self.jvm.juveniles.count
-                        }
                         Divider()
 
                         // MARK: Queue Drawer - Content Generic

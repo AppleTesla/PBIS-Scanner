@@ -105,7 +105,7 @@ extension APIManager {
         Amplify.DataStore.save(entity) { result in
             switch result {
             case .success(let object):
-                print("\(object.modelName) successfully saved to disk.")
+//                print("\(object.modelName) successfully saved to disk.")
                 completion?(true)
             case .failure(let error):
                 print(error)

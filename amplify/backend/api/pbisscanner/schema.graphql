@@ -26,14 +26,8 @@ type Behavior @model {
     location: Location! @connection
 }
 
-type Bucket @model {
-    id: ID!
-    posts: [Post]! @connection(name:"BucketPosts")
-}
-
 type Post @model {
     id: ID!
     juvenile_id: String!
     behavior_id: String!
-    bucket: Bucket! @connection(name:"BucketPosts")
 }

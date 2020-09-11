@@ -11,9 +11,13 @@ struct ScanView: View {
 
     @EnvironmentObject private var jvm: JuvenileManager
 
+    @EnvironmentObject private var auth: AuthManager
+
     @EnvironmentObject private var blm: BehaviorLocationManager
 
     // MARK: Capture Session Properties
+
+    @State private var showProfileDetail = false
 
     @State var sessionIsOffline = false
 
@@ -29,20 +33,30 @@ struct ScanView: View {
                           message: Text(.sessionAlertMessage),
                           dismissButton: .default(Text(.sessionAlertDismiss)))
             }
-            .onReceive(qrCodePublisher
-            .debounce(for: .milliseconds(ProcessInfo.processInfo.isLowPowerModeEnabled ? 25 : 10),
-                      scheduler: RunLoop.main)) { code in
+            .onReceive(qrCodePublisher) { code in
                         self.jvm.fetchJuveniles(withEventID: code) }
 
             VStack {
-                LocationSelectorView()
+                ZStack(alignment: .topLeading) {
+                    LocationSelectorView()
+                    ProfileIconView()
+                        .padding([.top, .leading])
+                        .onTapGesture {
+                            self.showProfileDetail = true
+                    }
+                        .sheet(isPresented: $showProfileDetail) {
+                            ProfileView(auth: self.auth, jvm: self.jvm)
+                    }
+                }
 
                 Spacer()
 
                 QueueDrawer { // Drawer expanded...
                     EmptyView()
                 }
+                .edgesIgnoringSafeArea(.bottom)
             }
+            .edgesIgnoringSafeArea(.bottom)
         }
     }
 }

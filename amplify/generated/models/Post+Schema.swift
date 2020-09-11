@@ -8,7 +8,6 @@ extension Post {
     case id
     case juvenile_id
     case behavior_id
-    case bucket
   }
   
   public static let keys = CodingKeys.self
@@ -22,8 +21,7 @@ extension Post {
     model.fields(
       .id(),
       .field(post.juvenile_id, is: .required, ofType: .string),
-      .field(post.behavior_id, is: .required, ofType: .string),
-      .belongsTo(post.bucket, is: .required, ofType: Bucket.self, targetName: "postBucketId")
+      .field(post.behavior_id, is: .required, ofType: .string)
     )
     }
 }

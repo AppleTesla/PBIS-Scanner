@@ -8,9 +8,9 @@ struct ProfileView: View {
 
     // MARK: Environment Objects
 
-    @EnvironmentObject private var auth: AuthManager
+    @ObservedObject var auth: AuthManager
 
-    @EnvironmentObject private var jvm: JuvenileManager
+    @ObservedObject var jvm: JuvenileManager
 
     // MARK: View Properties
 
@@ -67,6 +67,6 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(auth: .init(), jvm: .init())
     }
 }

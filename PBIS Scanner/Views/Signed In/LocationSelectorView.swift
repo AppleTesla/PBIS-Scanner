@@ -12,11 +12,11 @@ struct LocationSelectorView: View {
 
     // Location Preview
     @State private var locationSelectorSize: CGFloat = 1
-    @State private var locationSelectorBGSize: CGFloat = 150
+    @State private var locationSelectorBGSize: CGFloat = 200
 
     let blurTintMix = 0.3
 
-    let lowerDragThreshold: CGFloat = 150
+    let lowerDragThreshold: CGFloat = 200
     let upperDragThreshold: CGFloat = 300
 
     var body: some View {
@@ -52,22 +52,24 @@ struct LocationSelectorView: View {
                 }
         }
         
-        return ZStack(alignment: .top) {
-            ZStack(alignment: .bottom) {
+        return ZStack(alignment: .topTrailing) {
+            ZStack(alignment: .bottomTrailing) {
                 Rectangle()
                     .foregroundColor(.orange)
                     .opacity(0.5)
                 Text(blm.selectedLocation?.name.uppercased() ?? "LET GO TO REFRESH")
                     .foregroundColor(.white)
                     .font(.system(size: 30, weight: .black, design: Font.Design.monospaced))
-                    .padding(.bottom)
+                    .padding([.bottom, .trailing])
             }
             .edgesIgnoringSafeArea(.all)
             .frame(height: locationSelectorBGSize)
-            .opacity(locationSelectorBGSize == 150 ? 0 : 1)
-            .disabled(locationSelectorBGSize == 150)
+            .opacity(locationSelectorBGSize == lowerDragThreshold ? 0 : 1)
+            .disabled(locationSelectorBGSize == lowerDragThreshold)
 
             HStack {
+                Text(blm.selectedLocation?.name ?? "Drag this down 👉")
+                    .font(.system(size: 15))
                 BoxStringContainerView(text: String(blm.selectedLocation?.name.prefix(1) ?? "?"))
                     .aspectRatio(1, contentMode: .fit)
                     .frame(width: 40)
@@ -85,8 +87,6 @@ struct LocationSelectorView: View {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         }
                 }
-                Text(blm.selectedLocation?.name ?? "👈 Drag this down")
-                    .font(.system(size: 15))
             }
             .padding()
             .background(
@@ -101,7 +101,7 @@ struct LocationSelectorView: View {
                         .mask(RoundedRectangle(cornerRadius: 10))
                 )
             )
-                .padding(.top)
+            .padding([.top, .trailing])
 
         }
     }

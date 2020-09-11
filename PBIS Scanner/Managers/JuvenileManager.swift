@@ -12,6 +12,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
     // MARK: Properties
 
     @Published var juveniles = [Juvenile]()
+    @Published var queueVerbalUpdate = ""
     private var juvenilesSubscription: AnyCancellable?
 
     weak var bucketManagerDelegate: BucketManager?
@@ -38,18 +39,23 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                 switch DataStoreMutationType(rawValue: changes.mutationType) {
                 case .create:
                     guard juvenile.isEnqueued else { break }
-//                    self.juveniles.append(juvenile)
+                    self.juveniles.append(juvenile)
                 case .delete:
                     if let index = self.juveniles.firstIndex(of: juvenile) {
                         self.juveniles.remove(at: index)
                     }
                 case .update:
-                    if let index = self.juveniles.firstIndex(of: juvenile) {
-                        if juvenile.isEnqueued {
+                    // TODO: Why is deletion behavior so odd?
+                    if juvenile.isEnqueued {
+                        // Add to queue
+                        if !self.juveniles.contains(juvenile) {
+                            self.juveniles.append(juvenile)
+                            // Verbal Update
+                            self.queueVerbalUpdate = "\(juvenile.first_name) was added!"
+                        // Already in queue
+                        } else if let index = self.juveniles.firstIndex(of: juvenile) {
                             self.juveniles[index] = juvenile
                         }
-                    } else if juvenile.isEnqueued && !self.juveniles.contains(juvenile) {
-                        self.juveniles.append(juvenile)
                     }
                 default:
                     break
@@ -76,12 +82,14 @@ extension JuvenileManager {
                         self.apiManager.save(entity: new)
                     })
                     if !ProcessInfo.processInfo.isLowPowerModeEnabled {
-                        // Remove outdated juveniles.
-                        localFetch.forEach({ local in
-                            if !remotes.contains(local) {
-                                self.apiManager.delete(entity: local)
-                            }
-                        })
+                        DispatchQueue.global(qos: .background).async {
+                            // Remove outdated juveniles.
+                            localFetch.forEach({ local in
+                                if !remotes.contains(local) {
+                                    self.apiManager.delete(entity: local)
+                                }
+                            })
+                        }
                     }
                 }
             }
@@ -108,19 +116,23 @@ extension JuvenileManager {
         var juvenile = juvenile
         juvenile.isEnqueued = false
         apiManager.save(entity: juvenile) { didSave in
-            if let index = self.juveniles.firstIndex(of: juvenile) {
+            if didSave { if let index = self.juveniles.firstIndex(of: juvenile) {
                 self.juveniles.remove(at: index)
+                self.queueVerbalUpdate = "\(juvenile.first_name) was removed."
+                }
             }
         }
     }
 
     func removeAllJuveniles() {
+        var failures = 0
         for case var juvenile in juveniles {
             juvenile.isEnqueued = false
             apiManager.save(entity: juvenile) { didSave in
-                self.juveniles = []
+                if !didSave { failures += 1; print("WARNING: Could not remove \(juvenile.first_name) from queue.") }
             }
         }
+        DispatchQueue.main.async { self.juveniles.removeAll() }
     }
 }
 
@@ -130,17 +142,12 @@ extension JuvenileManager {
     func saveToBucket(with behavior: Behavior?, for juveniles: [Juvenile]) {
         guard let behavior = behavior else { return }
 
-        let bucket = Bucket()
-        apiManager.save(entity: bucket) { didSave in
-            if didSave {
-                for juvenile in juveniles {
-                    self.removeJuvenile(juvenile: juvenile)
-                    let post = Post(juvenile_id: juvenile.id, behavior_id: behavior.id, bucket: bucket)
-                    self.apiManager.save(entity: post)
-                }
-                self.bucketManagerDelegate?.attemptToPushBuckets()
-            }
+        for juvenile in juveniles {
+            self.removeJuvenile(juvenile: juvenile)
+            let post = Post(juvenile_id: juvenile.id, behavior_id: behavior.id)
+            self.apiManager.save(entity: post)
         }
 
+        self.bucketManagerDelegate?.attemptToPushPosts()
     }
 }

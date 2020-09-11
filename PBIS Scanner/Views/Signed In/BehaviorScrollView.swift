@@ -33,7 +33,7 @@ struct BehaviorScrollView: View {
                     GeometryReader { geo in
                         BehaviorCardView(behavior: behavior)
                             .padding(self.cardSpacing)
-                            .blur(radius: abs(UIScreen.main.bounds.width/2 - geo.frame(in: .global).midX) / 200)
+                            .blur(radius: abs(UIScreen.main.bounds.width/2 - geo.frame(in: .global).midX) / 150)
                             .rotation3DEffect(Angle(degrees: (Double(geo.frame(in: .global).maxX - UIScreen.main.bounds.width / 2 - self.cardWidth/2)) / -20),
                                               axis: (x: 0, y: 10, z: 0))
                             .onTapGesture {
@@ -42,6 +42,7 @@ struct BehaviorScrollView: View {
                                     let distanceToGo = self.cardWidth + ( self.cardSpacing / 2)
                                     let offset = distanceToGo * (CGFloat(indexTo) - self.currentIndex)
                                     self.cumulativeOffset -= offset
+                                    self.currentIndex = CGFloat(indexTo)
                                 }
                         }
                     }

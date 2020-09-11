@@ -22,19 +22,20 @@ struct AppView: View {
     var body: some View {
         Group {
             if auth.isSignedIn {
-                TabView(selection: $tabIndex) {
-                    ScanView()
-                        .tabItem {
-                            tabIndex == .first ? Image(.barcode).font(.system(size: uim.tabIconSize)) : Image(.viewfinder).font(.system(size: uim.tabIconSize))
-                    }
-                    .tag(Tabs.first)
-                    
-                    ProfileView()
-                        .tabItem {
-                            tabIndex == .second ? Image(.personFill).font(.system(size: uim.tabIconSize)) : Image(.person).font(.system(size: uim.tabIconSize))
-                    }
-                    .tag(Tabs.second)
-                }
+                ScanView()
+//                TabView(selection: $tabIndex) {
+//                    ScanView()
+//                        .tabItem {
+//                            tabIndex == .first ? Image(.barcode).font(.system(size: uim.tabIconSize)) : Image(.viewfinder).font(.system(size: uim.tabIconSize))
+//                    }
+//                    .tag(Tabs.first)
+//
+//                    ProfileView()
+//                        .tabItem {
+//                            tabIndex == .second ? Image(.personFill).font(.system(size: uim.tabIconSize)) : Image(.person).font(.system(size: uim.tabIconSize))
+//                    }
+//                    .tag(Tabs.second)
+//                }
             } else {
                 SignInView()
             }
