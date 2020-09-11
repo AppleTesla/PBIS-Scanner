@@ -9,31 +9,40 @@ import Combine
 
 final class BehaviorLocationManager: ObservableObject, APIManagerInjector {
 
+    // Cateogry
     @Published var selectedCategory: Category = .safe {
         willSet {
             selectedCategory_PREV = selectedCategory
         }
         didSet {
-            selectedBehavior = behaviors.filter({ $0.location == selectedLocation && $0.category == selectedCategory }).first
+            behaviors = behaviors_CACHE.filter({ $0.location == selectedLocation && $0.category == selectedCategory })
+            selectedBehavior = behaviors.first
         }
     }
     @Published var selectedCategory_PREV: Category?
 
+    // Behavior
+    private var behaviors_CACHE: [Behavior] = [] {
+        didSet {
+            behaviors = behaviors_CACHE.filter({ $0.location == selectedLocation && $0.category == selectedCategory })
+        }
+    }
     @Published var behaviors = [Behavior]()
+    @Published var selectedBehavior: Behavior? { willSet { selectedBehavior_PREV = selectedBehavior } }
+    @Published var selectedBehavior_PREV: Behavior?
 
+    // Location
     @Published var locations = [Location]()
     @Published var selectedLocation: Location? {
         willSet {
             selectedLocation_PREV = selectedLocation
         }
         didSet {
-            selectedBehavior = behaviors.filter({ $0.location == selectedLocation && $0.category == selectedCategory }).first
+            behaviors = behaviors_CACHE.filter({ $0.location == selectedLocation && $0.category == selectedCategory })
+            selectedBehavior = behaviors.first
         }
     }
     @Published var selectedLocation_PREV: Location?
-
-    @Published var selectedBehavior: Behavior? { willSet { selectedBehavior_PREV = selectedBehavior } }
-    @Published var selectedBehavior_PREV: Behavior?
 
     init() {
         initializeLocations()
@@ -84,18 +93,18 @@ extension BehaviorLocationManager {
 extension BehaviorLocationManager {
     func initializeBehaviors() {
         apiManager.offlineFetch { (locals: [Behavior]) in
-            self.behaviors = locals
+            self.behaviors_CACHE = locals
             apiManager.fetchOnlineList { (remotes: [Behavior]) in
                 print("Attempting to fetch behaviors from remote: ", remotes.count)
                 remotes.forEach({ remote in
-                    if !self.behaviors.contains(remote),
+                    if !self.behaviors_CACHE.contains(remote),
                         let location = self.locations.first(where: { $0 == remote.location })
                     {
                         var behavior = remote
                         behavior.location = location
                         self.apiManager.save(entity: behavior) { didSave in
                             if didSave {
-                                self.behaviors.append(behavior)
+                                self.behaviors_CACHE.append(behavior)
                             }
                         }
                     }
@@ -104,8 +113,8 @@ extension BehaviorLocationManager {
                 locals.forEach({ local in
                     if !remotes.isEmpty && !remotes.contains(local) {
                         self.apiManager.delete(entity: local)
-                        if let index = self.behaviors.firstIndex(where: { $0.id == local.id }) {
-                            self.behaviors.remove(at: index)
+                        if let index = self.behaviors_CACHE.firstIndex(where: { $0.id == local.id }) {
+                            self.behaviors_CACHE.remove(at: index)
                         }
                     }
                 })

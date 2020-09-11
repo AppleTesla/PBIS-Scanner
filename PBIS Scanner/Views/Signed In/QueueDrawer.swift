@@ -180,23 +180,26 @@ struct QueueDrawer<Content: View>: View {
 
                         // MARK: Queue Drawer - Behavior Selector Placeholder
 
-                        if blm.selectedBehavior == nil {
-                            VStack {
-                                Text("Hey there!")
-                                    .fontWeight(.bold)
-                                    .padding()
-                                Text("Pull down from the location box up top 👆")
-                                    .foregroundColor(.gray)
-                                    .padding(.bottom)
+                        Group {
+                            if blm.selectedBehavior == nil {
+                                VStack {
+                                    Text("Hey there!")
+                                        .fontWeight(.bold)
+                                        .padding()
+                                    Text("Pull down from the location box up top 👆")
+                                        .foregroundColor(.gray)
+                                        .padding(.bottom)
+                                }
+                            } else {
+
+                                // MARK: Queue Drawer - Behavior Selector
+
+                                BehaviorScrollView()
+                                    .padding(.vertical)
+                                    .shadow(radius: 25)
                             }
-                        } else {
-
-                            // MARK: Queue Drawer - Behavior Selector
-
-                            BehaviorScrollView()
-                                .padding(.vertical)
-                                .shadow(radius: 25)
                         }
+
                         Divider()
 
                         // MARK: Queue Drawer - Juvenile Selector
