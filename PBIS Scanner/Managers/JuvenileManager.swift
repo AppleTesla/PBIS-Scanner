@@ -11,17 +11,20 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
 
     // MARK: Properties
 
-    @Published var juveniles = [Juvenile]()
+    var juveniles = [Juvenile]()
     @Published var queueVerbalUpdate = ""
     private var juvenilesSubscription: AnyCancellable?
 
     weak var bucketManagerDelegate: BucketManager?
 
+    private let dispatchGroup = DispatchGroup()
+    private let dispatchQueue = DispatchQueue(label: "com.juvenileManager", qos: .userInitiated)
+
     // MARK: Initializers
 
     init() {
+        initializeQueue()
         juvenilesSubscription = subscribeToJuveniles()
-        fetchJuveniles()
     }
 
     deinit {
@@ -35,55 +38,74 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                     print("Subscription received error - \(error.localizedDescription)")
                 }
             }, receiveValue: { changes in
-                guard let juvenile = try? changes.decodeModel(as: Juvenile.self) else { return }
-                switch DataStoreMutationType(rawValue: changes.mutationType) {
-                case .create:
-                    guard juvenile.isEnqueued else { break }
-                    self.juveniles.append(juvenile)
-                case .delete:
-                    if let index = self.juveniles.firstIndex(of: juvenile) {
-                        self.juveniles.remove(at: index)
-                    }
-                case .update:
-                    // TODO: Why is deletion behavior so odd?
-                    if juvenile.isEnqueued {
-                        // Add to queue
-                        if !self.juveniles.contains(juvenile) {
-                            self.juveniles.append(juvenile)
-                            // Verbal Update
-                            self.queueVerbalUpdate = "\(juvenile.first_name) was added!"
-                        // Already in queue
-                        } else if let index = self.juveniles.firstIndex(of: juvenile) {
-                            self.juveniles[index] = juvenile
+                self.dispatchQueue.async(group: self.dispatchGroup) {
+                    self.dispatchGroup.enter()
+                    guard let juvenile = try? changes.decodeModel(as: Juvenile.self) else { return }
+                    switch DataStoreMutationType(rawValue: changes.mutationType) {
+                    case .create:
+                        guard juvenile.isEnqueued else { break }
+                        self.juveniles.append(juvenile)
+                        DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
+                        self.dispatchGroup.leave()
+                    case .delete:
+                        if let index = self.juveniles.firstIndex(of: juvenile) {
+                            self.juveniles.remove(at: index)
+                            DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was removed!" }
+                            self.dispatchGroup.leave()
                         }
+                    case .update:
+                        if juvenile.isEnqueued {
+                            // Add to queue
+                            if !self.juveniles.contains(juvenile) {
+                                self.juveniles.append(juvenile)
+                                DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
+                                self.dispatchGroup.leave()
+                            // Already in queue
+                            } else if let index = self.juveniles.firstIndex(of: juvenile) {
+                                self.juveniles[index] = juvenile
+                                self.dispatchGroup.leave()
+                            }
+                        } else if let index = self.juveniles.firstIndex(of: juvenile) {
+                            self.juveniles.remove(at: index)
+                            self.dispatchGroup.leave()
+                        }
+                    default:
+                        self.dispatchGroup.leave()
+                        break
                     }
-                default:
-                    break
                 }
-            })
+            }
+        )
     }
 }
 
 // MARK: Juvenile Fetch
 
 extension JuvenileManager {
+    func initializeQueue() {
+        self.apiManager.offlineFetch { (juveniles: [Juvenile]) in
+            for juvenile in juveniles {
+                if juvenile.isEnqueued {
+                    self.juveniles.append(juvenile)
+                }
+            }
+        }
+    }
+
     func fetchJuveniles(withEventID id: Int? = nil) {
         var localFetch: [Juvenile] = []
 
         defer {
             if networkManager.isConnected {
                 apiManager.fetchOnlineList { (remotes: [Juvenile]) in
-                    remotes.forEach({ remote in
-                        // See if remote contains juvenile of interest.
-                        var new = remote
-                        if let index = localFetch.firstIndex(of: remote), localFetch[index].isEnqueued {
-                            new.isEnqueued = true
-                        }
-                        self.apiManager.save(entity: new)
-                    })
+                    if var interest = remotes.first(where: { $0.event_id == id }) {
+                        interest.isEnqueued = true
+                        self.apiManager.save(entity: interest)
+                    }
                     if !ProcessInfo.processInfo.isLowPowerModeEnabled {
                         DispatchQueue.global(qos: .background).async {
-                            // Remove outdated juveniles.
+                            // Flush non-existent juveniles.
+                            guard !remotes.isEmpty else { return }
                             localFetch.forEach({ local in
                                 if !remotes.contains(local) {
                                     self.apiManager.delete(entity: local)
@@ -115,24 +137,20 @@ extension JuvenileManager {
     func removeJuvenile(juvenile: Juvenile) {
         var juvenile = juvenile
         juvenile.isEnqueued = false
-        apiManager.save(entity: juvenile) { didSave in
-            if didSave { if let index = self.juveniles.firstIndex(of: juvenile) {
-                self.juveniles.remove(at: index)
-                self.queueVerbalUpdate = "\(juvenile.first_name) was removed."
-                }
-            }
+        apiManager.save(entity: juvenile)
+        DispatchQueue.main.async {
+            self.queueVerbalUpdate = "\(juvenile.first_name) was removed."
         }
     }
 
     func removeAllJuveniles() {
-        var failures = 0
         for case var juvenile in juveniles {
             juvenile.isEnqueued = false
-            apiManager.save(entity: juvenile) { didSave in
-                if !didSave { failures += 1; print("WARNING: Could not remove \(juvenile.first_name) from queue.") }
-            }
+            self.apiManager.save(entity: juvenile)
         }
-        DispatchQueue.main.async { self.juveniles.removeAll() }
+        DispatchQueue.main.async {
+            self.queueVerbalUpdate = "Queue is emptied."
+        }
     }
 }
 

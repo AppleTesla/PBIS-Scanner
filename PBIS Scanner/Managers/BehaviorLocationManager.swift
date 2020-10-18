@@ -19,7 +19,7 @@ final class BehaviorLocationManager: ObservableObject, APIManagerInjector {
             selectedBehavior = behaviors.first
         }
     }
-    @Published var selectedCategory_PREV: Category?
+    var selectedCategory_PREV: Category?
 
     // Behavior
     private var behaviors_CACHE: [Behavior] = [] {
@@ -27,12 +27,12 @@ final class BehaviorLocationManager: ObservableObject, APIManagerInjector {
             behaviors = behaviors_CACHE.filter({ $0.location == selectedLocation && $0.category == selectedCategory })
         }
     }
-    @Published var behaviors = [Behavior]()
+    var behaviors = [Behavior]()
     @Published var selectedBehavior: Behavior? { willSet { selectedBehavior_PREV = selectedBehavior } }
-    @Published var selectedBehavior_PREV: Behavior?
+    var selectedBehavior_PREV: Behavior?
 
     // Location
-    @Published var locations = [Location]()
+    var locations = [Location]()
     @Published var selectedLocation: Location? {
         willSet {
             selectedLocation_PREV = selectedLocation
@@ -42,7 +42,7 @@ final class BehaviorLocationManager: ObservableObject, APIManagerInjector {
             selectedBehavior = behaviors.first
         }
     }
-    @Published var selectedLocation_PREV: Location?
+    var selectedLocation_PREV: Location?
 
     init() {
         initializeLocations()

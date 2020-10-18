@@ -60,6 +60,5 @@ struct BehaviorCardView: View {
             }
         )
             .scaleEffect(blm.selectedBehavior == self.behavior ? 1.2 : 1)
-            .animation(.spring())
     }
 }

@@ -34,6 +34,7 @@ struct ScanView: View {
                           dismissButton: .default(Text(.sessionAlertDismiss)))
             }
             .onReceive(qrCodePublisher) { code in
+                print(code)
                         self.jvm.fetchJuveniles(withEventID: code) }
 
             VStack {

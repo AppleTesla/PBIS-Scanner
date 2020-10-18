@@ -63,6 +63,8 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
         let dataTask = session.dataTask(with: request) { data, response, error in
             var result: Result<T, ResponseError> = .failure(.deferred)
 
+//            print(response)
+
             defer { resultQueue.async { completion(result) } }
 
             if let error = error {

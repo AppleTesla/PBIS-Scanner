@@ -36,18 +36,15 @@ struct QueueDrawer<Content: View>: View {
             .onChanged { value in
                 self.minOffset_HOR = value.translation.width * 0.1
                 self.minOffset_VER = value.translation.height * 0.1
+                print("fgjdfgoijijuu777")
         }
         .onEnded { value in
             self.minOffset_HOR = 0
             self.minOffset_VER = 0
-            withAnimation(Animation.interpolatingSpring(stiffness: 300.0,
-                                                        damping: 30.0,
-                                                        initialVelocity: 10.0)) {
-                                                            if value.translation.height < -30 {
-                                                                self.isMinimized = false
-                                                            } else if value.translation.height > 30 {
-                                                                self.isMinimized = true
-                                                            }
+            if value.translation.height < -30 {
+                self.isMinimized = false
+            } else if value.translation.height > 30 {
+                self.isMinimized = true
             }
         }
 
@@ -87,6 +84,7 @@ struct QueueDrawer<Content: View>: View {
                     .foregroundColor(.white)
                     .font(.system(size: 30, weight: .black, design: Font.Design.monospaced))
                     .padding([.top, .leading])
+                    .animation(nil)
             }
             .position(x: UIScreen.main.bounds.width/2)
             .frame(height: categorySelectorBGSize)
@@ -106,7 +104,6 @@ struct QueueDrawer<Content: View>: View {
                         .aspectRatio(1, contentMode: .fit)
                         .frame(width: isMinimized ? 40 : 50)
                         .scaleEffect(categorySelectorSize, anchor: .center)
-                        .animation(.easeOut)
                         .font(.system(size: isMinimized ? 20 : 30))
                         .onTapGesture {
                             let currentCategory = self.blm.selectedCategory
@@ -130,11 +127,12 @@ struct QueueDrawer<Content: View>: View {
                                 .foregroundColor(.gray)
                                 .onReceive(jvm.$queueVerbalUpdate.removeDuplicates()) { _ in
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                        withAnimation { self.jvm.queueVerbalUpdate = "" }
+                                        self.jvm.queueVerbalUpdate = ""
                                     }
                             }
                         }
                     }
+                    .animation(nil)
 
                     Spacer()
 
@@ -148,16 +146,13 @@ struct QueueDrawer<Content: View>: View {
                             .padding(isMinimized ? .bottom : .vertical)
                             .opacity(0.5)
                             .offset(x: minOffset_HOR, y: minOffset_VER)
-                            .onTapGesture {
-                                withAnimation(Animation.interpolatingSpring(stiffness: 300.0,
-                                                                            damping: 30.0,
-                                                                            initialVelocity: 10.0)) { self.isMinimized.toggle() }
-                        }
-                        .simultaneousGesture(minimizerDrag)
+                            .onTapGesture { self.isMinimized.toggle() }
                     }
                 }
                 .padding([.top, .horizontal])
                 .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 0 : isMinimized ? 40 : 0)
+                .contentShape(Rectangle())
+                .gesture(minimizerDrag)
 
                 // MARK: Mini Bar - END
 
@@ -212,8 +207,7 @@ struct QueueDrawer<Content: View>: View {
 
                         // MARK: Queue Drawer - Juvenile Selector
 
-                        JuvenileScrollView(juveniles: self.$jvm.juveniles)
-                            .padding(.vertical)
+                        JuvenileScrollView(juveniles: self.jvm.juveniles)
                         Divider()
 
                         // MARK: Queue Drawer - Content Generic
@@ -238,5 +232,8 @@ struct QueueDrawer<Content: View>: View {
             )
                 .cornerRadius(radius: isMinimized ? 0 : 10, corners: [.topLeft, .topRight])
         }
+        .animation(Animation.interpolatingSpring(stiffness: 300.0,
+                                                    damping: 30.0,
+                                                    initialVelocity: 10.0))
     }
 }

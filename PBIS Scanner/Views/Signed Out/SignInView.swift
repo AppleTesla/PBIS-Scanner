@@ -14,10 +14,10 @@ struct SignInView: View {
         Button(action: {
             self.authManager.signInWithWebUI()
         }, label: {
-            Text("Sign In")
+            Text("Please Sign In")
         })
             .padding()
-            .background(Color.purple)
+            .background(Color.white)
             .cornerRadius(5)
     }
 }

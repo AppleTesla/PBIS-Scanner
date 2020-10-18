@@ -61,11 +61,15 @@ struct LocationSelectorView: View {
                     .foregroundColor(.white)
                     .font(.system(size: 30, weight: .black, design: Font.Design.monospaced))
                     .padding([.bottom, .trailing])
+                    .animation(nil)
             }
             .edgesIgnoringSafeArea(.all)
             .frame(height: locationSelectorBGSize)
             .opacity(locationSelectorBGSize == lowerDragThreshold ? 0 : 1)
             .disabled(locationSelectorBGSize == lowerDragThreshold)
+            .animation(Animation.interpolatingSpring(stiffness: 300.0,
+                                                        damping: 30.0,
+                                                        initialVelocity: 10.0))
 
             HStack {
                 Text(blm.selectedLocation?.name ?? "Drag this down 👉")
@@ -74,7 +78,6 @@ struct LocationSelectorView: View {
                     .aspectRatio(1, contentMode: .fit)
                     .frame(width: 40)
                     .scaleEffect(locationSelectorSize, anchor: .center)
-                    .animation(.easeOut)
                     .font(.system(size: 30))
                     .onTapGesture {
                         guard self.blm.selectedLocation != nil else { return }

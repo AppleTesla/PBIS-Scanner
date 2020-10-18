@@ -21,10 +21,12 @@ struct BehaviorScrollView: View {
                 state = value.translation.width
             })
             .onEnded { value in
-                let finalIndex = self.blm.behaviors.count - 1
-                let offset = value.translation.width / (self.cardWidth + self.cardSpacing / 2)
-                self.currentIndex = max(min(self.currentIndex - offset.rounded(), CGFloat(finalIndex)), 0)
-                self.cumulativeOffset = -(self.currentIndex) * (self.cardWidth + self.cardSpacing / 2)
+                let maxIndex = self.blm.behaviors.count - 1
+                let distanceToGo = self.cardWidth + self.cardSpacing
+                let offset = value.translation.width / distanceToGo
+                let previousIndex = self.currentIndex
+                self.currentIndex = max(min(self.currentIndex - offset.rounded(), CGFloat(maxIndex)), 0)
+                self.cumulativeOffset -= distanceToGo * (self.currentIndex - previousIndex)
         }
 
         return ScrollView(.horizontal, showsIndicators: false) {
@@ -39,7 +41,7 @@ struct BehaviorScrollView: View {
                             .onTapGesture {
                                 self.blm.selectedBehavior = behavior
                                 if let indexTo = self.blm.behaviors.firstIndex(of: behavior) {
-                                    let distanceToGo = self.cardWidth + ( self.cardSpacing / 2)
+                                    let distanceToGo = self.cardWidth + self.cardSpacing
                                     let offset = distanceToGo * (CGFloat(indexTo) - self.currentIndex)
                                     self.cumulativeOffset -= offset
                                     self.currentIndex = CGFloat(indexTo)
@@ -55,17 +57,13 @@ struct BehaviorScrollView: View {
                 }
             }
             .frame(height: self.cardWidth + 20)
-            .padding(.horizontal, UIScreen.main.bounds.width/2 - cardWidth/2)
+            .padding(.horizontal, UIScreen.main.bounds.width/2 - cardWidth/2 - cardSpacing)
             .offset(x: translation)
             .offset(x: cumulativeOffset)
-            .animation(Animation.interpolatingSpring(stiffness: 300.0,
-                                                     damping: 50.0,
-                                                     initialVelocity: 30.0))
-            .onReceive(blm.$behaviors) { _ in
-                self.cumulativeOffset = 0
-                self.currentIndex = 0
-            }
             .simultaneousGesture(drag)
+            .animation(Animation.interpolatingSpring(stiffness: 200.0,
+                                                     damping: 30.0,
+                                                     initialVelocity: 20.0))
         }
     }
 }
