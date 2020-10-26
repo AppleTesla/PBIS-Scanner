@@ -21,6 +21,14 @@ final class BucketManager: APIManagerInjector {
         })
     }
 
+    func getPostCount() -> Int {
+        var count = 0
+        apiManager.offlineFetch { (posts: [Post]) in
+            count = posts.count
+        }
+        return count
+    }
+
     func attemptToPushPosts() {
         apiManager.offlineFetch { (posts: [Post]) in
             guard !posts.isEmpty else { return }

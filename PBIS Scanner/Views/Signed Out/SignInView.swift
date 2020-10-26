@@ -9,16 +9,36 @@ struct SignInView: View {
     // MARK: Properties
     
     @EnvironmentObject private var authManager: AuthManager
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        Button(action: {
-            self.authManager.signInWithWebUI()
-        }, label: {
-            Text("Please Sign In")
-        })
-            .padding()
-            .background(Color.white)
-            .cornerRadius(5)
+        VStack(spacing: 20) {
+            Image("collab")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 150, height: 75, alignment: .center)
+            Text("PBIS Scan")
+                .fontWeight(.bold)
+                .font(.largeTitle)
+            Text("Strengthening the youth through positive reinforcement")
+                .fontWeight(.medium)
+                .multilineTextAlignment(.center)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            Spacer()
+            Button(action: {
+                self.authManager.signInWithWebUI()
+            }, label: {
+                Text("Sign In or Sign Up")
+                    .fontWeight(.medium)
+                    .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+            })
+                .padding()
+                .background(colorScheme == .dark ? Color.white : Color.black)
+                .cornerRadius(5)
+        }
+        .padding(.vertical)
+        .background(Image("bg"))
     }
 }
 

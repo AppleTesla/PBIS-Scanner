@@ -13,9 +13,10 @@ struct ProfileDetailView: View {
     var body: some View {
         List {
             ForEach(attributeDictionary.keys.sorted(), id: \.self) { key in
-                ListRowView(key: Text(key), value: Text(String(self.attributeDictionary[key]!)))
+                ListRowView(key: Text(key), value: Text(String(self.attributeDictionary[key]!)).foregroundColor(.gray))
             }
         }
+        .listStyle(InsetGroupedListStyle())
         .onAppear {
             let usernameKey = KeychainCategory.username
             let emailKey = KeychainCategory.email

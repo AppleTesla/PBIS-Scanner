@@ -41,6 +41,12 @@ struct ProfileView: View {
                             }
                         }
                     }
+                    HStack {
+                        Text("Juveniles Pending Upload")
+                        Spacer()
+                        Text("\(jvm.bucketManagerDelegate?.getPostCount() ?? 0)")
+                            .foregroundColor(.gray)
+                    }
                 }
 
                 Section(footer: Text(.copyright)) {

@@ -26,8 +26,8 @@ struct QueueDrawer<Content: View>: View {
 
     let blurTintMix = 0.3
 
-    let lowerDragThreshold: CGFloat = 200
-    let upperDragThreshold: CGFloat = 300
+    let lowerDragThreshold: CGFloat = 250
+    let upperDragThreshold: CGFloat = 400
 
     var content: () -> Content
     var body: some View {
@@ -36,7 +36,6 @@ struct QueueDrawer<Content: View>: View {
             .onChanged { value in
                 self.minOffset_HOR = value.translation.width * 0.1
                 self.minOffset_VER = value.translation.height * 0.1
-                print("fgjdfgoijijuu777")
         }
         .onEnded { value in
             self.minOffset_HOR = 0
@@ -57,12 +56,10 @@ struct QueueDrawer<Content: View>: View {
 
                 self.categorySelectorSize = abs(state.translation.height / -UIScreen.main.bounds.height / 2) + 1
 
-                if state.translation.height < 0 {
-                    if abs(state.translation.height) > self.upperDragThreshold {
-                        self.categorySelectorBGSize = state.translation.height * 2.2 - (state.translation.height + self.upperDragThreshold)
-                    } else {
-                        self.categorySelectorBGSize = state.translation.height * 2.2
-                    }
+                if abs(state.translation.height) > self.upperDragThreshold {
+                    self.categorySelectorBGSize = abs(state.translation.height - 0.8 * (state.translation.height + self.upperDragThreshold))
+                } else {
+                    self.categorySelectorBGSize = abs(state.translation.height)
                 }
             })
             .onEnded { _ in
@@ -86,7 +83,6 @@ struct QueueDrawer<Content: View>: View {
                     .padding([.top, .leading])
                     .animation(nil)
             }
-            .position(x: UIScreen.main.bounds.width/2)
             .frame(height: categorySelectorBGSize)
             .opacity(categorySelectorBGSize == 0 ? 0 : 1)
             .disabled(categorySelectorBGSize == 0)
@@ -118,11 +114,12 @@ struct QueueDrawer<Content: View>: View {
 
                     // MARK: Mini Bar - Behavior & Queue Count Preview
 
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(blm.selectedBehavior?.title ?? "No behavior selected")
-                            .fontWeight(.medium)
-                            .opacity(blm.selectedBehavior?.title == nil ? 0.2 : 1)
-                        if !jvm.queueVerbalUpdate.isEmpty {
+                    Group {
+                        if jvm.queueVerbalUpdate.isEmpty {
+                            Text(blm.selectedBehavior?.title ?? "No behavior selected")
+                                .fontWeight(.medium)
+                                .opacity(blm.selectedBehavior?.title == nil ? 0.2 : 1)
+                        } else {
                             Text(jvm.queueVerbalUpdate)
                                 .foregroundColor(.gray)
                                 .onReceive(jvm.$queueVerbalUpdate.removeDuplicates()) { _ in
@@ -198,6 +195,7 @@ struct QueueDrawer<Content: View>: View {
                                 // MARK: Queue Drawer - Behavior Selector
 
                                 BehaviorScrollView()
+                                    .frame(width: UIScreen.main.bounds.width, alignment: .leading)
                                     .padding(.vertical)
                                     .shadow(radius: 25)
                             }

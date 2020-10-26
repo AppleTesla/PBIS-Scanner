@@ -27,43 +27,44 @@ struct BehaviorScrollView: View {
                 let previousIndex = self.currentIndex
                 self.currentIndex = max(min(self.currentIndex - offset.rounded(), CGFloat(maxIndex)), 0)
                 self.cumulativeOffset -= distanceToGo * (self.currentIndex - previousIndex)
-        }
-
-        return ScrollView(.horizontal, showsIndicators: false) {
-            HStack {
-                ForEach(blm.behaviors, id: \.id) { behavior in
-                    GeometryReader { geo in
-                        BehaviorCardView(behavior: behavior)
-                            .padding(self.cardSpacing)
-                            .blur(radius: abs(UIScreen.main.bounds.width/2 - geo.frame(in: .global).midX) / 150)
-                            .rotation3DEffect(Angle(degrees: (Double(geo.frame(in: .global).maxX - UIScreen.main.bounds.width / 2 - self.cardWidth/2)) / -20),
-                                              axis: (x: 0, y: 10, z: 0))
-                            .onTapGesture {
-                                self.blm.selectedBehavior = behavior
-                                if let indexTo = self.blm.behaviors.firstIndex(of: behavior) {
-                                    let distanceToGo = self.cardWidth + self.cardSpacing
-                                    let offset = distanceToGo * (CGFloat(indexTo) - self.currentIndex)
-                                    self.cumulativeOffset -= offset
-                                    self.currentIndex = CGFloat(indexTo)
-                                }
-                        }
-                    }
-                    .font(.system(size: 20, weight: .bold))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(3)
-                    .minimumScaleFactor(0.5)
-                    .aspectRatio(1, contentMode: .fit)
-                    .frame(width: self.cardWidth, height: self.cardWidth)
-                }
             }
-            .frame(height: self.cardWidth + 20)
-            .padding(.horizontal, UIScreen.main.bounds.width/2 - cardWidth/2 - cardSpacing)
-            .offset(x: translation)
-            .offset(x: cumulativeOffset)
-            .simultaneousGesture(drag)
-            .animation(Animation.interpolatingSpring(stiffness: 200.0,
-                                                     damping: 30.0,
-                                                     initialVelocity: 20.0))
+
+        return HStack {
+            ForEach(blm.behaviors, id: \.id) { behavior in
+                GeometryReader { geo in
+                    BehaviorCardView(behavior: behavior)
+                        .padding(self.cardSpacing)
+                        .rotation3DEffect(Angle(degrees: (Double(geo.frame(in: .global).maxX - UIScreen.main.bounds.width / 2 - self.cardWidth/2)) / -20),
+                                          axis: (x: 0, y: 10, z: 0))
+                        .onTapGesture {
+                            self.blm.selectedBehavior = behavior
+                            if let indexTo = self.blm.behaviors.firstIndex(of: behavior) {
+                                let distanceToGo = self.cardWidth + self.cardSpacing
+                                let offset = distanceToGo * (CGFloat(indexTo) - self.currentIndex)
+                                self.cumulativeOffset -= offset
+                                self.currentIndex = CGFloat(indexTo)
+                            }
+                        }
+                }
+                .font(.system(size: 20, weight: .bold))
+                .multilineTextAlignment(.center)
+                .lineLimit(3)
+                .minimumScaleFactor(0.5)
+                .aspectRatio(1, contentMode: .fit)
+                .frame(width: self.cardWidth, height: self.cardWidth)
+            }
         }
+        .frame(height: self.cardWidth + 20)
+        .padding(.leading, (UIScreen.main.bounds.width - cardWidth) / 2)
+        .offset(x: translation)
+        .offset(x: cumulativeOffset)
+        .simultaneousGesture(drag)
+        .onChange(of: blm.behaviors, perform: { _ in
+            cumulativeOffset = 0
+            currentIndex = 0
+        })
+        .animation(Animation.interpolatingSpring(stiffness: 200.0,
+                                                 damping: 30.0,
+                                                 initialVelocity: 20.0))
     }
 }
