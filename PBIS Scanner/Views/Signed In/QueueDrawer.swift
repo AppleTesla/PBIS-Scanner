@@ -94,7 +94,7 @@ struct QueueDrawer<Content: View>: View {
 
                 // MARK: Mini Bar - BEGIN
 
-                HStack(alignment: .top, spacing: 15) {
+                HStack(alignment: .center, spacing: 15) {
                     // MARK: Mini Bar - Category Prefix
                     BoxStringContainerView(text: String(blm.selectedCategory.stringValue.prefix(1)))
                         .aspectRatio(1, contentMode: .fit)
@@ -115,18 +115,24 @@ struct QueueDrawer<Content: View>: View {
                     // MARK: Mini Bar - Behavior & Queue Count Preview
 
                     Group {
-                        if jvm.queueVerbalUpdate.isEmpty {
-                            Text(blm.selectedBehavior?.title ?? "No behavior selected")
-                                .fontWeight(.medium)
-                                .opacity(blm.selectedBehavior?.title == nil ? 0.2 : 1)
-                        } else {
+                        if !jvm.queueVerbalUpdate.isEmpty {
                             Text(jvm.queueVerbalUpdate)
                                 .foregroundColor(.gray)
                                 .onReceive(jvm.$queueVerbalUpdate.removeDuplicates()) { _ in
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                         self.jvm.queueVerbalUpdate = ""
                                     }
                             }
+                        } else if !isMinimized {
+                            VStack {
+                                Text(blm.selectedCategory.stringValue)
+                                    .fontWeight(.bold)
+                                    .font(.title)
+                            }
+                        } else {
+                            Text(blm.selectedBehavior?.title ?? "No behavior selected")
+                                .fontWeight(.medium)
+                                .opacity(blm.selectedBehavior?.title == nil ? 0.2 : 1)
                         }
                     }
                     .animation(nil)
@@ -140,14 +146,13 @@ struct QueueDrawer<Content: View>: View {
                             .resizable()
                             .aspectRatio(1, contentMode: .fit)
                             .frame(width: 30)
-                            .padding(isMinimized ? .bottom : .vertical)
                             .opacity(0.5)
                             .offset(x: minOffset_HOR, y: minOffset_VER)
                             .onTapGesture { self.isMinimized.toggle() }
                     }
                 }
                 .padding([.top, .horizontal])
-                .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 0 : isMinimized ? 40 : 0)
+                .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 20 : isMinimized ? 40 : 0)
                 .contentShape(Rectangle())
                 .gesture(minimizerDrag)
 

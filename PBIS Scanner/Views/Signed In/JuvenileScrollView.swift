@@ -18,7 +18,7 @@ struct JuvenileScrollView: View {
                 // Juvenile Icons
                 ForEach(juveniles, id: \.id) { juvenile in
                     VStack {
-                        ProfileIconView(badges: [.Juvenile(.online)])
+                        ProfileIconView(badges: [])
                             .frame(width: 60, height: 60)
                             .contentShape(Circle())
                             .contextMenu {

@@ -63,8 +63,6 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
         let dataTask = session.dataTask(with: request) { data, response, error in
             var result: Result<T, ResponseError> = .failure(.deferred)
 
-//            print(response)
-
             defer { resultQueue.async { completion(result) } }
 
             if let error = error {
@@ -106,8 +104,8 @@ extension APIManager {
     func save<T: Model>(entity: T, completion: ((Bool) -> ())? = nil) {
         Amplify.DataStore.save(entity) { result in
             switch result {
-            case .success(let object):
-                print("\(object.modelName) successfully saved to disk.")
+            case .success(let _):
+//                print("\(object.modelName) successfully saved to disk.")
                 completion?(true)
             case .failure(let error):
                 print(error)

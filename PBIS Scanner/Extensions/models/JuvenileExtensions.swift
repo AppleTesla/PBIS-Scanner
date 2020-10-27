@@ -9,10 +9,10 @@ extension Juvenile: Codable {
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: Juvenile.keys)
 
-        do {
+        do { // network
             let id_integer = try values.decode(Int.self, forKey: .id)
             id = String(id_integer)
-        } catch {
+        } catch { // local
             id = try values.decode(String.self, forKey: .id)
         }
 
@@ -44,7 +44,7 @@ extension Juvenile: Codable {
 
 extension Juvenile: Equatable {
     public static func ==(lhs: Juvenile, rhs: Juvenile) -> Bool {
-        return lhs.event_id == rhs.event_id
+        return lhs.id == rhs.id
     }
 }
 
@@ -53,5 +53,6 @@ extension Juvenile: Identifiable { }
 extension Juvenile: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(event_id)
+        hasher.combine(id)
     }
 }

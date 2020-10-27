@@ -33,9 +33,9 @@ struct ScanView: View {
                           message: Text(.sessionAlertMessage),
                           dismissButton: .default(Text(.sessionAlertDismiss)))
             }
-            .onReceive(qrCodePublisher) { code in
-                print(code)
-                        self.jvm.fetchJuveniles(withEventID: code) }
+                .onReceive(qrCodePublisher) { code in
+                    self.jvm.fetchJuveniles(withEventID: code)
+            }
 
             VStack {
                 ZStack(alignment: .topLeading) {
