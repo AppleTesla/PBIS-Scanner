@@ -16,7 +16,7 @@ struct SignInView: View {
             Image("collab")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 150, height: 75, alignment: .center)
+                .frame(width: 200, height: 100, alignment: .center)
             Text("PBIS Scan")
                 .fontWeight(.bold)
                 .font(.largeTitle)
@@ -37,7 +37,8 @@ struct SignInView: View {
                 .background(colorScheme == .dark ? Color.white : Color.black)
                 .cornerRadius(5)
         }
-        .padding(.vertical)
+        .padding(.top)
+        .padding(.bottom, 75)
         .background(Image("bg"))
     }
 }

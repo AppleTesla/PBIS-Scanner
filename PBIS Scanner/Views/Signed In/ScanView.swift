@@ -32,21 +32,22 @@ struct ScanView: View {
                     Alert(title: Text(.sessionAlertTitle),
                           message: Text(.sessionAlertMessage),
                           dismissButton: .default(Text(.sessionAlertDismiss)))
-            }
+                }
                 .onReceive(qrCodePublisher) { code in
                     self.jvm.fetchJuveniles(withEventID: code)
-            }
+                }
 
             VStack {
                 ZStack(alignment: .topLeading) {
                     LocationSelectorView()
-                    ProfileIconView()
-                        .padding([.top, .leading])
-                        .onTapGesture {
-                            self.showProfileDetail = true
+                    Button {
+                        self.showProfileDetail = true
+                    } label: {
+                        ProfileIconView()
+                            .padding([.top, .leading])
                     }
-                        .sheet(isPresented: $showProfileDetail) {
-                            ProfileView(auth: self.auth, jvm: self.jvm)
+                    .sheet(isPresented: $showProfileDetail) {
+                        ProfileView(auth: self.auth, jvm: self.jvm)
                     }
                 }
 
