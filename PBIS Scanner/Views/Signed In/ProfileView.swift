@@ -28,7 +28,7 @@ struct ProfileView: View {
                             ProfileIconView(badges: [])
                                 .aspectRatio(1, contentMode: .fit)
                                 .frame(width: 50)
-                                .padding(10)
+                                .padding([.trailing, .vertical], 10)
                             VStack(alignment: .leading) {
                                 Text(fullName)
                                     .font(.headline)
