@@ -118,7 +118,7 @@ struct QueueDrawer<Content: View>: View {
                         if !jvm.queueVerbalUpdate.isEmpty {
                             Text(jvm.queueVerbalUpdate)
                                 .foregroundColor(.gray)
-                                .onReceive(jvm.$queueVerbalUpdate.removeDuplicates()) { _ in
+                                .onReceive(jvm.$queueVerbalUpdate.removeDuplicates().debounce(for: .seconds(2), scheduler: RunLoop.main)) { current in
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                         self.jvm.queueVerbalUpdate = ""
                                     }
