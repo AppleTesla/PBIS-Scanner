@@ -15,6 +15,7 @@ struct ProfileView: View {
     // MARK: View Properties
 
     @State var fullName = "Not Signed In"
+    @State private var remainingPostsCount = 0
 
     @State var connectionState = ""
 
@@ -41,11 +42,22 @@ struct ProfileView: View {
                             }
                         }
                     }
-                    HStack {
-                        Text("Juveniles Pending Upload")
-                        Spacer()
-                        Text("\(jvm.bucketManagerDelegate?.getPostCount() ?? 0)")
-                            .foregroundColor(.gray)
+
+                    if jvm.networkManager.isConnected {
+                        Button {
+                            self.jvm.bucketManagerDelegate?.attemptToPushPosts()
+                        } label: {
+                            HStack {
+                                Text("Pending Upload")
+                                Spacer()
+                                Text("\(remainingPostsCount) juveniles")
+                                    .foregroundColor(.gray)
+                                    .onReceive(jvm.bucketManagerDelegate!.postRemainingCount) { count in
+                                        remainingPostsCount = count
+                                    }
+                            }
+                        }
+                        .disabled(remainingPostsCount == 0)
                     }
                 }
 
@@ -63,6 +75,10 @@ struct ProfileView: View {
             .navigationBarTitle(Text(.title))
         }
         .onAppear {
+            if jvm.bucketManagerDelegate == nil {
+                jvm.bucketManagerDelegate?.attemptToPushPosts()
+            }
+            
             if let usernameData = self.auth.keychainManager.load(key: .username),
                 let username = String(data: usernameData, encoding: .utf8) {
                 self.fullName = username

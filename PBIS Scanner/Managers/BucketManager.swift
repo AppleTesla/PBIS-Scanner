@@ -3,30 +3,52 @@
 import Foundation
 import SwiftUI
 import Combine
+import Amplify
 
 // MARK: Classes
 
 final class BucketManager: APIManagerInjector {
 
-    private var cancellable: AnyCancellable?
+    private var statusCancellable: AnyCancellable?
+    private var countCancellable: AnyCancellable?
+    public let postRemainingCount = PassthroughSubject<Int, Never>()
+    private var count = 0
 
     @ObservedObject var observedNWManager: NetworkManager
 
     init(networkManager: NetworkManager) {
         self.observedNWManager = networkManager
-        cancellable = observedNWManager.$isConnected.sink(receiveValue: { isConnected in
+        statusCancellable = observedNWManager.$isConnected.sink(receiveValue: { isConnected in
             if isConnected {
                 self.attemptToPushPosts()
             }
         })
-    }
 
-    func getPostCount() -> Int {
-        var count = 0
         apiManager.offlineFetch { (posts: [Post]) in
             count = posts.count
+            countCancellable = getPostCount()
         }
-        return count
+    }
+
+    deinit {
+        countCancellable?.cancel()
+        statusCancellable?.cancel()
+    }
+
+    private func getPostCount() -> AnyCancellable {
+        Amplify.DataStore.publisher(for: Post.self)
+            .sink { errors in
+            } receiveValue: { changes in
+                switch DataStoreMutationType(rawValue: changes.mutationType) {
+                case .create:
+                    self.count += 1
+                case .delete:
+                    self.count -= 1
+                default:
+                    break
+                }
+                self.postRemainingCount.send(self.count)
+            }
     }
 
     func attemptToPushPosts() {

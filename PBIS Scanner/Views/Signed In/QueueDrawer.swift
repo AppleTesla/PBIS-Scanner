@@ -160,7 +160,7 @@ struct QueueDrawer<Content: View>: View {
 
                 // MARK: Submit Button
 
-                if !jvm.juveniles.isEmpty && blm.selectedBehavior != nil {
+                if !jvm.juveniles.isEmpty {
                     Button(action: {
                         self.jvm.saveToBucket(with: self.blm.selectedBehavior, for: self.jvm.juveniles)
                     }) {
@@ -169,9 +169,10 @@ struct QueueDrawer<Content: View>: View {
                             .padding()
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
-                            .background(Color.blue)
+                            .background(blm.selectedBehavior == nil ? Color.gray : Color.blue)
                             .cornerRadius(10)
                             .padding(.horizontal, 5)
+                            .disabled(blm.selectedBehavior == nil)
                     }
                     .padding(.horizontal)
                     .padding(.bottom, isMinimized ? 40 : 5)

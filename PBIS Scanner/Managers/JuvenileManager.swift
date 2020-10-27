@@ -61,7 +61,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                                 self.juveniles.append(juvenile)
                                 DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
                                 self.dispatchGroup.leave()
-                            // Already in queue
+                                // Already in queue
                             } else if let index = self.juveniles.firstIndex(of: juvenile) {
                                 self.juveniles[index] = juvenile
                                 self.dispatchGroup.leave()
@@ -76,7 +76,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                     }
                 }
             }
-        )
+            )
     }
 }
 
@@ -84,50 +84,43 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
 
 extension JuvenileManager {
     func initializeQueue() {
-        self.apiManager.offlineFetch { (juveniles: [Juvenile]) in
-            for juvenile in juveniles {
-                if juvenile.isEnqueued {
-                    self.juveniles.append(juvenile)
-                }
+        apiManager.offlineFetch { (locals: [Juvenile]) in
+            for local in locals {
+                self.apiManager.save(entity: local)
             }
+
+            fetchOnlineJuveniles_PROTECTED(locals: locals)
         }
     }
 
     func fetchJuveniles(withEventID id: Int? = nil) {
-        var localFetch: [Juvenile] = []
-        var didFind = false
-
         defer {
-            if networkManager.isConnected {
-                apiManager.fetchOnlineList { (remotes: [Juvenile]) in
-                    if !didFind, var interest = remotes.first(where: { $0.event_id == id }) {
-                        interest.isEnqueued = true
-                        self.apiManager.save(entity: interest)
+            apiManager.offlineFetch { (locals: [Juvenile]) in
+                for local in locals {
+                    if local.event_id == id {
+                        var new = local
+                        new.isEnqueued = true
+                        self.apiManager.save(entity: new)
+                        break
                     }
-//                    if !ProcessInfo.processInfo.isLowPowerModeEnabled {
-//                        DispatchQueue.global(qos: .background).async {
-//                            // Flush non-existent juveniles.
-//                            guard !remotes.isEmpty else { return }
-//                            localFetch.forEach({ local in
-//                                if !remotes.contains(local) {
-//                                    self.apiManager.delete(entity: local)
-//                                }
-//                            })
-//                        }
-//                    }
                 }
-            } else { // Look for juveniles offline if no network connection found.
-                apiManager.offlineFetch { (locals: [Juvenile]) in
-                    localFetch = locals
-                    locals.forEach({ local in
-                        if local.event_id == id {
-                            var new = local
-                            new.isEnqueued = true
-                            self.apiManager.save(entity: new)
-                            return
-                        }
-                    })
-                }
+
+                fetchOnlineJuveniles_PROTECTED(locals: locals)
+
+
+                //                apiManager.fetchOnlineList { (remotes: [Juvenile]) in
+                //                    if !ProcessInfo.processInfo.isLowPowerModeEnabled {
+                //                        DispatchQueue.global(qos: .background).async {
+                //                            // Flush non-existent juveniles.
+                //                            guard !remotes.isEmpty else { return }
+                //                            localFetch.forEach({ local in
+                //                                if !remotes.contains(local) {
+                //                                    self.apiManager.delete(entity: local)
+                //                                }
+                //                            })
+                //                        }
+                //                    }
+                //                }
             }
         }
 
@@ -136,10 +129,25 @@ extension JuvenileManager {
         apiManager.fetchOnlineObject(customEndpoint: querySingleJuvenileEndpoint) { (juvenile: Juvenile?) in
             if var juvenile = juvenile {
                 juvenile.isEnqueued = true
-                self.apiManager.save(entity: juvenile) { didSave in
-                    didFind = true
-                }
+                self.apiManager.save(entity: juvenile)
             }
+        }
+    }
+
+    private func fetchOnlineJuveniles_PROTECTED(locals: [Juvenile]) {
+        guard networkManager.isConnected else { return }
+
+        apiManager.fetchOnlineList { (remotes: [Juvenile]) in
+            guard !remotes.isEmpty, remotes.count != locals.count else { return }
+            remotes.forEach({ remote in
+                if let interest = locals.first(where: { $0.event_id == remote.event_id }), interest.isEnqueued {
+                    var newRemote = remote
+                    newRemote.isEnqueued = true
+                    self.apiManager.save(entity: newRemote)
+                } else {
+                    self.apiManager.save(entity: remote)
+                }
+            })
         }
     }
 }

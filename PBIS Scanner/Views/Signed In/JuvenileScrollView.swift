@@ -36,7 +36,7 @@ struct JuvenileScrollView: View {
                                             self.jvm.removeJuvenile(juvenile: juvenile)
                                         }
                                     }) {
-                                        Label("Are You Sure?", image: SystemImage.trash.rawValue)
+                                        Label("Are You Sure?", systemImage: SystemImage.trash.rawValue)
                                     }
                                 }
 
@@ -46,7 +46,7 @@ struct JuvenileScrollView: View {
                                             self.jvm.removeAllJuveniles()
                                         }
                                     }) {
-                                        Label("Are You Sure?", image: SystemImage.trash.rawValue)
+                                        Label("Are You Sure?", systemImage: SystemImage.trash.rawValue)
                                     }
                                 }
                             }
