@@ -7,8 +7,7 @@
 
 import Foundation
 
-public class RepeatingTimer {
-    public init() {
-        // TODO: to be implemented
-    }
+/// Implement this protocol to support versioning in your plugin
+protocol AmplifyVersionable {
+    var version: String { get }
 }

@@ -104,7 +104,7 @@ extension APIManager {
     func save<T: Model>(entity: T, completion: ((Bool) -> ())? = nil) {
         Amplify.DataStore.save(entity) { result in
             switch result {
-            case .success(let _):
+            case .success(_):
 //                print("\(object.modelName) successfully saved to disk.")
                 completion?(true)
             case .failure(let error):
