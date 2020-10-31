@@ -29,6 +29,15 @@ struct JuvenileScrollView: View {
                                 Button(action: { showHistory = true }) {
                                     Label("Transaction History", systemImage: SystemImage.clock.rawValue)
                                 }
+                                .sheet(isPresented: $showHistory) {
+                                    NavigationView {
+                                        VStack {
+
+                                        }
+                                        .listStyle(InsetGroupedListStyle())
+                                        .navigationBarTitle(juvenile.first_name)
+                                    }
+                                }
 
                                 Divider()
 
@@ -58,15 +67,6 @@ struct JuvenileScrollView: View {
             }
             .frame(height: 100)
             .padding(.horizontal, 20)
-        }
-        .sheet(isPresented: $showHistory) {
-            NavigationView {
-                VStack {
-                    ForEach()
-                }
-                .listStyle(InsetGroupedListStyle())
-                .navigationBarTitle(Text(.title))
-            }
         }
     }
 }
