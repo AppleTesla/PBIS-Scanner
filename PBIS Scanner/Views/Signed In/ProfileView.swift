@@ -43,22 +43,31 @@ struct ProfileView: View {
                         }
                     }
 
-                    if jvm.networkManager.isConnected {
-                        Button {
-                            self.jvm.bucketManagerDelegate?.attemptToPushPosts()
-                        } label: {
-                            HStack {
-                                Text("Pending Upload")
-                                Spacer()
-                                Text("\(remainingPostsCount) juveniles")
-                                    .foregroundColor(.gray)
-                                    .onReceive(jvm.bucketManagerDelegate!.postRemainingCount) { count in
-                                        remainingPostsCount = count
-                                    }
-                            }
+                    Button {
+                        self.jvm.bucketManagerDelegate?.attemptToPushPosts()
+                    } label: {
+                        HStack {
+                            Text("Pending Upload")
+                            Spacer()
+                            Text("\(remainingPostsCount) juveniles")
+                                .foregroundColor(.gray)
                         }
-                        .disabled(remainingPostsCount == 0)
                     }
+                    .disabled(!jvm.networkManager.isConnected || remainingPostsCount == 0)
+                }
+
+                Section {
+                    Button("Upload History") { }
+                        .disabled(true)
+                    Button("Lock With Passcode") { }
+                        .disabled(true)
+                }
+
+                Section {
+                    Button("Report a bug") { }
+                        .disabled(true)
+                    Button("About") { }
+                        .disabled(true)
                 }
 
                 Section(footer: Text(.copyright)) {
@@ -74,11 +83,12 @@ struct ProfileView: View {
             }
             .navigationBarTitle(Text(.title))
         }
+        .onReceive(jvm.bucketManagerDelegate!.postRemainingCount) { count in
+            remainingPostsCount = count
+        }
         .onAppear {
-            if jvm.bucketManagerDelegate == nil {
-                jvm.bucketManagerDelegate?.attemptToPushPosts()
-            }
-            
+            jvm.bucketManagerDelegate?.attemptToPushPosts()
+
             if let usernameData = self.auth.keychainManager.load(key: .username),
                 let username = String(data: usernameData, encoding: .utf8) {
                 self.fullName = username

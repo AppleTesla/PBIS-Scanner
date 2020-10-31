@@ -45,7 +45,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             else { return }
 
         // Configure any delegates for communication between managers.
-        juvenileManager.apiManager.credentialsDelegate = authManager
+        juvenileManager.apiManager.authManager = authManager
         juvenileManager.bucketManagerDelegate = bucketManager
 
         // Create the SwiftUI view that provides the window contents.
@@ -84,22 +84,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Rebuild Keychain items
-//        authManager?.getAccessToken { token in
-//            guard let token = token,
-//                let data = token.data(using: .utf8)
-//                else { return }
-//            _ = self.juvenileManager?.apiManager.keychainManager.save(key: .token, data: data)
-//        }
-
         // Restart network manager
         juvenileManager?.apiManager.networkManager.connect()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        // Release Keychain items
-//        juvenileManager?.apiManager.keychainManager.remove(key: .token)
-
         // Restart network manager
         juvenileManager?.apiManager.networkManager.disconnect()
         

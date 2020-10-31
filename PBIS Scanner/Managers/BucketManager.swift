@@ -9,7 +9,7 @@ import Amplify
 
 final class BucketManager: APIManagerInjector {
 
-    private var statusCancellable: AnyCancellable?
+    private var networkCancellable: AnyCancellable?
     private var countCancellable: AnyCancellable?
     public let postRemainingCount = PassthroughSubject<Int, Never>()
     private var count = 0
@@ -18,7 +18,7 @@ final class BucketManager: APIManagerInjector {
 
     init(networkManager: NetworkManager) {
         self.observedNWManager = networkManager
-        statusCancellable = observedNWManager.$isConnected.sink(receiveValue: { isConnected in
+        networkCancellable = observedNWManager.$isConnected.sink(receiveValue: { isConnected in
             if isConnected {
                 self.attemptToPushPosts()
             }
@@ -26,16 +26,16 @@ final class BucketManager: APIManagerInjector {
 
         apiManager.offlineFetch { (posts: [Post]) in
             count = posts.count
-            countCancellable = getPostCount()
+            countCancellable = postCountCancellable()
         }
     }
 
     deinit {
         countCancellable?.cancel()
-        statusCancellable?.cancel()
+        networkCancellable?.cancel()
     }
 
-    private func getPostCount() -> AnyCancellable {
+    private func postCountCancellable() -> AnyCancellable {
         Amplify.DataStore.publisher(for: Post.self)
             .sink { errors in
             } receiveValue: { changes in
@@ -53,8 +53,8 @@ final class BucketManager: APIManagerInjector {
 
     func attemptToPushPosts() {
         apiManager.offlineFetch { (posts: [Post]) in
-            guard !posts.isEmpty else { return }
-            if observedNWManager.isConnected {
+            postRemainingCount.send(posts.count)
+            if !posts.isEmpty && observedNWManager.isConnected {
                 print("Attempt being made to push \(posts.count) posts.")
                 let dispatchGroup = DispatchGroup()
                 let semaphore = DispatchSemaphore(value: 1)

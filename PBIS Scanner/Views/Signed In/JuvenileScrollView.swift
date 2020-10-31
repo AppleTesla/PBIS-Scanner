@@ -8,6 +8,8 @@ struct JuvenileScrollView: View {
 
     @EnvironmentObject private var jvm: JuvenileManager
 
+    @State private var showHistory = false
+
     var juveniles: [Juvenile]
 
     @State private var shouldConfirmDelete = false
@@ -24,7 +26,7 @@ struct JuvenileScrollView: View {
                             .contextMenu {
                                 Label("\(juvenile.first_name) \(juvenile.last_name)", systemImage: "person.fill")
                                 Label("\(juvenile.points) points", systemImage: "number.square.fill")
-                                Button(action: { }) {
+                                Button(action: { showHistory = true }) {
                                     Label("Transaction History", systemImage: SystemImage.clock.rawValue)
                                 }
 
@@ -56,6 +58,15 @@ struct JuvenileScrollView: View {
             }
             .frame(height: 100)
             .padding(.horizontal, 20)
+        }
+        .sheet(isPresented: $showHistory) {
+            NavigationView {
+                VStack {
+                    ForEach()
+                }
+                .listStyle(InsetGroupedListStyle())
+                .navigationBarTitle(Text(.title))
+            }
         }
     }
 }

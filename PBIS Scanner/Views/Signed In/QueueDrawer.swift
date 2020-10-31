@@ -102,8 +102,7 @@ struct QueueDrawer<Content: View>: View {
                         .scaleEffect(categorySelectorSize, anchor: .center)
                         .font(.system(size: isMinimized ? 20 : 30))
                         .onTapGesture {
-                            let currentCategory = self.blm.selectedCategory
-                            self.blm.selectedCategory = currentCategory.next(state: currentCategory)
+                            self.blm.selectedCategory = self.blm.selectedCategory.next()
                     }
                         .gesture(categoryDrag)
                         .onReceive(blm.$selectedCategory) { _ in
@@ -164,7 +163,7 @@ struct QueueDrawer<Content: View>: View {
                     Button(action: {
                         self.jvm.saveToBucket(with: self.blm.selectedBehavior, for: self.jvm.juveniles)
                     }) {
-                        Text("Submit (\(jvm.juveniles.count))")
+                        Text(blm.selectedBehavior == nil ? "Select a behavior (\(jvm.juveniles.count))" : "Submit (\(jvm.juveniles.count))")
                             .fontWeight(.medium)
                             .padding()
                             .foregroundColor(.white)

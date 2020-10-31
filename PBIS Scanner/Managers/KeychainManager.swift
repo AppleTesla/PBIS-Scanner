@@ -31,6 +31,12 @@ final class KeychainManager {
         }
     }
 
+    func remove(keys: [KeychainCategory]) {
+        for key in keys {
+            remove(key: key)
+        }
+    }
+
     func load(key: KeychainCategory) -> Data? {
         let query = [
             kSecClass as String       : kSecClassGenericPassword,

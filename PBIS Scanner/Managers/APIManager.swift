@@ -11,7 +11,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
 
     // MARK: Credentials
 
-    var credentialsDelegate: CredentialsProvider?
+    var authManager: AuthManager?
 
     // MARK: Default Endpoints
 
@@ -44,6 +44,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
 
         guard let token_RAW = keychainManager.load(key: .token),
             let token = String(data: token_RAW, encoding: .utf8) else {
+            authManager?.fetchTokens()
             completion(.failure(.tokenProblem))
             return
         }
@@ -137,6 +138,7 @@ extension APIManager {
         Amplify.DataStore.clear { result in
             switch result {
             case .success:
+                self.keychainManager.remove(keys: KeychainCategory.allCases)
                 print("Successfully cleared DataStore.")
             case .failure(let error):
                 print(error)

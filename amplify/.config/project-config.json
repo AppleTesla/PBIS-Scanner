@@ -1,8 +1,8 @@
 {
-    "projectName": "PBISScanner",
-    "version": "3.0",
-    "frontend": "ios",
-    "providers": [
-        "awscloudformation"
-    ]
+  "projectName": "PBIS Scanner",
+  "version": "3.0",
+  "frontend": "ios",
+  "providers": [
+    "awscloudformation"
+  ]
 }

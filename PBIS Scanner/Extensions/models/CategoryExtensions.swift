@@ -24,7 +24,7 @@ extension Category {
 }
 
 extension Category {
-    func next(state: Category) -> Category {
-        return Category.allCases[(Category.allCases.firstIndex(of: state)! + 1) % Category.allCases.count]
+    func next() -> Category {
+        return Category.allCases[(Category.allCases.firstIndex(of: self)! + 1) % 3]
     }
 }

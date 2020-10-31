@@ -28,7 +28,7 @@ final class AuthManager: ObservableObject, KeychainManagerInjector {
 
     // MARK: Published
 
-    @Published var isSignedIn = false
+    @Published var isSignedIn = true
 
     init() {
         initCancellable = checkSessionStatus()
@@ -39,11 +39,10 @@ final class AuthManager: ObservableObject, KeychainManagerInjector {
     deinit {
         initCancellable?.cancel()
         stateCancellable?.cancel()
-        tokenCancellable?.cancel()
     }
 
     private func checkSessionStatus() -> AnyCancellable {
-        return Amplify.Auth.fetchAuthSession().resultPublisher
+        Amplify.Auth.fetchAuthSession().resultPublisher
             .sink(receiveCompletion: {
             if case let .failure(authError) = $0 {
                 print("Fetch session failed with error \(authError)")
@@ -65,7 +64,6 @@ extension AuthManager {
                 switch payload.eventName {
                 case HubPayload.EventName.Auth.signedIn:
                     DispatchQueue.main.async { self.isSignedIn = true }
-                    self.initCancellable?.cancel()
                 case HubPayload.EventName.Auth.signedOut,
                      HubPayload.EventName.Auth.sessionExpired:
                     DispatchQueue.main.async { self.isSignedIn = false }
@@ -111,7 +109,7 @@ extension AuthManager {
 // MARK: Provide vars for CredentialsProvider
 
 extension AuthManager: CredentialsProvider {
-    private func fetchTokens() -> AnyCancellable {
+    public func fetchTokens() -> AnyCancellable {
         Amplify.Auth.fetchAuthSession()
             .resultPublisher
             .sink(receiveCompletion: {
@@ -127,11 +125,12 @@ extension AuthManager: CredentialsProvider {
                         if saveError != noErr { print(saveError) }
 
                         let json = try JSONUtility().decode(jwtToken: tokens.idToken)
-                        if let username = json["name"] as? String, let email = json["email"] as? String, let verification = json["email_verified"] as? Int  {
+                        if let username = json["name"] as? String,
+                           let email = json["email"] as? String,
+                           let verification = json["email_verified"] as? Int  {
                             _ = self.keychainManager.save(key: .username, data: username.data(using: .utf8)!)
                             _ = self.keychainManager.save(key: .email, data: email.data(using: .utf8)!)
-                            let isVerified = verification == 1 ? true : false
-                            let isVerifiedData = try JSONEncoder().encode(isVerified)
+                            let isVerifiedData = try JSONEncoder().encode(verification == 1)
                             _ = self.keychainManager.save(key: .isVerified, data: isVerifiedData)
                         }
                     } catch {
@@ -139,20 +138,5 @@ extension AuthManager: CredentialsProvider {
                     }
                 }
         })
-    }
-}
-
-extension AuthManager {
-    private func rememberDevice() -> AnyCancellable {
-        Amplify.Auth.rememberDevice()
-            .resultPublisher
-            .sink(receiveCompletion:  {
-                if case let .failure(authError) = $0 {
-                    print("Remember device failed with error \(authError).")
-                }
-            },
-                  receiveValue: {
-                    print("Remember device succeeded!")
-            })
     }
 }

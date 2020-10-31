@@ -15,7 +15,8 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
     @Published var queueVerbalUpdate = ""
     private var juvenilesSubscription: AnyCancellable?
 
-    weak var bucketManagerDelegate: BucketManager?
+    var bucketManagerDelegate: BucketManager?
+    private var networkCancellable: AnyCancellable?
 
     private let dispatchGroup = DispatchGroup()
     private let dispatchQueue = DispatchQueue(label: "com.juvenileManager", qos: .userInitiated)
@@ -23,11 +24,22 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
     // MARK: Initializers
 
     init() {
-        initializeQueue()
+        apiManager.offlineFetch { (locals: [Juvenile]) in
+            for local in locals {
+                if local.isEnqueued {
+                    self.juveniles.append(local)
+                }
+            }
+        }
+
         juvenilesSubscription = subscribeToJuveniles()
+        networkCancellable = networkManager.$isConnected.sink { isConnected in
+            if isConnected { self.fetchJuveniles() }
+        }
     }
 
     deinit {
+        networkCancellable?.cancel()
         juvenilesSubscription?.cancel()
     }
 
@@ -83,16 +95,6 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
 // MARK: Juvenile Fetch
 
 extension JuvenileManager {
-    func initializeQueue() {
-        apiManager.offlineFetch { (locals: [Juvenile]) in
-            for local in locals {
-                self.apiManager.save(entity: local)
-            }
-
-            fetchOnlineJuveniles_PROTECTED(locals: locals)
-        }
-    }
-
     func fetchJuveniles(withEventID id: Int? = nil) {
         defer {
             apiManager.offlineFetch { (locals: [Juvenile]) in
@@ -174,6 +176,13 @@ extension JuvenileManager {
         }
     }
 }
+
+// MARK: Juvenile History
+extension JuvenileManager {
+    func getHistoryForJuvenile(_ juvenile: Juvenile) {
+    }
+}
+
 
 // MARK: Juvenile Post
 

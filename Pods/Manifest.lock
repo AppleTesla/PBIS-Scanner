@@ -2,7 +2,6 @@ PODS:
   - Amplify (1.4.0):
     - Amplify/Default (= 1.4.0)
   - Amplify/Default (1.4.0)
-  - Amplify/Tools (1.4.0)
   - AmplifyPlugins/AWSCognitoAuthPlugin (1.4.0):
     - AWSAuthCore (~> 2.18.0)
     - AWSCognitoIdentityProvider (~> 2.18.0)
@@ -36,7 +35,6 @@ PODS:
 
 DEPENDENCIES:
   - Amplify
-  - Amplify/Tools
   - AmplifyPlugins/AWSCognitoAuthPlugin
   - AmplifyPlugins/AWSDataStorePlugin
 
@@ -63,6 +61,6 @@ SPEC CHECKSUMS:
   AWSPluginsCore: 883d3969add07eec02d4719c1a844d0b870b2e1d
   SQLite.swift: d2b4642190917051ce6bd1d49aab565fe794eea3
 
-PODFILE CHECKSUM: f053a856b89ebcdfb6849616b9737b50de448085
+PODFILE CHECKSUM: 474b7eb6a6d694c684770e83746b51e14cf3e436
 
 COCOAPODS: 1.10.0
