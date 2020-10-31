@@ -151,7 +151,7 @@ struct QueueDrawer<Content: View>: View {
                     }
                 }
                 .padding([.top, .horizontal])
-                .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 20 : isMinimized ? 40 : 0)
+                .padding(.bottom, !jvm.juveniles.isEmpty && blm.selectedBehavior != nil ? 20 : 20)
                 .contentShape(Rectangle())
                 .gesture(minimizerDrag)
 
