@@ -7,6 +7,7 @@ enum LocalizationKey: String {
     // Profile View
     case title = "TITLE"
     case signOut = "SIGN_OUT"
+    case reconnectToSignOut = "RECONNECT_TO_SIGN_OUT"
 
     case connected = "CONNECTED"
     case disconnected = "DISCONNECTED"

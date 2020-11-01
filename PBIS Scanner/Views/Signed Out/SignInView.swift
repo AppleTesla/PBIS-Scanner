@@ -10,6 +10,7 @@ struct SignInView: View {
     
     @EnvironmentObject private var authManager: AuthManager
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.openURL) var openURL
 
     var body: some View {
         VStack(spacing: 20) {
@@ -17,6 +18,9 @@ struct SignInView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 200, height: 100, alignment: .center)
+                .onTapGesture {
+                    openURL(URL(string: "https://dxhub.calpoly.edu/challenges/best-practices-in-slo-juvenile-hall/")!)
+                }
             Text("PBIS Scan")
                 .fontWeight(.bold)
                 .font(.largeTitle)

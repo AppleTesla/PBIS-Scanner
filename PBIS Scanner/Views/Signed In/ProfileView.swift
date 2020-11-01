@@ -77,9 +77,12 @@ struct ProfileView: View {
                 Section(footer: Text(.copyright)) {
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
-                        self.jvm.clearFromDataStore()
-                        self.blm.clearFromDataStore()
-                        self.auth.signOut()
+                        self.auth.signOut { didSignOut in
+                            guard didSignOut else { return }
+                            self.jvm.bucketManagerDelegate?.clearFromDataStore()
+                            self.jvm.clearFromDataStore()
+                            self.blm.clearFromDataStore()
+                        }
                     }) {
                         Text(.signOut)
                             .foregroundColor(.red)

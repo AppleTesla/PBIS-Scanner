@@ -96,13 +96,15 @@ extension AuthManager {
 // MARK: Sign Out
 
 extension AuthManager {
-    func signOut() {
+    func signOut(completion: @escaping (Bool) -> Void) {
         Amplify.Auth.signOut() { result in
             switch result {
             case .success:
                 print("Successfully signed out")
+                completion(true)
             case .failure(let error):
                 print("Sign out failed with error \(error)")
+                completion(false)
             }
         }
     }
@@ -137,7 +139,7 @@ extension AuthManager: CredentialsProvider {
                         }
                     } catch {
                         print("TokenError", error)
-                        self.signOut()
+                        self.signOut { _ in }
                     }
                 }
         })

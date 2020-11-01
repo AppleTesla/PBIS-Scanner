@@ -301,12 +301,12 @@
 				55117BBD24FA98E90047D54A /* AmplifyConfigurator.swift */,
 				55117BD224FAAFB70047D54A /* APIManager.swift */,
 				55E18C2B24FA6D7800820CE3 /* AuthManager.swift */,
+				555DDF0E25006338001CC23D /* BucketManager.swift */,
 				55117BBF24FA9D650047D54A /* JuvenileManager.swift */,
 				555DDE3E24FE2AAE001CC23D /* BehaviorLocationManager.swift */,
 				55117BDA24FB1C130047D54A /* NetworkManager.swift */,
 				55117BDC24FB27710047D54A /* KeychainManager.swift */,
 				555DDE3C24FE26FF001CC23D /* UIManager.swift */,
-				555DDF0E25006338001CC23D /* BucketManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -772,7 +772,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development: Jennifer Whitespear (R3FR5M89FV)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5469;
+				CURRENT_PROJECT_VERSION = 8434;
 				DEVELOPMENT_ASSET_PATHS = "\"PBIS Scanner/Preview Content\"";
 				DEVELOPMENT_TEAM = JSR55HTJU9;
 				ENABLE_PREVIEWS = YES;
@@ -782,12 +782,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.74;
+				MARKETING_VERSION = 2020.10.5;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.calpoly.dxhub.pbis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "pbis-dev";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -798,7 +798,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development: Jennifer Whitespear (R3FR5M89FV)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5469;
+				CURRENT_PROJECT_VERSION = 8434;
 				DEVELOPMENT_ASSET_PATHS = "\"PBIS Scanner/Preview Content\"";
 				DEVELOPMENT_TEAM = JSR55HTJU9;
 				ENABLE_PREVIEWS = YES;
@@ -808,12 +808,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.74;
+				MARKETING_VERSION = 2020.10.5;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.calpoly.dxhub.pbis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "pbis-dev";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

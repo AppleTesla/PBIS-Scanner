@@ -112,4 +112,16 @@ final class BucketManager: APIManagerInjector {
             }
         }
     }
+
+    func clearFromDataStore() {
+        Amplify.DataStore.query(Post.self) {
+            switch $0 {
+            case .success(let posts):
+                // result will be of type [Post]
+                posts.forEach({ _ = Amplify.DataStore.delete($0) })
+            case .failure(let error):
+                print("Error on query() for type Juvenile - \(error.localizedDescription)")
+            }
+        }
+    }
 }
