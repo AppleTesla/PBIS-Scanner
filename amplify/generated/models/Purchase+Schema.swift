@@ -9,7 +9,6 @@ extension Purchase {
     case name
     case quantity
     case unit_price
-    case transaction
   }
   
   public static let keys = CodingKeys.self
@@ -24,8 +23,7 @@ extension Purchase {
       .id(),
       .field(purchase.name, is: .required, ofType: .string),
       .field(purchase.quantity, is: .required, ofType: .int),
-      .field(purchase.unit_price, is: .required, ofType: .int),
-      .belongsTo(purchase.transaction, is: .optional, ofType: Transaction.self, targetName: "purchaseTransactionId")
+      .field(purchase.unit_price, is: .required, ofType: .int)
     )
     }
 }

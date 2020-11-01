@@ -55,7 +55,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                     guard let juvenile = try? changes.decodeModel(as: Juvenile.self) else { return }
                     switch DataStoreMutationType(rawValue: changes.mutationType) {
                     case .create:
-                        print("create")
+                        print("created: ", juvenile)
                         guard juvenile.isEnqueued else { break }
                         self.juveniles.append(juvenile)
                         DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
@@ -175,6 +175,18 @@ extension JuvenileManager {
             self.queueVerbalUpdate = "Queue is emptied."
         }
     }
+
+    func clearFromDataStore() {
+        Amplify.DataStore.query(Juvenile.self) {
+            switch $0 {
+            case .success(let juveniles):
+                // result will be of type [Post]
+                juveniles.forEach({ _ = Amplify.DataStore.delete($0) })
+            case .failure(let error):
+                print("Error on query() for type Juvenile - \(error.localizedDescription)")
+            }
+        }
+    }
 }
 
 // MARK: Juvenile History
@@ -184,7 +196,7 @@ extension JuvenileManager {
                                                                httpMethod: .get,
                                                                body: nil,
                                                                queryStrings: ["juvenile_id": "\(juvenile.id)"])
-        apiManager.fetchOnlineList(customEndpoint: transactionsEndpointConfig) { (transactions: [Transaction]) in
+        apiManager.fetchOnlineList(customEndpoint: transactionsEndpointConfig) { (transactions: [Purchase]) in
             print(transactions)
         }
     }

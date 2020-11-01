@@ -12,10 +12,14 @@ struct ProfileView: View {
 
     @ObservedObject var jvm: JuvenileManager
 
+    @ObservedObject var blm: BehaviorLocationManager
+
     // MARK: View Properties
 
     @State var fullName = "Not Signed In"
     @State private var remainingPostsCount = 0
+
+    @Environment(\.presentationMode) var presentationMode
 
     @State var connectionState = ""
 
@@ -72,7 +76,9 @@ struct ProfileView: View {
 
                 Section(footer: Text(.copyright)) {
                     Button(action: {
-                        self.jvm.apiManager.clearAllData()
+                        self.presentationMode.wrappedValue.dismiss()
+                        self.jvm.clearFromDataStore()
+                        self.blm.clearFromDataStore()
                         self.auth.signOut()
                     }) {
                         Text(.signOut)
@@ -99,6 +105,6 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView(auth: .init(), jvm: .init())
+        ProfileView(auth: .init(), jvm: .init(), blm: .init())
     }
 }

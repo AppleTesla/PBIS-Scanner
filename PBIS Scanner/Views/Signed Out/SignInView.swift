@@ -29,9 +29,15 @@ struct SignInView: View {
             Button(action: {
                 self.authManager.signInWithWebUI()
             }, label: {
-                Text("Sign In or Sign Up")
-                    .fontWeight(.medium)
-                    .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+                HStack {
+                    Text("Sign In or Sign Up")
+                        .fontWeight(.medium)
+                        .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+                    if authManager.showProgress {
+                        Spacer().frame(width: 10)
+                        ProgressView().progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    }
+                }
             })
                 .padding()
                 .background(colorScheme == .dark ? Color.white : Color.black)

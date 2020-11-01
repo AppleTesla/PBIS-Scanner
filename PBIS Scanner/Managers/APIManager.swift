@@ -44,7 +44,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
 
         guard let token_RAW = keychainManager.load(key: .token),
             let token = String(data: token_RAW, encoding: .utf8) else {
-            authManager?.fetchTokens()
+            _ = authManager?.fetchTokens()
             completion(.failure(.tokenProblem))
             return
         }
@@ -133,18 +133,7 @@ extension APIManager {
 // MARK: Flush
 
 extension APIManager {
-    /// This is a wrapper for Ampllify DataStore's clear method. Use this upon signing out of the app.
-    func clearAllData() {
-        Amplify.DataStore.clear { result in
-            switch result {
-            case .success:
-                self.keychainManager.remove(keys: KeychainCategory.allCases)
-                print("Successfully cleared DataStore.")
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
+    /// This is a wrapper for Ampllify DataStore's clear method. Use this upon signing out of the app
 }
 
 // MARK: Local Fetch

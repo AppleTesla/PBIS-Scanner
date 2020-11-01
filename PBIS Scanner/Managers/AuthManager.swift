@@ -29,6 +29,7 @@ final class AuthManager: ObservableObject, KeychainManagerInjector {
     // MARK: Published
 
     @Published var isSignedIn = true
+    @Published var showProgress = false
 
     init() {
         initCancellable = checkSessionStatus()
@@ -78,16 +79,17 @@ extension AuthManager {
 
 extension AuthManager {
     func signInWithWebUI() {
-        _ = Amplify.Auth.signInWithWebUI(presentationAnchor: window)
-        .resultPublisher
-            .sink(receiveCompletion: {
-            if case let .failure(authError) = $0 {
-                print("Sign in failed \(authError)")
+        showProgress = true
+        Amplify.Auth.signInWithWebUI(presentationAnchor: window) { result in
+            switch result {
+            case .success:
+                print("Sign in succeeded")
+                DispatchQueue.main.async { self.showProgress = false }
+            case .failure(let error):
+                print("Sign in failed \(error)")
+                DispatchQueue.main.async { self.showProgress = false }
             }
-        },
-        receiveValue: { _ in
-            print("Sign in succeeded")
-        })
+        }
     }
 }
 
@@ -95,14 +97,14 @@ extension AuthManager {
 
 extension AuthManager {
     func signOut() {
-        _ = Amplify.Auth.signOut(listener: { result in
+        Amplify.Auth.signOut() { result in
             switch result {
             case .success:
-                print("User has signed out successfully.")
+                print("Successfully signed out")
             case .failure(let error):
-                print(error)
+                print("Sign out failed with error \(error)")
             }
-        })
+        }
     }
 }
 
@@ -134,7 +136,8 @@ extension AuthManager: CredentialsProvider {
                             _ = self.keychainManager.save(key: .isVerified, data: isVerifiedData)
                         }
                     } catch {
-                        print(error)
+                        print("TokenError", error)
+                        self.signOut()
                     }
                 }
         })

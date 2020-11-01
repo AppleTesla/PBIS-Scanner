@@ -14,10 +14,10 @@ struct TransactionView: View {
     
     var body: some View {
         List {
-            ForEach(transactions, id: \.id, content: { transaction in
-                Text(transaction.id)
-            })
-            .navigationBarTitle(juvenile.first_name)
+//            ForEach(transactions, id: \.id, content: { transaction in
+//                Text(transaction.id)
+//            })
+//            .navigationBarTitle(juvenile.first_name)
         }
         .onAppear {
 

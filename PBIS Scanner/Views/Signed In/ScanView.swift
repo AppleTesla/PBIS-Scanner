@@ -47,7 +47,7 @@ struct ScanView: View {
                             .padding([.top, .leading])
                     }
                     .sheet(isPresented: $showProfileDetail) {
-                        ProfileView(auth: self.auth, jvm: self.jvm)
+                        ProfileView(auth: self.auth, jvm: self.jvm, blm: self.blm)
                     }
                 }
 

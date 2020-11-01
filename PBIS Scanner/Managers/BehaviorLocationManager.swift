@@ -121,4 +121,26 @@ extension BehaviorLocationManager {
             }
         }
     }
+
+    func clearFromDataStore() {
+        Amplify.DataStore.query(Behavior.self) {
+            switch $0 {
+            case .success(let behaviors):
+                // result will be of type [Post]
+                behaviors.forEach({ _ = Amplify.DataStore.delete($0) })
+            case .failure(let error):
+                print("Error on query() for type Behavior - \(error.localizedDescription)")
+            }
+        }
+
+        Amplify.DataStore.query(Location.self) {
+            switch $0 {
+            case .success(let locations):
+                // result will be of type [Post]
+                locations.forEach({ _ = Amplify.DataStore.delete($0) })
+            case .failure(let error):
+                print("Error on query() for type Location - \(error.localizedDescription)")
+            }
+        }
+    }
 }

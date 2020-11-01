@@ -37,14 +37,4 @@ type Purchase @model {
     name: String!
     quantity: Int!
     unit_price: Int!
-    transaction: Transaction @connection(name: "transaction")
-}
-
-type Transaction @model {
-    id: ID!
-    claim_id: Int!
-    officer: String!
-    date: String!
-    subtotal: Int!
-    purchases: [Purchase] @connection(name: "transaction")
 }
