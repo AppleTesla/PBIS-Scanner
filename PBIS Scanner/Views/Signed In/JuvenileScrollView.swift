@@ -55,13 +55,7 @@ struct JuvenileScrollView: View {
                         Text(juvenile.first_name)
                     }
                     .sheet(isPresented: $showHistory) {
-                        NavigationView {
-                            VStack {
-
-                            }
-                            .listStyle(InsetGroupedListStyle())
-                            .navigationBarTitle(juvenile.first_name)
-                        }
+//                        TransactionView(juvenile: juvenile)
                     }
                 }
             }

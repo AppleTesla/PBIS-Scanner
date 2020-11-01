@@ -168,7 +168,7 @@ extension APIManager {
 extension APIManager {
     /// Use this remote fetch function if the object return type is expected to be an atomic array and there are no special parameters. Location is likely to be the only endpoint in need of this treatment.
     func fetchOnlineAtomic<T: Model, U: Decodable>(_ model: T.Type, withType atomic: U.Type, customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([U]) -> Void) {
-        var endpointConfig: EndpointConfiguration! = customEndpoint
+        var endpointConfig: EndpointConfiguration? = customEndpoint
 
         switch T.self {
         case is Location.Type:
@@ -178,7 +178,7 @@ extension APIManager {
             return
         }
 
-        request(from: endpointConfig) { (result: Result<[U], ResponseError>) in
+        request(from: endpointConfig!) { (result: Result<[U], ResponseError>) in
             switch result {
             case .success(let objects):
                 completion(objects)
@@ -191,7 +191,7 @@ extension APIManager {
 
     /// Use this remote fetch function if the object return type is not expected to be an array and there might special parameters.
     func fetchOnlineObject<T: Model>(customEndpoint: EndpointConfiguration? = nil, completion: @escaping (T?) -> Void) {
-        var endpointConfig: EndpointConfiguration! = customEndpoint
+        var endpointConfig: EndpointConfiguration? = customEndpoint
 
         if endpointConfig == nil {
             switch T.self {
@@ -205,7 +205,7 @@ extension APIManager {
             }
         }
 
-        request(from: endpointConfig) { (result: Result<T?, ResponseError>) in
+        request(from: endpointConfig!) { (result: Result<T?, ResponseError>) in
             switch result {
             case .success(let object):
                 completion(object)
@@ -217,8 +217,8 @@ extension APIManager {
     }
 
     /// Use this remote fetch function if the object return type is expected to be an array and there are no special parameters.
-    func fetchOnlineList<T: Model>(completion: @escaping ([T]) -> Void) {
-        var endpointConfig: EndpointConfiguration!
+    func fetchOnlineList<T: Model>(customEndpoint: EndpointConfiguration? = nil, completion: @escaping ([T]) -> Void) {
+        var endpointConfig: EndpointConfiguration? = customEndpoint
 
         if endpointConfig == nil {
             switch T.self {
@@ -232,7 +232,7 @@ extension APIManager {
             }
         }
 
-        request(from: endpointConfig) { (result: Result<[T], ResponseError>) in
+        request(from: endpointConfig!) { (result: Result<[T], ResponseError>) in
             switch result {
             case .success(let objects):
                 completion(objects)

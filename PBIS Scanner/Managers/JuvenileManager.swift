@@ -180,6 +180,13 @@ extension JuvenileManager {
 // MARK: Juvenile History
 extension JuvenileManager {
     func getHistoryForJuvenile(_ juvenile: Juvenile) {
+        let transactionsEndpointConfig = EndpointConfiguration(path: .juvenile(.transactions),
+                                                               httpMethod: .get,
+                                                               body: nil,
+                                                               queryStrings: ["juvenile_id": "\(juvenile.id)"])
+        apiManager.fetchOnlineList(customEndpoint: transactionsEndpointConfig) { (transactions: [Transaction]) in
+            print(transactions)
+        }
     }
 }
 

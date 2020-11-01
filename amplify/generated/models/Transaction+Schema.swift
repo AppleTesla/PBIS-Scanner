@@ -27,7 +27,7 @@ extension Transaction {
       .field(transaction.officer, is: .required, ofType: .string),
       .field(transaction.date, is: .required, ofType: .string),
       .field(transaction.subtotal, is: .required, ofType: .int),
-      .hasMany(transaction.purchases, is: .optional, ofType: Purchase.self, associatedWith: Purchase.keys.transactionPurchasesId)
+      .hasMany(transaction.purchases, is: .optional, ofType: Purchase.self, associatedWith: Purchase.keys.transaction)
     )
     }
 }

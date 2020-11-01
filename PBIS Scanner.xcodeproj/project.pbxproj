@@ -64,6 +64,7 @@
 		55BA839B24FA63DA009356DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BA839A24FA63DA009356DC /* Assets.xcassets */; };
 		55BA839E24FA63DA009356DC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BA839D24FA63DA009356DC /* Preview Assets.xcassets */; };
 		55BA83A124FA63DA009356DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55BA839F24FA63DA009356DC /* LaunchScreen.storyboard */; };
+		55CDD2E2254E365300F22820 /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CDD2E1254E365300F22820 /* TransactionView.swift */; };
 		55D3BF3A24FD104600FD5236 /* QueueDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3BF3924FD104600FD5236 /* QueueDrawer.swift */; };
 		55D3BF3C24FD215900FD5236 /* CornerRadiusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3BF3B24FD215900FD5236 /* CornerRadiusExtensions.swift */; };
 		55E18C2C24FA6D7800820CE3 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E18C2B24FA6D7800820CE3 /* AuthManager.swift */; };
@@ -149,6 +150,7 @@
 		55BA839D24FA63DA009356DC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		55BA83A024FA63DA009356DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		55BA83A224FA63DA009356DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55CDD2E1254E365300F22820 /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
 		55D3BF3924FD104600FD5236 /* QueueDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueDrawer.swift; sourceTree = "<group>"; };
 		55D3BF3B24FD215900FD5236 /* CornerRadiusExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRadiusExtensions.swift; sourceTree = "<group>"; };
 		55E18C2B24FA6D7800820CE3 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -381,6 +383,7 @@
 				555DDE4624FE4DC0001CC23D /* BehaviorCardView.swift */,
 				555DDE4824FE6238001CC23D /* JuvenileScrollView.swift */,
 				557465AC24FB9BF200C8138F /* ProfileView.swift */,
+				55CDD2E1254E365300F22820 /* TransactionView.swift */,
 				555DDE3524FE133D001CC23D /* ProfileDetailView.swift */,
 			);
 			path = "Signed In";
@@ -558,6 +561,7 @@
 			files = (
 				55117BD124FAACB90047D54A /* DataStoreMutationType.swift in Sources */,
 				555DDE4324FE46D8001CC23D /* Badge.swift in Sources */,
+				55CDD2E2254E365300F22820 /* TransactionView.swift in Sources */,
 				55117BCF24FAA3B40047D54A /* HttpMethod.swift in Sources */,
 				559FCCAB24FB93A9007763B4 /* ImageExtensions.swift in Sources */,
 				55BA839524FA63D4009356DC /* AppDelegate.swift in Sources */,
