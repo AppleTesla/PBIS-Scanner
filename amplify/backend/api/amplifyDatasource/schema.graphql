@@ -10,13 +10,13 @@ type Location @model {
 }
 
 type Juvenile @model {
-  id: ID!
-  first_name: String!
-  last_name: String!
-  points: Int!
-  event_id: Int!
-  active: Int!
-  isEnqueued: Boolean!
+    id: ID!
+    first_name: String!
+    last_name: String!
+    points: Int!
+    event_id: Int!
+    active: Int!
+    isEnqueued: Boolean!
 }
 
 type Behavior @model {
@@ -30,4 +30,11 @@ type Post @model {
     id: ID!
     juvenile_id: String!
     behavior_id: String!
+}
+
+type Purchase @model {
+    id: ID!
+    name: String!
+    quantity: Int!
+    unit_price: Int!
 }

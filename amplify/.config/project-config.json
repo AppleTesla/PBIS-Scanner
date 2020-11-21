@@ -1,8 +1,8 @@
 {
-    "projectName": "PBISScanner",
-    "version": "3.0",
-    "frontend": "ios",
-    "providers": [
-        "awscloudformation"
-    ]
+  "providers": [
+    "awscloudformation"
+  ],
+  "projectName": "PBISScanner",
+  "version": "3.0",
+  "frontend": "ios"
 }
