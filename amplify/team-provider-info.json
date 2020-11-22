@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pbisscanner-dev-231449-authRole",
+      "UnauthRoleArn": "arn:aws:iam::234177478365:role/amplify-pbisscanner-dev-231449-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::234177478365:role/amplify-pbisscanner-dev-231449-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-pbisscanner-dev-231449-deployment",
+      "UnauthRoleName": "amplify-pbisscanner-dev-231449-unauthRole",
+      "StackName": "amplify-pbisscanner-dev-231449",
+      "StackId": "arn:aws:cloudformation:us-west-2:234177478365:stack/amplify-pbisscanner-dev-231449/8d337090-1b59-11eb-933c-06d67766a030",
+      "AmplifyAppId": "di0y8qsrtboug"
+    },
+    "categories": {
+      "auth": {
+        "pbisscannere8ddf393": {
+          "hostedUIProviderCreds": "[]"
+        }
+      }
+    }
+  }
+}
