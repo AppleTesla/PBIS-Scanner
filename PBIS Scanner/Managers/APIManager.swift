@@ -195,7 +195,7 @@ extension APIManager {
                 return
             }
         }
-
+        
         request(from: endpointConfig!) { (result: Result<T?, ResponseError>) in
             switch result {
             case .success(let object):

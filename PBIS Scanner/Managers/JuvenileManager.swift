@@ -97,17 +97,20 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
 extension JuvenileManager {
     func fetchJuveniles(withEventID id: Int? = nil) {
         defer {
-            apiManager.offlineFetch { (locals: [Juvenile]) in
-                for local in locals {
-                    if local.event_id == id {
-                        var new = local
-                        new.isEnqueued = true
-                        self.apiManager.save(entity: new)
-                        break
+            if let id = id {
+                apiManager.offlineFetch { (locals: [Juvenile]) in
+                    for local in locals {
+                        if local.event_id == id {
+                            var new = local
+                            new.isEnqueued = true
+                            self.apiManager.save(entity: new)
+                            break
+                        }
                     }
                 }
+            }
 
-                fetchOnlineJuveniles_PROTECTED(locals: locals)
+//                fetchOnlineJuveniles_PROTECTED(locals: locals)
 
 
                 //                apiManager.fetchOnlineList { (remotes: [Juvenile]) in
@@ -123,13 +126,12 @@ extension JuvenileManager {
                 //                        }
                 //                    }
                 //                }
-            }
         }
-
+        
         guard let id = id, networkManager.isConnected else { return }
         let querySingleJuvenileEndpoint = EndpointConfiguration(path: .juvenile(.get), httpMethod: .get, body: nil, queryStrings: ["event_id": "\(id)"])
         apiManager.fetchOnlineObject(customEndpoint: querySingleJuvenileEndpoint) { (juvenile: Juvenile?) in
-            if var juvenile = juvenile, juvenile.active == 1 {
+            if var juvenile = juvenile {
                 juvenile.isEnqueued = true
                 self.apiManager.save(entity: juvenile)
             }

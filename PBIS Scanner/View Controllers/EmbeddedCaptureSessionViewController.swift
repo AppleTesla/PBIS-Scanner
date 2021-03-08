@@ -130,7 +130,9 @@ extension CaptureSessionViewController: CaptureSessionSetup {
     
     func resume() {
         if (!captureSession.isRunning) {
-            captureSession.startRunning()
+            #if !targetEnvironment(simulator)
+                captureSession.startRunning()
+            #endif
         }
     }
     

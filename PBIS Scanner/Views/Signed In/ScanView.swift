@@ -18,6 +18,8 @@ struct ScanView: View {
     // MARK: Capture Session Properties
 
     @State private var showProfileDetail = false
+    
+    @State private var showSubmitSheet = false
 
     @State var sessionIsOffline = false
 
@@ -28,6 +30,8 @@ struct ScanView: View {
             EmbeddedCaptureSessionViewController(sessionIsOffline: $sessionIsOffline,
                                                  qrPassthrough: $qrCodePublisher)
                 .edgesIgnoringSafeArea(.all)
+                .blur(radius: sessionIsOffline ? 30 : 0)
+                .opacity(sessionIsOffline ? 0.5 : 1)
 //                .alert(isPresented: $sessionIsOffline) {
 //                    Alert(title: Text(.sessionAlertTitle),
 //                          message: Text(.sessionAlertMessage),
@@ -36,6 +40,7 @@ struct ScanView: View {
                 .onReceive(qrCodePublisher) { code in
                     self.jvm.fetchJuveniles(withEventID: code)
                 }
+                .animation(.easeIn)
 
             VStack {
                 ZStack(alignment: .topLeading) {
@@ -58,26 +63,44 @@ struct ScanView: View {
                         if (jvm.juveniles.isEmpty) {
                             sessionIsOffline.toggle()
                         } else {
-                            self.jvm.saveToBucket(with: self.blm.selectedBehavior, for: self.jvm.juveniles)
+                            showSubmitSheet = true
                         }
                     }) {
-                        Text(sessionIsOffline ? "Paused" : self.jvm.juveniles.isEmpty ? "Tap to Pause" : blm.selectedBehavior == nil ? "Select a location" : jvm.juveniles.isEmpty ? "Scanning..." : "Submit (\(jvm.juveniles.count))")
+                        Text(sessionIsOffline ? "Tap to Resume" : self.jvm.juveniles.isEmpty ? "Tap to Pause" : blm.selectedBehavior == nil ? "Select a location" : jvm.juveniles.isEmpty ? "Scanning..." : "Submit (\(jvm.juveniles.count))")
                             .fontWeight(.medium)
                             .padding()
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
-                            .background(blm.selectedBehavior == nil ? Color.gray : Color.blue)
+                            .background(sessionIsOffline ? Color.red : blm.selectedBehavior == nil ? Color.gray : Color.blue)
                             .cornerRadius(10)
                             .padding(.horizontal, 5)
-//                            .disabled(blm.selectedBehavior == nil)
                     }
                     .padding(.horizontal)
+                    .actionSheet(isPresented: $showSubmitSheet) {
+                        ActionSheet(title: Text("Submit"), message: Text("Choose a behavior"), buttons: [
+                            .default(Text("Safe")) {
+                                blm.selectedCategory = .safe
+                                self.jvm.saveToBucket(with: blm.selectedBehavior, for: jvm.juveniles)
+                            },
+                            .default(Text("Responsible")) {
+                                blm.selectedCategory = .responsible
+                                self.jvm.saveToBucket(with: blm.selectedBehavior, for: jvm.juveniles)
+                            },
+                            .default(Text("Considerate")) {
+                                blm.selectedCategory = .considerate
+                                self.jvm.saveToBucket(with: blm.selectedBehavior, for: jvm.juveniles)
+                            },
+                            .cancel()
+                        ])
+                    }
+                    
                     if (!jvm.juveniles.isEmpty) {
                         JuvenileScrollView(juveniles: self.jvm.juveniles)
                     }
                 }
                 .animation(.easeOut)
             }
+            .padding(.bottom)
         }
     }
 }
