@@ -28,11 +28,11 @@ struct ScanView: View {
             EmbeddedCaptureSessionViewController(sessionIsOffline: $sessionIsOffline,
                                                  qrPassthrough: $qrCodePublisher)
                 .edgesIgnoringSafeArea(.all)
-                .alert(isPresented: $sessionIsOffline) {
-                    Alert(title: Text(.sessionAlertTitle),
-                          message: Text(.sessionAlertMessage),
-                          dismissButton: .default(Text(.sessionAlertDismiss)))
-                }
+//                .alert(isPresented: $sessionIsOffline) {
+//                    Alert(title: Text(.sessionAlertTitle),
+//                          message: Text(.sessionAlertMessage),
+//                          dismissButton: .default(Text(.sessionAlertDismiss)))
+//                }
                 .onReceive(qrCodePublisher) { code in
                     self.jvm.fetchJuveniles(withEventID: code)
                 }
@@ -52,13 +52,32 @@ struct ScanView: View {
                 }
 
                 Spacer()
-
-                QueueDrawer { // Drawer expanded...
-                    EmptyView()
+                
+                VStack {
+                    Button(action: {
+                        if (jvm.juveniles.isEmpty) {
+                            sessionIsOffline.toggle()
+                        } else {
+                            self.jvm.saveToBucket(with: self.blm.selectedBehavior, for: self.jvm.juveniles)
+                        }
+                    }) {
+                        Text(sessionIsOffline ? "Paused" : self.jvm.juveniles.isEmpty ? "Tap to Pause" : blm.selectedBehavior == nil ? "Select a location" : jvm.juveniles.isEmpty ? "Scanning..." : "Submit (\(jvm.juveniles.count))")
+                            .fontWeight(.medium)
+                            .padding()
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .background(blm.selectedBehavior == nil ? Color.gray : Color.blue)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 5)
+//                            .disabled(blm.selectedBehavior == nil)
+                    }
+                    .padding(.horizontal)
+                    if (!jvm.juveniles.isEmpty) {
+                        JuvenileScrollView(juveniles: self.jvm.juveniles)
+                    }
                 }
-                .edgesIgnoringSafeArea(.bottom)
+                .animation(.easeOut)
             }
-            .edgesIgnoringSafeArea(.bottom)
         }
     }
 }

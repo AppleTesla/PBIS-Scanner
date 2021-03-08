@@ -48,7 +48,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
             completion(.failure(.tokenProblem))
             return
         }
-
+        
         guard networkManager.isConnected else {
             completion(.failure(.networkProblem))
             return
@@ -75,6 +75,8 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
                 result = .failure(.responseProblem(URLError(.badServerResponse)))
                 return
             }
+            
+            print(response);
 
             if response.statusCode == 401 {
                 result = .failure(.otherProblem(URLError(.userAuthenticationRequired)))

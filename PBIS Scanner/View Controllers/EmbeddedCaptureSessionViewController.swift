@@ -15,13 +15,19 @@ struct EmbeddedCaptureSessionViewController: UIViewControllerRepresentable {
         CaptureSessionCoordinator(self)
     }
 
-    func makeUIViewController(context: Context) -> UIViewController {
+    func makeUIViewController(context: Context) -> CaptureSessionViewController {
         let viewController = CaptureSessionViewController()
         viewController.delegate = context.coordinator
         return viewController
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: CaptureSessionViewController, context: Context) {
+        print("YAYYYYY!")
+        if (sessionIsOffline) {
+            uiViewController.stop()
+        } else {
+            uiViewController.resume()
+        }
     }
 }
 
@@ -120,6 +126,18 @@ extension CaptureSessionViewController: CaptureSessionSetup {
         view.layer.addSublayer(previewLayer)
 
         captureSession.startRunning()
+    }
+    
+    func resume() {
+        if (!captureSession.isRunning) {
+            captureSession.startRunning()
+        }
+    }
+    
+    func stop() {
+        if (captureSession.isRunning) {
+            captureSession.stopRunning()
+        }
     }
 
     func lockFocus() {
