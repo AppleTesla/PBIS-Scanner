@@ -1,6 +1,7 @@
 // MARK: Imports
 
 import Foundation
+import AVFoundation
 import Amplify
 import AmplifyPlugins
 import Combine
@@ -59,6 +60,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                         guard juvenile.isEnqueued else { break }
                         self.juveniles.append(juvenile)
                         DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         self.dispatchGroup.leave()
                     case .delete:
                         if let index = self.juveniles.firstIndex(of: juvenile) {
@@ -72,6 +74,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                             if !self.juveniles.contains(juvenile) {
                                 self.juveniles.append(juvenile)
                                 DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
                                 self.dispatchGroup.leave()
                                 // Already in queue
                             } else if let index = self.juveniles.firstIndex(of: juvenile) {
@@ -175,6 +178,7 @@ extension JuvenileManager {
         }
         DispatchQueue.main.async {
             self.queueVerbalUpdate = "Queue is emptied."
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         }
     }
 
@@ -216,6 +220,9 @@ extension JuvenileManager {
             let post = Post(juvenile_id: juvenile.id, behavior_id: behavior.id)
             self.apiManager.save(entity: post)
         }
+        
+        AudioServicesPlaySystemSound(1407)
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
 
         self.bucketManagerDelegate?.attemptToPushPosts()
     }

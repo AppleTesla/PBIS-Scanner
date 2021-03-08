@@ -32,6 +32,7 @@ struct SignInView: View {
             Spacer()
             Button(action: {
                 self.authManager.signInWithWebUI()
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
             }, label: {
                 HStack {
                     Text("Sign In or Sign Up")

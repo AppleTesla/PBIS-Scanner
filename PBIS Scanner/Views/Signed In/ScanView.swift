@@ -62,6 +62,7 @@ struct ScanView: View {
                     Button(action: {
                         if (jvm.juveniles.isEmpty) {
                             sessionIsOffline.toggle()
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         } else {
                             showSubmitSheet = true
                         }
