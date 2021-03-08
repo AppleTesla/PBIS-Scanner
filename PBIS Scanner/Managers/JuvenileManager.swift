@@ -129,7 +129,7 @@ extension JuvenileManager {
         guard let id = id, networkManager.isConnected else { return }
         let querySingleJuvenileEndpoint = EndpointConfiguration(path: .juvenile(.get), httpMethod: .get, body: nil, queryStrings: ["event_id": "\(id)"])
         apiManager.fetchOnlineObject(customEndpoint: querySingleJuvenileEndpoint) { (juvenile: Juvenile?) in
-            if var juvenile = juvenile {
+            if var juvenile = juvenile, juvenile.active == 1 {
                 juvenile.isEnqueued = true
                 self.apiManager.save(entity: juvenile)
             }
