@@ -20,9 +20,12 @@ struct ScanView: View {
     @State private var showProfileDetail = false
     
     @State private var showSubmitSheet = false
+    
+    @State private var showAlert = false
+    @State private var code = 0
 
     @State var sessionIsOffline = false
-
+    
     @State var qrCodePublisher = PassthroughSubject<Int, Never>()
 
     var body: some View {
@@ -32,13 +35,26 @@ struct ScanView: View {
                 .edgesIgnoringSafeArea(.all)
                 .blur(radius: sessionIsOffline ? 30 : 0)
                 .opacity(sessionIsOffline ? 0.5 : 1)
-//                .alert(isPresented: $sessionIsOffline) {
-//                    Alert(title: Text(.sessionAlertTitle),
-//                          message: Text(.sessionAlertMessage),
-//                          dismissButton: .default(Text(.sessionAlertDismiss)))
-//                }
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text(.sessionAlertTitle),
+                          message: Text(jvm.queueVerbalUpdate),
+                          primaryButton: .default(Text("Yes"), action: { 
+                            self.jvm.activateJuvenileWithId(eventId: code)
+                          }),
+                          secondaryButton: .cancel())
+                }
                 .onReceive(qrCodePublisher) { code in
-                    self.jvm.fetchJuveniles(withEventID: code)
+                    self.code = code
+                    self.jvm.fetchJuvenile(withEventID: code) { (result: Result<Int, Error>) in
+                        switch result {
+                        case .success(let isActive):
+                            if isActive == 0 {
+                                showAlert = true
+                            }
+                        default:
+                            break
+                        }
+                    }
                 }
                 .animation(.easeIn)
 
@@ -60,10 +76,10 @@ struct ScanView: View {
                 
                 VStack {
                     Button(action: {
-                        if (jvm.juveniles.isEmpty) {
+                        if (jvm.juveniles.isEmpty && blm.selectedBehavior != nil) {
                             sessionIsOffline.toggle()
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        } else {
+                        } else if (blm.selectedBehavior != nil) {
                             showSubmitSheet = true
                         }
                     }) {

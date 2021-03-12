@@ -22,7 +22,6 @@ struct EmbeddedCaptureSessionViewController: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: CaptureSessionViewController, context: Context) {
-        print("YAYYYYY!")
         if (sessionIsOffline) {
             uiViewController.stop()
         } else {

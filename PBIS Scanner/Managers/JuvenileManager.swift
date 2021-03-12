@@ -25,17 +25,19 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
     // MARK: Initializers
 
     init() {
-        apiManager.offlineFetch { (locals: [Juvenile]) in
-            for local in locals {
-                if local.isEnqueued {
-                    self.juveniles.append(local)
+        self.fetchAllJuveniles {
+            apiManager.offlineFetch { (locals: [Juvenile]) in
+                for local in locals {
+                    if local.isEnqueued {
+                        self.juveniles.append(local)
+                    }
                 }
             }
         }
 
         juvenilesSubscription = subscribeToJuveniles()
         networkCancellable = networkManager.$isConnected.sink { isConnected in
-            if isConnected { self.fetchJuveniles() }
+            if isConnected { self.fetchAllJuveniles { } }
         }
     }
 
@@ -98,60 +100,50 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
 // MARK: Juvenile Fetch
 
 extension JuvenileManager {
-    func fetchJuveniles(withEventID id: Int? = nil) {
+    func fetchJuvenile(withEventID id: Int? = nil, completion: @escaping (Result<Int, Error>) -> Void) {
+        var isActive = 0
+        
         defer {
             if let id = id {
                 apiManager.offlineFetch { (locals: [Juvenile]) in
-                    for local in locals {
+                    for var local in locals {
                         if local.event_id == id {
-                            var new = local
-                            new.isEnqueued = true
-                            self.apiManager.save(entity: new)
+                            local.isEnqueued = true
+                            self.apiManager.save(entity: local)
                             break
                         }
                     }
                 }
             }
-
-//                fetchOnlineJuveniles_PROTECTED(locals: locals)
-
-
-                //                apiManager.fetchOnlineList { (remotes: [Juvenile]) in
-                //                    if !ProcessInfo.processInfo.isLowPowerModeEnabled {
-                //                        DispatchQueue.global(qos: .background).async {
-                //                            // Flush non-existent juveniles.
-                //                            guard !remotes.isEmpty else { return }
-                //                            localFetch.forEach({ local in
-                //                                if !remotes.contains(local) {
-                //                                    self.apiManager.delete(entity: local)
-                //                                }
-                //                            })
-                //                        }
-                //                    }
-                //                }
         }
         
         guard let id = id, networkManager.isConnected else { return }
         let querySingleJuvenileEndpoint = EndpointConfiguration(path: .juvenile(.get), httpMethod: .get, body: nil, queryStrings: ["event_id": "\(id)"])
         apiManager.fetchOnlineObject(customEndpoint: querySingleJuvenileEndpoint) { (juvenile: Juvenile?) in
-            if var juvenile = juvenile {
-                juvenile.isEnqueued = true
+            if juvenile != nil, var juvenile = juvenile {
+                if (juvenile.active == 1) {
+                    isActive = 1
+                    juvenile.isEnqueued = true
+                }
+                
+                self.queueVerbalUpdate = "Do you want to reactivate \(juvenile.first_name)"
                 self.apiManager.save(entity: juvenile)
+                completion(.success(isActive))
             }
         }
+        
+        completion(.failure(NSError(domain: "jvm", code: 0, userInfo: nil)))
     }
-
-    private func fetchOnlineJuveniles_PROTECTED(locals: [Juvenile]) {
+    
+    private func fetchAllJuveniles(completion: () -> Void) {
         guard networkManager.isConnected else { return }
+        
+        defer { completion() }
 
         apiManager.fetchOnlineList { (remotes: [Juvenile]) in
-            guard !remotes.isEmpty, remotes.count != locals.count else { return }
+            guard !remotes.isEmpty else { return }
             remotes.forEach({ remote in
-                if let interest = locals.first(where: { $0.event_id == remote.event_id }), interest.isEnqueued {
-                    var newRemote = remote
-                    newRemote.isEnqueued = true
-                    self.apiManager.save(entity: newRemote)
-                } else {
+                if (remote.active == 1) {
                     self.apiManager.save(entity: remote)
                 }
             })
@@ -190,6 +182,43 @@ extension JuvenileManager {
                 juveniles.forEach({ _ = Amplify.DataStore.delete($0) })
             case .failure(let error):
                 print("Error on query() for type Juvenile - \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+extension JuvenileManager {
+    func activateJuvenileWithId(eventId: Int? = nil) {
+        guard let eventId = eventId, networkManager.isConnected else { return }
+        
+        var activateJuvenileEndpoint: EndpointConfiguration!
+        var id: String? = nil
+            
+        defer {
+            if let id = id {
+                activateJuvenileEndpoint = EndpointConfiguration(path: .juvenile(.activate),
+                                                                 httpMethod: .put,
+                                                                 body: nil,
+                                                                 queryStrings: [
+                                                                    "event_id": "\(eventId)",
+                                                                    "juvenile_id": "\(id)"
+                                                                 ])
+                apiManager.request(from: activateJuvenileEndpoint) { (result: Result<Juvenile, ResponseError>) in
+                    switch result {
+                    case .success(let juvenile):
+                        self.apiManager.save(entity: juvenile)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        }
+                            
+        apiManager.offlineFetch { (locals: [Juvenile]) in
+            for local in locals {
+                if local.event_id == eventId {
+                    id = local.id
+                }
             }
         }
     }

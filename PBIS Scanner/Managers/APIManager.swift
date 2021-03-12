@@ -65,7 +65,7 @@ final class APIManager: APIManagerProtocol, NetworkManagerInjector, KeychainMana
             var result: Result<T, ResponseError> = .failure(.deferred)
 
             defer { resultQueue.async { completion(result) } }
-
+            
             if let error = error {
                 result = .failure(.responseProblem(error))
                 return
