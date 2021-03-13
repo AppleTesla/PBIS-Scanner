@@ -28,7 +28,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
         self.fetchAllJuveniles {
             apiManager.offlineFetch { (locals: [Juvenile]) in
                 for local in locals {
-                    if local.isEnqueued {
+                    if local.isEnqueued, local.active == 1 {
                         self.juveniles.append(local)
                     }
                 }
@@ -59,7 +59,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                     switch DataStoreMutationType(rawValue: changes.mutationType) {
                     case .create:
                         print("created: ", juvenile)
-                        guard juvenile.isEnqueued else { break }
+                        guard juvenile.isEnqueued, juvenile.active == 1 else { break }
                         self.juveniles.append(juvenile)
                         DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -73,7 +73,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
                     case .update:
                         if juvenile.isEnqueued {
                             // Add to queue
-                            if !self.juveniles.contains(juvenile) {
+                            if !self.juveniles.contains(juvenile), juvenile.active == 1 {
                                 self.juveniles.append(juvenile)
                                 DispatchQueue.main.async { self.queueVerbalUpdate = "\(juvenile.first_name) was added!" }
                                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -101,7 +101,7 @@ final class JuvenileManager: ObservableObject, APIManagerInjector, NetworkManage
 
 extension JuvenileManager {
     func fetchJuvenile(withEventID id: Int? = nil, completion: @escaping (Result<Int, Error>) -> Void) {
-        var isActive = 0
+        var isActive = 1
         
         defer {
             if let id = id {
@@ -121,14 +121,16 @@ extension JuvenileManager {
         let querySingleJuvenileEndpoint = EndpointConfiguration(path: .juvenile(.get), httpMethod: .get, body: nil, queryStrings: ["event_id": "\(id)"])
         apiManager.fetchOnlineObject(customEndpoint: querySingleJuvenileEndpoint) { (juvenile: Juvenile?) in
             if juvenile != nil, var juvenile = juvenile {
-                if (juvenile.active == 1) {
-                    isActive = 1
+                if (juvenile.active == 0) {
+                    self.queueVerbalUpdate = "Do you want to reactivate \(juvenile.first_name)?"
+                    isActive = 0
+                } else {
                     juvenile.isEnqueued = true
                 }
-                
-                self.queueVerbalUpdate = "Do you want to reactivate \(juvenile.first_name)"
-                self.apiManager.save(entity: juvenile)
-                completion(.success(isActive))
+                                
+                self.apiManager.save(entity: juvenile) { _ in
+                    completion(.success(isActive))
+                }
             }
         }
         
@@ -195,18 +197,28 @@ extension JuvenileManager {
         var id: String? = nil
             
         defer {
-            if let id = id {
+            if let id = id, let body = try? JSONSerialization.data(withJSONObject: [
+                "event_id": "\(eventId)",
+                "juvenile_id": "\(id)"
+            ], options: []) {
+                
+                
                 activateJuvenileEndpoint = EndpointConfiguration(path: .juvenile(.activate),
                                                                  httpMethod: .put,
-                                                                 body: nil,
-                                                                 queryStrings: [
-                                                                    "event_id": "\(eventId)",
-                                                                    "juvenile_id": "\(id)"
-                                                                 ])
+                                                                 body: body,
+                                                                 queryStrings: nil)
                 apiManager.request(from: activateJuvenileEndpoint) { (result: Result<Juvenile, ResponseError>) in
                     switch result {
-                    case .success(let juvenile):
-                        self.apiManager.save(entity: juvenile)
+                    case .success(var juvenile):
+                        self.fetchJuvenile(withEventID: juvenile.event_id) { (result: Result <Int, Error>) in
+                            switch result {
+                            case .success(_):
+                                juvenile.isEnqueued = true
+                                self.apiManager.save(entity: juvenile)
+                            default:
+                                return
+                            }
+                        }
                     case .failure(let error):
                         print(error)
                     }

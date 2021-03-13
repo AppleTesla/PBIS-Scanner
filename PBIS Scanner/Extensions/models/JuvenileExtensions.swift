@@ -21,6 +21,7 @@ extension Juvenile: Codable {
         points = try values.decode(Int.self, forKey: .points)
         event_id = try values.decode(Int.self, forKey: .event_id)
         active = try values.decode(Int.self, forKey: .active)
+//        isEnqueued = try values.decode(Bool.self, forKey: .isEnqueued)
 
         if let temp = try? values.decode(Bool.self, forKey: .isEnqueued) {
             isEnqueued = temp

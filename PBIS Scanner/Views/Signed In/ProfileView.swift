@@ -18,6 +18,7 @@ struct ProfileView: View {
 
     @State var fullName = "Not Signed In"
     @State private var remainingPostsCount = 0
+    @State private var isConnected = false
 
     @Environment(\.presentationMode) var presentationMode
 
@@ -57,7 +58,7 @@ struct ProfileView: View {
                                 .foregroundColor(.gray)
                         }
                     }
-                    .disabled(!jvm.networkManager.isConnected || remainingPostsCount == 0)
+                    .disabled(!isConnected || remainingPostsCount == 0)
                 }
 
                 Section {
@@ -92,6 +93,9 @@ struct ProfileView: View {
             }
             .navigationBarTitle(Text(.title))
         }
+        .onReceive(jvm.apiManager.networkManager.$isConnected, perform: { isConnected in
+            self.isConnected = isConnected
+        })
         .onReceive(jvm.bucketManagerDelegate!.postRemainingCount) { count in
             remainingPostsCount = count
         }

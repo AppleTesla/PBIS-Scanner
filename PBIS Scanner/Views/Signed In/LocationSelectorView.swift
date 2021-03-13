@@ -13,6 +13,8 @@ struct LocationSelectorView: View {
     // Location Preview
     @State private var locationSelectorSize: CGFloat = 1
     @State private var locationSelectorBGSize: CGFloat = 200
+    
+    @State private var isTapped = false
 
     let blurTintMix = 0.3
 
@@ -24,6 +26,7 @@ struct LocationSelectorView: View {
         let drag = DragGesture(minimumDistance: 0)
             .onChanged({ state in
                 guard state.translation.height >= 0 else { return }
+                isTapped = true
                 let indexRange = abs(state.translation.height / self.upperDragThreshold)
                 let indexFloat = indexRange * CGFloat(self.blm.locations.count)
 
@@ -41,6 +44,7 @@ struct LocationSelectorView: View {
                 }
             })
             .onEnded { _ in
+                isTapped = false
                 self.locationSelectorSize = 0
                 self.locationSelectorBGSize = self.lowerDragThreshold
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { self.locationSelectorSize = 1 }
@@ -53,7 +57,7 @@ struct LocationSelectorView: View {
         }
         
         return ZStack(alignment: .topTrailing) {
-            ZStack(alignment: .bottomTrailing) {
+            ZStack(alignment: .bottom) {
                 Rectangle()
                     .foregroundColor(.orange)
                     .opacity(0.5)
@@ -72,13 +76,11 @@ struct LocationSelectorView: View {
                                                         initialVelocity: 10.0))
 
             HStack {
-                Text(blm.selectedLocation?.name ?? "Drag this down 👉")
-                    .font(.system(size: 15))
                 BoxStringContainerView(text: String(blm.selectedLocation?.name.prefix(1) ?? "?"))
                     .aspectRatio(1, contentMode: .fit)
-                    .frame(width: 40)
+                    .frame(width: 60)
                     .scaleEffect(locationSelectorSize, anchor: .center)
-                    .font(.system(size: 30))
+                    .font(.system(size: 26))
                     .onTapGesture {
                         guard self.blm.selectedLocation != nil else { return }
                         let index = self.blm.locations.firstIndex(of: self.blm.selectedLocation!)!
@@ -93,18 +95,20 @@ struct LocationSelectorView: View {
             }
             .padding()
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color.gray.opacity(0.5), lineWidth: 0.5)
+                Rectangle()
+                    .strokeBorder(Color.gray.opacity(0.5), lineWidth: 0.2)
                     .background(
                         ZStack {
                             Color(UIColor(named: "DrawerBG_Tint")!)
                                 .opacity(blurTintMix)
                             VisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
                         }
-                        .mask(RoundedRectangle(cornerRadius: 10))
-                )
+                        .mask(Circle().frame(width: 80))
+                    )
+                    .opacity(isTapped ? 1 : 0.25)
             )
-            .padding([.top, .trailing])
+            .padding(.top, 5)
+            .padding(.trailing, 7)
 
         }
     }

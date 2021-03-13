@@ -53,6 +53,12 @@ struct JuvenileScrollView: View {
                                 }
                             }
                         Text(juvenile.first_name)
+                            .fontWeight(.medium)
+                            .foregroundColor(.white)
+                            .padding(.vertical, 2)
+                            .padding(.horizontal, 4)
+                            .background(Color.gray)
+                            .cornerRadius(3)
                     }
                     .sheet(isPresented: $showHistory) {
 //                        TransactionView(juvenile: juvenile)

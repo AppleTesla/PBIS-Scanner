@@ -5,6 +5,7 @@ enum SystemImage: String {
     case personFill = "person.fill"
     case viewfinder = "viewfinder"
     case barcode = "barcode.viewfinder"
+    case battery = "battery.25"
     case clock = "clock"
     case clockFill = "clock.fill"
     case checkmarkCircleFill = "checkmark.circle.fill"

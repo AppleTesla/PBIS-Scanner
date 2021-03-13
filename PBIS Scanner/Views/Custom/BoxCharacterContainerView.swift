@@ -8,10 +8,10 @@ struct BoxStringContainerView: View {
     var text: String
     var body: some View {
         ZStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: 5)
-                .foregroundColor(.red)
-            Text(text)
+            Circle()
                 .foregroundColor(.white)
+            Text(text)
+                .foregroundColor(.red)
                 .fontWeight(.bold)
         }
     }

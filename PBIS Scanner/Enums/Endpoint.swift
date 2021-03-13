@@ -27,7 +27,7 @@ enum Endpoint {
         case .juvenile(.activate):
             return "/juvenile/activate"
         case .juvenile(.deactivate):
-            return "/juvenile/activate"
+            return "/juvenile/deactivate"
         case .juvenile(.create):
             return "/juvenile/create"
         case .juvenile(.delete):
